@@ -31,10 +31,12 @@ spinner on the cross-reference map.
   (gregobase.selapa.net), public-domain Liber Usualis and Graduale scans,
   and freely licensed recordings on Wikimedia Commons; downloaded when the
   user clicks.
-- **Church fathers (next up).** A download option for patristic writings:
-  the public-domain Ante-Nicene, Nicene and Post-Nicene Fathers (Schaff,
-  1885–1900; CrossWire has some as SWORD books, CCEL has the full set),
-  shown in Books, with each father's verse comments linked from the reader.
+- **Church fathers (done in 0.8.0; next steps).** The 37 volumes download
+  from CCEL and read in the Reading room. Still to do: link each father's
+  comments on a verse from the reader (their scripture references are marked
+  in the ThML), search inside the volumes, and a Wikisource source as it
+  fills in. The real CCEL download hasn't been tried from the build machine
+  (its network is blocked); check one volume on a desktop.
 - **Translations.** Spanish is started (po/es.po): the sidebar, page titles,
   Today and Preferences. Still to do: the rest of the interface, book names
   and feast names (from the Bible module's language where possible), dates

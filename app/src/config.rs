@@ -90,6 +90,8 @@ pub struct Config {
     pub defaults_version: u32,
     /// the reading plan being followed
     pub plan: Option<bible_core::plans::PlanState>,
+    /// the section last read in each church fathers volume
+    pub fathers_place: std::collections::BTreeMap<String, usize>,
     /// bookmarked verses, "John.3.16", with their tags
     pub bookmarks: Vec<Bookmark>,
 }
@@ -121,6 +123,7 @@ impl Default for Config {
             tradition: "Western".into(),
             legal_notice: true,
             accent: "season".into(),
+            fathers_place: Default::default(),
             check_updates: true,
             offline: false,
             language: String::new(),

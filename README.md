@@ -31,9 +31,13 @@ Start with the Bible, offline. Add the original languages, maps, history, the ch
 - **Interlinear Greek and Hebrew.** Word-by-word data from STEP Bible
   (Tyndale House), with glosses, grammar in plain English, lexicon entries
   and every occurrence of a word.
+- **Church fathers.** The Ante-Nicene and Nicene and Post-Nicene Fathers,
+  37 volumes from Clement and Ignatius to Augustine, Chrysostom and the
+  councils, downloaded one at a time from the Christian Classics Ethereal
+  Library and read offline.
 - **Cross-reference map.** OpenBible.info's 343,000 cross-references drawn as
   arcs. Zoom down to a single verse and see everything that meets there. You
-  can also view them as a circle or a matrix, and order the books by
+  can also view them as a circle, a matrix, or in 3D as a cube or a globe you turn by hand, and order the books by
   events, date written, writer, language, culture, genre or literary form.
 - **Introductions to every book.** Built in for the 66 books and the 18
   deuterocanonical books (Apocrypha), with each book's places on a map and

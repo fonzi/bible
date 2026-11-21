@@ -21,6 +21,7 @@ pangocairo = "0.20"
 gstreamer = "0.23"
 cairo-rs = { version = "0.20", features = ["png"] }
 scraper = "0.20"
+ego-tree = "0.6"
 urlencoding = "2"
 
 [package.metadata.deb]

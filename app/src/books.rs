@@ -488,7 +488,7 @@ impl Section for Books {
         }
         let mods = self.modules();
         let mut groups = Vec::new();
-        if mods.is_empty() {
+        if mods.is_empty() && crate::fathers::installed().is_empty() {
             let g = adw::PreferencesGroup::new();
             let row = adw::ActionRow::builder()
                 .title("No books yet")
@@ -576,6 +576,36 @@ impl Section for Books {
                         },
                     )
                 });
+                g.add(&row);
+            }
+            self.list.add(&g);
+            groups.push(g);
+        }
+        // the church fathers, downloaded volume by volume
+        let fathers = crate::fathers::installed();
+        if !fathers.is_empty() {
+            let g = adw::PreferencesGroup::builder()
+                .title("Church fathers")
+                .description("Opens where you left off")
+                .build();
+            for id in fathers {
+                let row = adw::ActionRow::builder()
+                    .title(glib::markup_escape_text(crate::fathers::title_of(id)).as_str())
+                    .subtitle(
+                        crate::fathers::VOLUMES
+                            .iter()
+                            .find(|v| v.0 == id)
+                            .map(|v| v.1)
+                            .unwrap_or(""),
+                    )
+                    .activatable(true)
+                    .build();
+                let icon = gtk::Image::from_icon_name("system-users-symbolic");
+                icon.add_css_class("dim-label");
+                row.add_prefix(&icon);
+                row.add_suffix(&gtk::Image::from_icon_name("go-next-symbolic"));
+                let c = self.ctx.clone();
+                row.connect_activated(move |_| crate::fathers::open(&c, id));
                 g.add(&row);
             }
             self.list.add(&g);

@@ -97,6 +97,7 @@ impl About {
         g.add(&row("CrossWire Bible Society · SWORD modules", "Bibles, commentaries and books. Each module keeps its own licence, shown in Downloads."));
         g.add(&row("STEP Bible · Tyndale House, Cambridge", "Interlinear Greek and Hebrew, glosses, grammar and brief lexicons (TAGNT, TAHOT, TBESG, TBESH). CC BY 4.0 · www.STEPBible.org"));
         g.add(&row("Places · STEPBible TIPNR and OpenBible.info", "Biblical places with every reference (TIPNR, CC BY 4.0, www.STEPBible.org); locations from OpenBible.info (CC BY 4.0)."));
+        g.add(&row("Church fathers", "The Ante-Nicene and Nicene and Post-Nicene Fathers (Roberts, Donaldson and Schaff, public domain), downloaded on request from the Christian Classics Ethereal Library, ccel.org."));
         g.add(&row("Book introductions", "Overviews from Wikipedia (CC BY-SA 4.0), each credited on its page, with traditional author and date added for this app."));
         g.add(&row("Audio", "Berean Standard Bible narrated by Bob Souer, public domain, from OpenBible.com. Downloaded only when you ask."));
         g.add(&row("Startup sounds", "Hymn openings (Old Hundredth, New Britain, Nicaea) synthesised for this app from public-domain tunes. “Kyrie” is the opening of Kyrie XI (Orbis Factor) sung by Paterm, from Wikimedia Commons, CC BY-SA 3.0 (creativecommons.org/licenses/by-sa/3.0), shortened to two seconds with a fade."));

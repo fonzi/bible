@@ -137,6 +137,96 @@ fn lang_name(code: &str) -> String {
 }
 
 impl LibraryView {
+    /// The church fathers, one volume at a time from CCEL.
+    fn render_fathers(&self) {
+        let g = adw::PreferencesGroup::builder()
+            .title("Church fathers")
+            .description("The Ante-Nicene and Nicene and Post-Nicene Fathers (Roberts, Donaldson and Schaff, public domain), from the Christian Classics Ethereal Library. Each volume is about 3–10 MB and reads offline in the Reading room.")
+            .build();
+        g.set_widget_name("libgroup");
+        let mut series: Vec<(&str, adw::ExpanderRow)> = Vec::new();
+        for (id, ser, title) in crate::fathers::VOLUMES {
+            let exp = match series.iter().find(|s| s.0 == ser) {
+                Some(s) => s.1.clone(),
+                None => {
+                    let e = adw::ExpanderRow::builder().title(ser).build();
+                    g.add(&e);
+                    series.push((ser, e.clone()));
+                    e
+                }
+            };
+            let installed = crate::fathers::is_installed(id);
+            let row = adw::ActionRow::builder()
+                .title(glib::markup_escape_text(title).as_str())
+                .subtitle(if installed { "Downloaded · in the Reading room" } else { "Not downloaded" })
+                .build();
+            row.set_title_lines(2);
+            let spin = crate::loader::new(24);
+            spin.set_visible(false);
+            spin.set_valign(gtk::Align::Center);
+            row.add_suffix(&spin);
+            let btn = gtk::Button::with_label(if installed { "Remove" } else { "Download" });
+            btn.set_valign(gtk::Align::Center);
+            if installed {
+                btn.add_css_class("flat");
+            }
+            let ctx = self.ctx.clone();
+            btn.connect_clicked(move |b| {
+                if crate::fathers::is_installed(id) {
+                    if b.label().as_deref() == Some("Remove") {
+                        b.set_label("Confirm remove");
+                        b.add_css_class("destructive-action");
+                        b.remove_css_class("flat");
+                        return;
+                    }
+                    crate::fathers::remove(id);
+                    ctx.toast("Removed the volume");
+                    ctx.refresh_all();
+                    return;
+                }
+                b.set_sensitive(false);
+                b.set_label("Downloading");
+                spin.set_visible(true);
+                let ctx = ctx.clone();
+                let b = b.clone();
+                let spin = spin.clone();
+                glib::spawn_future_local(async move {
+                    let res = gio::spawn_blocking(move || {
+                        crate::fathers::download(id, &mut |_, _| {}).map_err(|e| e.to_string())
+                    })
+                    .await;
+                    spin.set_visible(false);
+                    match res {
+                        Ok(Ok(())) => {
+                            ctx.toast("Downloaded. It’s in the Reading room");
+                            ctx.refresh_all();
+                        }
+                        Ok(Err(e)) => {
+                            b.set_sensitive(true);
+                            b.set_label("Try again");
+                            ctx.toast(&format!("Download failed: {e}"));
+                        }
+                        Err(_) => {
+                            b.set_sensitive(true);
+                            b.set_label("Try again");
+                        }
+                    }
+                });
+            });
+            row.add_suffix(&btn);
+            exp.add_row(&row);
+        }
+        for (ser, e) in &series {
+            let n = crate::fathers::VOLUMES
+                .iter()
+                .filter(|v| v.1 == *ser && crate::fathers::is_installed(v.0))
+                .count();
+            let total = crate::fathers::VOLUMES.iter().filter(|v| v.1 == *ser).count();
+            e.set_subtitle(&format!("{n} of {total} volumes downloaded"));
+        }
+        self.installed.add(&g);
+    }
+
     /// The legal notice shows until it has been read once ("Understood").
     fn legal_due(&self) -> bool {
         let c = self.ctx.config.borrow();
@@ -410,6 +500,7 @@ impl LibraryView {
             g.add(&row);
         }
         self.installed.add(&g);
+        self.render_fathers();
         self.render_audio();
 
         if lib.modules.is_empty() {

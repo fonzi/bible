@@ -2,7 +2,7 @@
 
 use crate::ctx::{Ctx, Section};
 use crate::{
-    about, bookmarks, books, crossrefs, fasting, library, notes_view, plans, prefs, reader, search,
+    about, bookmarks, books, crossrefs, fathers, fasting, library, notes_view, plans, prefs, reader, search,
     timeline, today, wordstudy,
 };
 use adw::prelude::*;
@@ -192,6 +192,7 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
         wordstudy::WordStudy::new(&ctx),
         fasting::FastingView::new(&ctx),
         crossrefs::CrossRefs::new(&ctx),
+        fathers::FathersView::new(&ctx),
     ];
     for s in &sections {
         stack.add_named(&s.widget(), Some(s.id()));
@@ -353,6 +354,10 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
         .and_then(|a| bible_core::Ref::from_uri(&a).or_else(|| bible_core::refs::parse_osis(&a)))
     {
         ctx.open_ref(&r);
+    }
+    // for screenshots and tests: BIBLE_APP_FATHERS=anf01
+    if let Ok(id) = std::env::var("BIBLE_APP_FATHERS") {
+        fathers::open(&ctx, &id);
     }
     // name every icon-only button for screen readers (pages do it again when shown)
     crate::ctx::label_icon_buttons(window.upcast_ref());
