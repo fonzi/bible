@@ -1,6 +1,7 @@
 name: Release
 # Publishes a release whenever the version in Cargo.toml changes on main
-# (or when run by hand from the Actions tab). The tag is created here.
+# (or when run by hand from the Actions tab). The tag is created here,
+# on the commit that was built.
 on:
   push:
     branches: [main]
