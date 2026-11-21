@@ -1,11 +1,11 @@
 //! Cross-references in three dimensions, as a cube or a globe you can turn.
 //!
 //! Cube: across is where a cross-reference starts, down is where it lands
-//! (as in the flat matrix), and depth is when the citing book was written,
-//! so later books reaching back to earlier ones climb through the cube.
+//! (as in the flat matrix), and depth is how far back in time it reaches:
+//! the citing book's date of writing minus the cited book's.
 //!
-//! Globe: the Old Testament runs round the northern half and the New
-//! Testament round the southern half. Links within a Testament stay near
+//! Globe: the Old Testament spirals over the northern half and the New
+//! Testament over the southern half. Links within a Testament stay near
 //! its ring; links between them cut through the middle.
 
 use gtk::prelude::*;
@@ -19,34 +19,25 @@ pub enum Shape {
 }
 
 /// Bins per axis: fine enough to show structure, coarse enough to turn smoothly.
-const BINS: usize = 120;
-const RING_BINS: usize = 90;
+const BINS: usize = 160;
+const RING_BINS: usize = 240;
 
-/// When each book was written, as a step from earliest (0) to latest (5),
-/// following the same traditional dates as the flat views.
-pub fn age_step(book: &str) -> u8 {
-    const STEPS: [&[&str]; 6] = [
-        &["Job", "Gen", "Exod", "Lev", "Num", "Deut", "Josh"],
-        &["Judg", "Ruth", "1Sam", "2Sam", "Ps", "Song", "Prov", "Eccl"],
-        &["Obad", "Joel", "Jonah", "Amos", "Hos", "Mic", "Isa", "Nah", "Zeph", "Hab", "Jer"],
-        &["Lam", "1Kgs", "2Kgs", "Ezek", "Dan"],
-        &["Hag", "Zech", "Esth", "1Chr", "2Chr", "Ezra", "Neh", "Mal"],
-        &[],
-    ];
-    STEPS
-        .iter()
-        .position(|s| s.contains(&book))
-        .unwrap_or(5) as u8
+/// Books in the traditional order of writing, earliest first (approximate
+/// dates). The cube gives each its own depth.
+const WRITTEN: [&str; 66] = [
+    "Job", "Gen", "Exod", "Lev", "Num", "Deut", "Josh", "Judg", "Ruth", "Ps", "Song", "Prov",
+    "Eccl", "1Sam", "2Sam", "Obad", "Joel", "Jonah", "Amos", "Hos", "Mic", "Isa", "Zeph", "Nah",
+    "Hab", "Jer", "Lam", "Ezek", "1Kgs", "2Kgs", "Dan", "Hag", "Zech", "Esth", "1Chr", "2Chr",
+    "Ezra", "Neh", "Mal", "Jas", "Gal", "1Thess", "2Thess", "1Cor", "2Cor", "Rom", "Mark", "Eph",
+    "Col", "Phlm", "Phil", "Matt", "Luke", "Acts", "1Tim", "Titus", "1Pet", "2Tim", "2Pet", "Heb",
+    "Jude", "John", "1John", "2John", "3John", "Rev",
+];
+
+/// Depth for a book, 0 (earliest written) to 1 (latest).
+pub fn written_depth(book: &str) -> f64 {
+    WRITTEN.iter().position(|b| *b == book).unwrap_or(65) as f64 / 65.0
 }
 
-pub const AGE_NAMES: [&str; 6] = [
-    "before 1200 BC",
-    "1050–930 BC",
-    "930–586 BC",
-    "586–538 BC",
-    "538–400 BC",
-    "AD 45–95",
-];
 
 /// A point or line in the model, with its weight and colour position.
 struct Dot {
@@ -141,7 +132,8 @@ impl Space {
     pub fn reset(&self) {
         self.yaw.set(HOME.0);
         self.pitch.set(HOME.1);
-        self.zoom.set(HOME.2);
+        // the globe has no corners, so it can open larger than the cube
+        self.zoom.set(if self.shape.get() == Shape::Globe { 1.35 } else { HOME.2 });
         self.area.queue_draw();
     }
 
@@ -219,10 +211,27 @@ impl Space {
                 let _ = cr.stroke();
             }
             Shape::Globe => {
-                for lat in [ring_lat(true), 0.0, ring_lat(false)] {
+                // a few lines of latitude and longitude, the equator firmer
+                for lat in [-1.0, -0.5, 0.0, 0.5, 1.0] {
+                    cr.set_source_rgba(fg, fg, fg, if lat == 0.0 { 0.3 } else { 0.12 });
                     for i in 0..=96 {
                         let lon = i as f64 / 96.0 * std::f64::consts::TAU;
                         let (x, y, _) = self.project(sphere(lat, lon), w, h);
+                        if i == 0 {
+                            cr.move_to(x, y);
+                        } else {
+                            cr.line_to(x, y);
+                        }
+                    }
+                    let _ = cr.stroke();
+                }
+                cr.set_source_rgba(fg, fg, fg, 0.12);
+                for m in 0..6 {
+                    let lon = m as f64 / 6.0 * std::f64::consts::PI;
+                    for i in 0..=96 {
+                        let lat = i as f64 / 96.0 * std::f64::consts::TAU;
+                        let p = [lat.cos() * lon.cos(), lat.sin(), lat.cos() * lon.sin()];
+                        let (x, y, _) = self.project(p, w, h);
                         if i == 0 {
                             cr.move_to(x, y);
                         } else {
@@ -291,10 +300,6 @@ impl Space {
     }
 }
 
-fn ring_lat(old: bool) -> f64 {
-    if old { 0.62 } else { -0.62 }
-}
-
 fn sphere(lat: f64, lon: f64) -> [f64; 3] {
     [lat.cos() * lon.cos(), lat.sin(), lat.cos() * lon.sin()]
 }
@@ -324,20 +329,27 @@ fn nt_start(chs: &[(String, u16, u16)]) -> usize {
 fn cube(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
     let n = chs.len().max(1);
     let bin = |c: u16| (c as usize * BINS / n).min(BINS - 1);
-    // (from bin, to bin, age step) -> count
-    let mut cells: std::collections::HashMap<(usize, usize, u8), u32> = Default::default();
+    // (from bin, to bin, reach) -> count. Depth is how far back in time the
+    // reference reaches: the citing book's date of writing minus the cited one's
+    let mut cells: std::collections::HashMap<(usize, usize, i16), u32> = Default::default();
     for &(a, b, k) in links {
         for (from, to) in [(a, b), (b, a)] {
-            let Some(book) = chs.get(from as usize).map(|c| c.0.as_str()) else { continue };
-            *cells.entry((bin(from), bin(to), age_step(book))).or_default() += k as u32;
+            let (Some(fb), Some(tb)) = (chs.get(from as usize), chs.get(to as usize)) else { continue };
+            let d = ((written_depth(&fb.0) - written_depth(&tb.0)) * 65.0).round() as i16;
+            *cells.entry((bin(from), bin(to), d)).or_default() += k as u32;
         }
     }
     let max = cells.values().copied().max().unwrap_or(1) as f64;
     let coord = |i: usize| i as f64 / (BINS - 1) as f64 * 2.0 - 1.0;
+    // a small, fixed spread in depth turns each book's sheet into a cloud
+    let spread = |x: usize, y: usize| {
+        let h = (x as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ (y as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
+        ((h >> 40) as f64 / (1u64 << 24) as f64 - 0.5) * 0.028
+    };
     let dots = cells
         .into_iter()
         .map(|((x, y, z), c)| Dot {
-            p: [coord(x), -coord(y), z as f64 / 5.0 * 2.0 - 1.0],
+            p: [coord(x), -coord(y), (z as f64 / 65.0 + spread(x, y)).clamp(-1.0, 1.0)],
             w: (c as f64).ln_1p() / max.ln_1p(),
             t: (x as f64 - y as f64).abs() / BINS as f64,
         })
@@ -355,8 +367,9 @@ fn cube(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
     }
     labels.push(([0.55, 1.3, -1.0], "cited from →".into()));
     labels.push(([-1.45, 0.0, -1.0], "cited ↓".into()));
-    labels.push(([1.12, -1.12, -1.0], format!("written {}", AGE_NAMES[0])));
-    labels.push(([1.12, -1.12, 1.0], format!("written {}", AGE_NAMES[5])));
+    labels.push(([1.12, -1.12, -1.0], "cites later writings".into()));
+    labels.push(([1.12, -1.12, 0.0], "same time".into()));
+    labels.push(([1.12, -1.12, 1.0], "reaches far back".into()));
     Model { dots, lines: vec![], labels }
 }
 
@@ -373,13 +386,21 @@ fn globe(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
             (false, (c - nt) * RING_BINS / n_nt)
         }
     };
+    // each Testament spirals over its half: Genesis by the North Pole down
+    // to Malachi at the equator, Matthew at the equator down to Revelation
+    // by the South Pole
     let pos = |(old, b): (bool, usize)| {
-        sphere(ring_lat(old), b as f64 / RING_BINS as f64 * std::f64::consts::TAU)
+        let u = b as f64 / RING_BINS as f64;
+        let lat = if old { 1.48 - u * 1.40 } else { -0.08 - u * 1.40 };
+        sphere(lat, u * std::f64::consts::TAU)
     };
     let mut pairs: std::collections::HashMap<((bool, usize), (bool, usize)), u32> = Default::default();
     for &(a, b, k) in links {
         let (pa, pb) = (place(a), place(b));
-        if pa == pb {
+        // short links hug the surface and only draw the spiral; keep the
+        // ones that cross the globe
+        let (p, q) = (pos(pa), pos(pb));
+        if p[0] * q[0] + p[1] * q[1] + p[2] * q[2] > 0.84 {
             continue;
         }
         let key = if pa <= pb { (pa, pb) } else { (pb, pa) };
@@ -441,10 +462,12 @@ mod tests {
 
     #[test]
     fn every_book_has_an_age() {
-        assert_eq!(age_step("Gen"), 0);
-        assert_eq!(age_step("Ps"), 1);
-        assert_eq!(age_step("Mal"), 4);
-        assert_eq!(age_step("Rom"), 5);
+        assert_eq!(written_depth("Job"), 0.0);
+        assert_eq!(written_depth("Rev"), 1.0);
+        let mut w = WRITTEN.to_vec();
+        w.sort();
+        w.dedup();
+        assert_eq!(w.len(), 66);
     }
 
     #[test]
@@ -456,8 +479,9 @@ mod tests {
             assert!(d.p.iter().all(|v| (-1.0..=1.0).contains(v)), "{:?}", d.p);
             assert!((0.0..=1.0).contains(&d.w));
         }
-        // the Roman-era books sit at the far face
-        assert!(m.dots.iter().any(|d| d.p[2] == 1.0));
+        // Romans citing Psalms reaches back; Psalms citing Romans reaches forward
+        assert!(m.dots.iter().any(|d| d.p[2] > 0.3));
+        assert!(m.dots.iter().any(|d| d.p[2] < -0.3));
     }
 
     #[test]
@@ -469,7 +493,7 @@ mod tests {
             for p in [l.a, l.b] {
                 let r = (p[0] * p[0] + p[1] * p[1] + p[2] * p[2]).sqrt();
                 assert!((r - 1.0).abs() < 1e-9);
-                assert!(p[1].abs() > 0.5, "on a ring, not the equator");
+                assert!(p[1].abs() > 0.05, "off the equator, in its own half");
             }
         }
         // Isaiah to Matthew crosses from north to south

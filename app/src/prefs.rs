@@ -179,7 +179,31 @@ impl Prefs {
         st.connect_selected_notify(move |r| {
             c.config.borrow_mut().splash_style = crate::splash::STYLES[r.selected() as usize].0.to_string();
             c.save_config();
+            // show the new style straight away
+            if let Some(app) = c.window.get().and_then(|w| w.application()).and_downcast::<adw::Application>() {
+                let style = c.config.borrow().splash_style.clone();
+                crate::splash::show(&app, &style, crate::splash::verse_of_the_day(), 1800, || {});
+            }
         });
+        // play the chosen splash right here, no restart needed
+        let play = gtk::Button::from_icon_name("media-playback-start-symbolic");
+        play.set_tooltip_text(Some(&crate::i18n::t("Preview the splash screen")));
+        play.add_css_class("flat");
+        play.set_valign(gtk::Align::Center);
+        let c = ctx.clone();
+        play.connect_clicked(move |_| {
+            let Some(app) = c
+                .window
+                .get()
+                .and_then(|w| w.application())
+                .and_downcast::<adw::Application>()
+            else {
+                return;
+            };
+            let style = c.config.borrow().splash_style.clone();
+            crate::splash::show(&app, &style, crate::splash::verse_of_the_day(), 1800, || {});
+        });
+        st.add_suffix(&play);
         look.add(&st);
         let lnames: Vec<&str> = crate::loader::STYLES.iter().map(|s| s.1).collect();
         let lrow = adw::ComboRow::builder()

@@ -129,7 +129,7 @@ const MODE_HELP: [&str; 5] = [
     "Rainbow: each arc joins two passages that refer to each other, the colour showing how far apart they are.",
     "Circle: the books run clockwise from the top, each chord a cross-reference; dense bundles show books that lean on each other.",
     "Matrix: a dot for every cross-reference, from across and to down. The diagonal is passages quoting their neighbours; squares and stripes are groups of books that echo each other, repeating at every zoom level like a fractal.",
-    "Cube (3D): the matrix with depth. Across is where a reference starts, down is where it lands, and depth is when the citing book was written, so later books reaching back to earlier ones climb through the cube. Drag to turn it.",
+    "Cube (3D): the matrix with depth. Across is where a reference starts, down is where it lands, and depth is how far back in time it reaches: references from late books to early ones sit at the back, ones to later writings at the front. Drag to turn it.",
     "Globe (3D): the Old Testament runs round the northern half and the New Testament round the southern half. Links within a Testament stay near its ring; links between the Testaments cut through the middle. Drag to turn it.",
 ];
 
