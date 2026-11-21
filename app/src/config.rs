@@ -81,6 +81,8 @@ pub struct Config {
     pub splash_style: String,
     /// loading animation: an id from loader::STYLES
     pub loader: String,
+    /// the accent colour follows the liturgical colour of the day
+    pub season_accent: bool,
     /// a short hymn when the app opens (opt in): an id from sounds::SOUNDS
     pub startup_sound: String,
     /// bumped when a default must be applied again to existing configs
@@ -117,6 +119,7 @@ impl Default for Config {
             obsidian_links: true,
             tradition: "Western".into(),
             legal_notice: true,
+            season_accent: true,
             check_updates: true,
             offline: false,
             language: String::new(),

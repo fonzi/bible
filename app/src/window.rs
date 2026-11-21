@@ -15,6 +15,24 @@ thread_local! {
 }
 
 /// (Re)load the app stylesheet; text size and highlight colours come from settings.
+/// The accent for a liturgical colour: (background with white text, text on
+/// the page), tuned for contrast in light and dark. White feasts use gold,
+/// since white can't work as an accent.
+pub fn season_accent(colour: &str, dark: bool) -> (&'static str, &'static str) {
+    match (colour, dark) {
+        ("purple", false) => ("#7340a8", "#6a3a9e"),
+        ("purple", true) => ("#7d4bb5", "#c4a3ee"),
+        ("white", false) => ("#946600", "#835a00"),
+        ("white", true) => ("#946600", "#e6c06a"),
+        ("red", false) => ("#b02a25", "#a3241f"),
+        ("red", true) => ("#b8322c", "#f5958f"),
+        ("black", false) => ("#3d3846", "#3d3846"),
+        ("black", true) => ("#5e5c64", "#c0bfbc"),
+        (_, false) => ("#237a4b", "#1f6d43"),
+        (_, true) => ("#26804f", "#7fd1a1"),
+    }
+}
+
 pub fn load_css(ctx: &Ctx) {
     let cfg = ctx.config.borrow();
     let mut css = String::from(include_str!("style.css"));
@@ -62,14 +80,26 @@ pub fn load_css(ctx: &Ctx) {
             hex = c.hex
         ));
     }
-    for (name, hex) in [
-        ("purple", "#9141ac"),
-        ("white", "#deddda"),
-        ("green", "#2ec27e"),
-        ("red", "#e01b24"),
-        ("black", "#3d3846"),
-    ] {
+    // the season stripe on Today, in the same shades as the accent (white stays white)
+    let dark = adw::StyleManager::default().is_dark();
+    for name in ["purple", "white", "green", "red", "black"] {
+        let hex = if name == "white" { "#deddda" } else { season_accent(name, dark).0 };
         css.push_str(&format!(".season-{name} {{ background-color: {hex}; }}\n"));
+    }
+    // the app is dressed for the day: its accent follows the liturgical colour
+    if cfg.season_accent {
+        let today = chrono::Local::now().date_naive();
+        let trad = bible_core::churchyear::Tradition::from_name(&cfg.tradition);
+        let colour = bible_core::churchyear::day_info(today, trad).colour;
+        let dark = adw::StyleManager::default().is_dark();
+        let (bg, text) = season_accent(colour.name(), dark);
+        css.push_str(&format!(
+            "@define-color accent_bg_color {bg};\n\
+             @define-color accent_fg_color #ffffff;\n\
+             @define-color accent_color {text};\n\
+             .passage-card {{ background-color: mix(@card_bg_color, {bg}, {tint}); }}\n",
+            tint = if dark { 0.10 } else { 0.06 },
+        ));
     }
     let Some(display) = gdk::Display::default() else {
         return;
@@ -104,6 +134,11 @@ fn sidebar_row(s: &dyn Section) -> gtk::ListBoxRow {
 pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
     let ctx = Ctx::new();
     load_css(&ctx);
+    {
+        // the seasonal accent has light and dark shades
+        let c = ctx.clone();
+        adw::StyleManager::default().connect_dark_notify(move |_| load_css(&c));
+    }
     prefs::apply_style(&ctx.config.borrow().style.clone());
 
     let window = adw::ApplicationWindow::builder()
@@ -306,4 +341,34 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
         window.present();
     }
     ctx
+}
+
+#[cfg(test)]
+mod tests {
+    use super::season_accent;
+
+    fn lum(h: &str) -> f64 {
+        let h = h.trim_start_matches('#');
+        let c = |i: usize| {
+            let v = u8::from_str_radix(&h[i..i + 2], 16).unwrap() as f64 / 255.0;
+            if v <= 0.03928 { v / 12.92 } else { ((v + 0.055) / 1.055).powf(2.4) }
+        };
+        0.2126 * c(0) + 0.7152 * c(2) + 0.0722 * c(4)
+    }
+    fn contrast(a: &str, b: &str) -> f64 {
+        let (x, y) = (lum(a), lum(b));
+        (x.max(y) + 0.05) / (x.min(y) + 0.05)
+    }
+
+    #[test]
+    fn seasonal_accents_are_readable() {
+        for c in ["purple", "white", "green", "red", "black"] {
+            for dark in [false, true] {
+                let (bg, text) = season_accent(c, dark);
+                assert!(contrast("#ffffff", bg) >= 4.5, "{c} dark={dark}: white on {bg}");
+                let page = if dark { "#242424" } else { "#fafafa" };
+                assert!(contrast(text, page) >= 4.5, "{c} dark={dark}: {text} on {page}");
+            }
+        }
+    }
 }

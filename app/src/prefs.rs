@@ -222,6 +222,15 @@ impl Prefs {
             preview.set_sensitive(r.selected() != 0);
         });
         look.add(&snd);
+        look.add(&switch(
+            &crate::i18n::t("Follow the church year"),
+            &crate::i18n::t("The accent colour follows the liturgical colour of the day: violet in Advent and Lent, gold at feasts, green in Ordinary Time, red at Pentecost"),
+            cfg.season_accent,
+            Box::new(|c, v| {
+                c.config.borrow_mut().season_accent = v;
+                crate::window::load_css(c);
+            }),
+        ));
         g.add(&switch(
             &crate::i18n::t("Classic typography"),
             &crate::i18n::t("Old-style type like an early printed Bible, with a large initial letter opening each chapter"),
