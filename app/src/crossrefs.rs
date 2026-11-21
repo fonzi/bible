@@ -127,10 +127,10 @@ const ORDER_HELP: [&str; 12] = [
 /// What each view means.
 const MODE_HELP: [&str; 5] = [
     "Rainbow: each arc joins two passages that refer to each other, the colour showing how far apart they are.",
-    "Circle (beta): the books run clockwise from the top, each chord a cross-reference; dense bundles show books that lean on each other.",
-    "Matrix (beta): a dot for every cross-reference, from across and to down. The diagonal is passages quoting their neighbours; squares and stripes are groups of books that echo each other, repeating at every zoom level like a fractal.",
-    "Cube (beta, 3D): the matrix with depth. Across is where a reference starts, down is where it lands, and depth is when the citing book was written, so later books reaching back to earlier ones climb through the cube. Drag to turn it.",
-    "Globe (beta, 3D): the Old Testament runs round the northern half and the New Testament round the southern half. Links within a Testament stay near its ring; links between the Testaments cut through the middle. Drag to turn it.",
+    "Circle: the books run clockwise from the top, each chord a cross-reference; dense bundles show books that lean on each other.",
+    "Matrix: a dot for every cross-reference, from across and to down. The diagonal is passages quoting their neighbours; squares and stripes are groups of books that echo each other, repeating at every zoom level like a fractal.",
+    "Cube (3D): the matrix with depth. Across is where a reference starts, down is where it lands, and depth is when the citing book was written, so later books reaching back to earlier ones climb through the cube. Drag to turn it.",
+    "Globe (3D): the Old Testament runs round the northern half and the New Testament round the southern half. Links within a Testament stay near its ring; links between the Testaments cut through the middle. Drag to turn it.",
 ];
 
 /// The literary form of a chapter, most specific first.
@@ -576,10 +576,10 @@ impl CrossRefs {
         // views and zoom
         let modes = gtk::DropDown::from_strings(&[
             "Rainbow",
-            "Circle (beta)",
-            "Matrix (beta)",
-            "Cube (beta, 3D)",
-            "Globe (beta, 3D)",
+            "Circle",
+            "Matrix",
+            "Cube (3D)",
+            "Globe (3D)",
         ]);
         modes.set_tooltip_text(Some("How to draw the cross-references"));
         let zin = gtk::Button::from_icon_name("zoom-in-symbolic");
