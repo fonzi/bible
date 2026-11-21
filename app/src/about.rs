@@ -18,6 +18,12 @@ fn row(title: &str, sub: &str) -> adw::ActionRow {
         .build()
 }
 
+const WHY: [&str; 3] = [
+    "Most Bible apps now want an account and a connection. The ones that still work offline tend to look like they belong to another decade. This one is meant to feel at home on a modern GNOME desktop and to keep working with the network switched off.",
+    "The background to each book (who wrote it, when, and for whom) shouldn’t sit behind a study Bible’s copyright. For now the introductions come from Wikipedia under an open licence, and more open sources will follow.",
+    "Start with the Bible, offline. Add the original languages, maps, history, the church year and the wider Christian tradition when you want them, and take it as far as you like.",
+];
+
 impl About {
     pub fn new(ctx: &Rc<Ctx>) -> Rc<About> {
         let body = gtk::Box::new(gtk::Orientation::Vertical, 18);
@@ -40,6 +46,27 @@ impl About {
         head.append(&ver);
         head.append(&desc);
         body.append(&head);
+
+        // why the app exists, in a few plain sentences
+        let why = adw::PreferencesGroup::builder().title("Why this app").build();
+        let wb = gtk::Box::new(gtk::Orientation::Vertical, 10);
+        wb.add_css_class("card");
+        for (i, t) in WHY.iter().enumerate() {
+            let l = gtk::Label::new(Some(t));
+            l.set_wrap(true);
+            l.set_xalign(0.0);
+            l.set_margin_start(16);
+            l.set_margin_end(16);
+            if i == 0 {
+                l.set_margin_top(14);
+            }
+            if i == WHY.len() - 1 {
+                l.set_margin_bottom(14);
+            }
+            wb.append(&l);
+        }
+        why.add(&wb);
+        body.append(&why);
 
         let g = adw::PreferencesGroup::new();
         g.add(&row(

@@ -1,5 +1,7 @@
 # Bible
 
+[![Downloads](https://img.shields.io/github/downloads/fonzi/bible/total?label=downloads)](https://github.com/fonzi/bible/releases)
+
 An offline Bible app for GNOME. It works offline first, then reaches into
 the wider Christian tradition as far as you want to take it. Written in Rust
 with GTK 4 and libadwaita. Free software under the GPL-3.0-or-later.
@@ -11,6 +13,14 @@ with GTK 4 and libadwaita. Free software under the GPL-3.0-or-later.
 |---|---|
 | ![Today in light mode](website/screenshots/today-light.png) | ![Today in dark mode](website/screenshots/today-dark.png) |
 | ![Reading in light mode](website/screenshots/reader-light.png) | ![Reading in dark mode](website/screenshots/reader-dark.png) |
+
+## Why
+
+Most Bible apps now want an account and a connection. The ones that still work offline tend to look like they belong to another decade. This one is meant to feel at home on a modern GNOME desktop and to keep working with the network switched off.
+
+The background to each book (who wrote it, when, and for whom) shouldn’t sit behind a study Bible’s copyright. For now the introductions come from Wikipedia under an open licence, and more open sources will follow.
+
+Start with the Bible, offline. Add the original languages, maps, history, the church year and the wider Christian tradition when you want them, and take it as far as you like.
 
 ## Features
 
