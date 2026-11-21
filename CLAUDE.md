@@ -10,7 +10,9 @@ So, before every push that touches the app, data or packaging:
 
 1. Bump `version` in `Cargo.toml` (patch for fixes and polish, minor for new
    features), then `cargo build` so `Cargo.lock` follows.
-2. Commit the bump with the change.
+2. Add a `## <version>` section at the top of `CHANGELOG.md`, in plain words
+   for users; the release workflow puts it at the top of the release notes.
+   Commit it with the bump and the change.
 3. After pushing, confirm the release exists:
    `gh api repos/fonzi/bible/releases --jq '.[0].tag_name'`
    should show the new `v<version>` with the `.deb` attached.
