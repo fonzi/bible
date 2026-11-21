@@ -116,8 +116,8 @@ impl Today {
         }
         let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
         row.set_margin_top(6);
+        // one primary action per page ("Continue reading"); this one is quieter
         let read = gtk::Button::with_label("Read");
-        read.add_css_class("suggested-action");
         read.add_css_class("pill");
         let first = days[next].first().cloned();
         let ctx = self.ctx.clone();
@@ -440,17 +440,18 @@ impl Section for Today {
         // church day
         let c = card();
         c.add_css_class("season-card");
+        // the liturgical colour as a slim edge down the card, named in words too
         let row = gtk::Box::new(gtk::Orientation::Horizontal, 16);
         let sw = gtk::Box::new(gtk::Orientation::Horizontal, 0);
         sw.add_css_class("season-swatch");
         sw.add_css_class(&format!("season-{}", d.colour.name()));
-        sw.set_valign(gtk::Align::Center);
+        sw.set_valign(gtk::Align::Fill);
         let txt = gtk::Box::new(gtk::Orientation::Vertical, 2);
         txt.append(&label(
             &format!("{} · liturgical colour {}", d.season, d.colour.name()),
             &["caption-heading", "dim-label"],
         ));
-        txt.append(&label(&d.title, &["title-2"]));
+        txt.append(&label(&d.title, &["title-2", "serif"]));
         if !d.upcoming.is_empty() {
             let up: Vec<String> = d
                 .upcoming
