@@ -74,9 +74,9 @@ impl Books {
         let list_tv = adw::ToolbarView::new();
         let lh = adw::HeaderBar::new();
         lh.pack_start(&sidebar_button(ctx));
-        lh.set_title_widget(Some(&adw::WindowTitle::new("Books and devotionals", "")));
+        lh.set_title_widget(Some(&adw::WindowTitle::new("Reading room", "")));
         let more = gtk::Button::from_icon_name("list-add-symbolic");
-        more.set_tooltip_text(Some("Get more from the Library"));
+        more.set_tooltip_text(Some("Get more from Downloads"));
         let c = ctx.clone();
         more.connect_clicked(move |_| c.go("library"));
         lh.pack_end(&more);
@@ -467,7 +467,7 @@ impl Section for Books {
         "books"
     }
     fn title(&self) -> &'static str {
-        "Books and devotionals"
+        "Reading room"
     }
     fn icon(&self) -> &'static str {
         "bibleapp-books-symbolic"
@@ -485,7 +485,7 @@ impl Section for Books {
             let g = adw::PreferencesGroup::new();
             let row = adw::ActionRow::builder()
                 .title("No books yet")
-                .subtitle("Calvin’s Institutes, the Westminster Confession, Spurgeon’s Morning and Evening, Strong’s dictionaries and more are in the Library.")
+                .subtitle("Calvin’s Institutes, the Westminster Confession, Spurgeon’s Morning and Evening, Strong’s dictionaries and more are in Downloads.")
                 .activatable(true)
                 .build();
             row.add_suffix(&gtk::Image::from_icon_name("go-next-symbolic"));

@@ -454,6 +454,7 @@ pub struct CrossRefs {
     again: Cell<bool>,
     busy: gtk::Box,
     source: RefCell<String>,
+    help: gtk::ToggleButton,
     cache: RefCell<Option<Cached>>,
     rerender: RefCell<Option<glib::SourceId>>,
     mode: Cell<Mode>,
@@ -527,8 +528,10 @@ impl CrossRefs {
         read.set_margin_bottom(12);
         read.set_visible(false);
         info.set_hexpand(true);
-        // wrap to whatever room there is, never widening the window
+        // one line, never widening the window; the ⓘ panel holds the explanations
         info.set_max_width_chars(1);
+        info.set_wrap(false);
+        info.set_ellipsize(gtk::pango::EllipsizeMode::End);
         let foot = gtk::Box::new(gtk::Orientation::Horizontal, 12);
         foot.append(&info);
         foot.append(&read);
@@ -588,12 +591,23 @@ impl CrossRefs {
         text.set_margin_bottom(18);
         text.set_margin_start(18);
         text.set_margin_end(18);
+        text.append(&help_heading("How to use it"));
+        for (n, w) in [
+            ("Zoom", "Scroll, or use the − ⤢ + buttons. Zoom in far enough and single verses can be picked."),
+            ("Move", "Drag the picture."),
+            ("Pick", "Click a chapter or verse to see only its links. Esc or ⤢ clears it."),
+            ("Read", "Double-click, or use the Read button, to open the passage."),
+        ] {
+            text.append(&help_line(n, w));
+        }
         let groups_box = gtk::Box::new(gtk::Orientation::Vertical, 10);
         text.append(&groups_box);
         text.append(&help_heading("Views"));
         for h in MODE_HELP {
             let (n, w) = h.split_once(": ").unwrap_or((h, ""));
-            text.append(&help_line(n, w));
+            let mut c = w.chars();
+            let w: String = c.next().map(|f| f.to_uppercase().chain(c).collect()).unwrap_or_default();
+            text.append(&help_line(n, &w));
         }
         text.append(&help_heading("Orders"));
         for (n, w) in ORDERS.iter().zip(ORDER_HELP) {
@@ -614,6 +628,7 @@ impl CrossRefs {
             .reveal_child(false)
             .build();
         help.bind_property("active", &revealer, "reveal-child").sync_create().build();
+
         content.append(&revealer);
         hb.pack_end(&help);
         hb.pack_end(&zoom);
@@ -636,6 +651,7 @@ impl CrossRefs {
             again: Cell::new(false),
             busy: busy.clone(),
             source: RefCell::new(String::new()),
+            help: help.clone(),
             cache: RefCell::new(None),
             rerender: RefCell::new(None),
             mode: Cell::new(Mode::Rainbow),
@@ -817,7 +833,7 @@ impl CrossRefs {
         let Some(m) = self.ctx.bible() else {
             self.status.set_title("No Bible installed");
             self.status
-                .set_description(Some("Download a Bible from the Library first."));
+                .set_description(Some("Download a Bible from Downloads first."));
             self.progress.set_visible(false);
             self.stack.set_visible_child_name("status");
             return;
@@ -1224,8 +1240,6 @@ impl CrossRefs {
     fn describe(&self) {
         let total = self.vlinks.borrow().len();
         let source = self.source.borrow().clone();
-        let how = MODE_HELP[self.mode.get() as usize];
-        let order = format!(" {}: {}", ORDERS[self.order.get() as usize], ORDER_HELP[self.order.get() as usize]);
         self.read.set_visible(self.selected.get().is_some());
         if let Some((i, v)) = self.selected.get() {
             if let Some((b, c, _)) = self.chs.borrow().get(i as usize) {
@@ -1234,7 +1248,19 @@ impl CrossRefs {
             }
         }
         let Some((i, verse)) = self.selected.get() else {
-            self.info.set_text(&format!("{total} cross-references from {source}. {how}{order} Scroll to zoom, drag to move. Click a chapter to pick out its links (zoom in to pick a single verse), double-click to read it."));
+            let short = source.split(" (").next().unwrap_or(&source).to_string();
+            let n = total.to_string();
+            let mut grouped = String::new();
+            for (k, ch) in n.chars().enumerate() {
+                if k > 0 && (n.len() - k) % 3 == 0 {
+                    grouped.push(',');
+                }
+                grouped.push(ch);
+            }
+            self.info.set_text(&format!(
+                "{grouped} cross-references from {short} · click a chapter to see its links · ⓘ explains the colours and orders"
+            ));
+            self.info.set_tooltip_text(Some(&source));
             return;
         };
         let chs = self.chs.borrow();
@@ -1268,7 +1294,7 @@ impl CrossRefs {
                 .map(|(c, v)| name(*c, Some(*v)))
                 .collect();
             self.info.set_text(&format!(
-                "{here} meets {} other verses: {}{}. Press Esc or the reset button to clear.",
+                "{here} meets {} other verses: {}{}",
                 seen.len(),
                 list.join(", "),
                 if seen.len() > 14 { ", …" } else { "" }
@@ -1287,7 +1313,7 @@ impl CrossRefs {
         let top: Vec<String> = others.iter().take(6).map(|(o, _)| name(*o, None)).collect();
         let _ = (b, c);
         self.info.set_text(&format!(
-            "{here} has {} cross-references to {} chapters, most of all {}. Press Esc or the reset button to clear.",
+            "{here} has {} cross-references to {} chapters, most of all {}",
             refs.len(),
             others.len(),
             top.join(", ")
@@ -1919,6 +1945,15 @@ impl Section for CrossRefs {
         false
     }
     fn shown(&self) {
+        // the first visit opens the explanations once
+        {
+            let mut c = self.ctx.config.borrow_mut();
+            if !c.dismissed_tips.iter().any(|t| t == "xref-help") {
+                c.dismissed_tips.push("xref-help".into());
+                c.save();
+                self.help.set_active(true);
+            }
+        }
         self.open();
     }
 }

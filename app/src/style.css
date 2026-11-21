@@ -17,6 +17,7 @@ button.swatch { min-width: 28px; min-height: 28px; padding: 0; margin: 0; border
 .warning-bar { background-color: alpha(@warning_bg_color, 0.10); border: 1px solid alpha(@warning_bg_color, 0.35); padding: 10px 14px; border-radius: 10px; margin: 12px; font-size: 0.93em; }
 /* the passage of the day is set apart from the utility cards */
 .passage-card { background-color: mix(@card_bg_color, #b98a2e, 0.07); }
+.compact-card { padding-top: 10px; padding-bottom: 10px; }
 .today-card { padding: 18px 20px; }
 .season-swatch { min-width: 5px; border-radius: 3px; }
 .app-version { padding: 3px 12px; border-radius: 999px; background-color: alpha(@accent_bg_color, 0.15); color: @accent_color; font-weight: 600; }

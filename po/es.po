@@ -48,11 +48,11 @@ msgstr "Introducciones a los libros"
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-msgid "Books and devotionals"
-msgstr "Libros y devocionales"
+msgid "Reading room"
+msgstr "Sala de lectura"
 
-msgid "Browse the Library"
-msgstr "Explorar la Biblioteca"
+msgid "Browse Downloads"
+msgstr "Explorar Descargas"
 
 msgid "Change"
 msgstr "Cambiar"
@@ -126,11 +126,11 @@ msgstr "Colores de resaltado"
 msgid "Language"
 msgstr "Idioma"
 
-msgid "Library"
-msgstr "Biblioteca"
+msgid "Downloads"
+msgstr "Descargas"
 
-msgid "Library sources"
-msgstr "Fuentes de la Biblioteca"
+msgid "Download sources"
+msgstr "Fuentes de descarga"
 
 msgid "Loading animation"
 msgstr "Animación de carga"
@@ -171,8 +171,8 @@ msgstr "Una vez al día, preguntar a GitHub si hay una versión nueva. No se env
 msgid "Only for versions that include these books"
 msgstr "Solo en versiones que incluyen estos libros"
 
-msgid "Open Library"
-msgstr "Abrir la Biblioteca"
+msgid "Open Downloads"
+msgstr "Abrir Descargas"
 
 msgid "Open log folder"
 msgstr "Abrir la carpeta de registros"
@@ -228,8 +228,8 @@ msgstr "Fija la fecha de la Pascua y las fiestas que aparecen en Hoy"
 msgid "Show the Apocrypha / Deuterocanon"
 msgstr "Mostrar los libros apócrifos / deuterocanónicos"
 
-msgid "Show the legal notice in the Library"
-msgstr "Mostrar el aviso legal en la Biblioteca"
+msgid "Show the legal notice in Downloads"
+msgstr "Mostrar el aviso legal en Descargas"
 
 msgid "Shown while the app is busy, such as drawing or downloading"
 msgstr "Se muestra mientras la aplicación trabaja, por ejemplo al dibujar o descargar"
@@ -243,8 +243,8 @@ msgstr "Pantalla de bienvenida"
 msgid "Splash style"
 msgstr "Estilo de bienvenida"
 
-msgid "Spurgeon’s Morning and Evening, Daily Light on the Daily Path and others are free in the Library. It opens to today’s entry each day. You can turn this card off in Preferences."
-msgstr "«Mañana y tarde» de Spurgeon, «Luz diaria para el camino diario» y otros están gratis en la Biblioteca. Cada día se abre en la lectura de hoy. Puedes quitar esta tarjeta en Preferencias."
+msgid "Spurgeon’s Morning and Evening, Daily Light on the Daily Path and others are free in Downloads. It opens to today’s entry each day. You can turn this card off in Preferences."
+msgstr "«Mañana y tarde» de Spurgeon, «Luz diaria para el camino diario» y otros están gratis en Descargas. Cada día se abre en la lectura de hoy. Puedes quitar esta tarjeta en Preferencias."
 
 msgid "Startup sound"
 msgstr "Sonido de inicio"
@@ -255,8 +255,8 @@ msgstr "Estilo"
 msgid "Takes effect the next time the app opens"
 msgstr "Se aplica la próxima vez que se abra la aplicación"
 
-msgid "The Library has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline."
-msgstr "La Biblioteca tiene cientos de versiones en muchos idiomas, además de comentarios y libros clásicos. Descarga una vez y lee sin conexión."
+msgid "Downloads has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline."
+msgstr "Descargas tiene cientos de versiones en muchos idiomas, además de comentarios y libros clásicos. Descarga una vez y lee sin conexión."
 
 msgid "This month"
 msgstr "Este mes"

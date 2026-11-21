@@ -67,7 +67,7 @@ impl About {
         let g = adw::PreferencesGroup::builder()
             .title("Texts and data")
             .build();
-        g.add(&row("CrossWire Bible Society · SWORD modules", "Bibles, commentaries and books. Each module keeps its own licence, shown in the Library."));
+        g.add(&row("CrossWire Bible Society · SWORD modules", "Bibles, commentaries and books. Each module keeps its own licence, shown in Downloads."));
         g.add(&row("STEP Bible · Tyndale House, Cambridge", "Interlinear Greek and Hebrew, glosses, grammar and brief lexicons (TAGNT, TAHOT, TBESG, TBESH). CC BY 4.0 · www.STEPBible.org"));
         g.add(&row("Places · STEPBible TIPNR and OpenBible.info", "Biblical places with every reference (TIPNR, CC BY 4.0, www.STEPBible.org); locations from OpenBible.info (CC BY 4.0)."));
         g.add(&row("Book introductions", "Overviews from Wikipedia (CC BY-SA 4.0), each credited on its page, with traditional author and date added for this app."));

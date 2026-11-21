@@ -76,9 +76,17 @@ impl Ctx {
         lib.get(&name)
             .filter(|m| m.kind == bible_sword::Kind::Bible && m.is_readable())
             .or_else(|| {
-                lib.of_kind(bible_sword::Kind::Bible)
+                // nothing chosen yet: one in the reader's language, else English
+                let lang = crate::i18n::pick(&self.config.borrow().language);
+                let all: Vec<_> = lib
+                    .of_kind(bible_sword::Kind::Bible)
                     .into_iter()
-                    .find(|m| m.is_readable())
+                    .filter(|m| m.is_readable())
+                    .collect();
+                let first_in = |l: &str| all.iter().find(|m| m.lang() == l).cloned();
+                first_in(&lang)
+                    .or_else(|| first_in("en"))
+                    .or_else(|| all.first().cloned())
             })
     }
 

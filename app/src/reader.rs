@@ -163,7 +163,73 @@ impl Reader {
         verse_btn.set_popover(Some(&verse_pop));
         title_box.append(&verse_btn);
         title_box.append(&next);
-        title_box.append(&version_dd);
+        // the header shows a menu button with a short, ellipsized name, so a
+        // long abbreviation never widens the window; it drives version_dd
+        let version_btn = gtk::MenuButton::new();
+        version_btn.set_always_show_arrow(true);
+        version_btn.set_tooltip_text(Some("Version"));
+        let version_lab = gtk::Label::new(None);
+        version_lab.set_ellipsize(gtk::pango::EllipsizeMode::End);
+        version_lab.set_max_width_chars(10);
+        version_lab.set_width_chars(4);
+        version_btn.set_child(Some(&version_lab));
+        let version_list = gtk::ListBox::new();
+        version_list.set_selection_mode(gtk::SelectionMode::None);
+        version_list.add_css_class("navigation-sidebar");
+        let version_scroll = gtk::ScrolledWindow::builder()
+            .child(&version_list)
+            .max_content_height(420)
+            .propagate_natural_height(true)
+            .propagate_natural_width(true)
+            .hscrollbar_policy(gtk::PolicyType::Never)
+            .build();
+        let version_pop = gtk::Popover::new();
+        version_pop.set_child(Some(&version_scroll));
+        version_btn.set_popover(Some(&version_pop));
+        {
+            let dd = version_dd.clone();
+            let pop = version_pop.clone();
+            version_list.connect_row_activated(move |_, row| {
+                dd.set_selected(row.index() as u32);
+                pop.popdown();
+            });
+        }
+        {
+            let lab = version_lab.clone();
+            let btn = version_btn.clone();
+            let list = version_list.clone();
+            let update = move |dd: &gtk::DropDown| {
+                let text = dd
+                    .selected_item()
+                    .and_downcast::<gtk::StringObject>()
+                    .map(|o| o.string().to_string())
+                    .unwrap_or_default();
+                lab.set_text(&text);
+                btn.set_tooltip_text(Some(&format!("Version: {text}")));
+                while let Some(c) = list.first_child() {
+                    list.remove(&c);
+                }
+                if let Some(m) = dd.model() {
+                    for i in 0..m.n_items() {
+                        let s = m
+                            .item(i)
+                            .and_downcast::<gtk::StringObject>()
+                            .map(|o| o.string().to_string())
+                            .unwrap_or_default();
+                        let l = gtk::Label::new(Some(&s));
+                        l.set_xalign(0.0);
+                        if i == dd.selected() {
+                            l.add_css_class("heading");
+                        }
+                        list.append(&l);
+                    }
+                }
+            };
+            let u = update.clone();
+            version_dd.connect_selected_notify(move |dd| u(dd));
+            version_dd.connect_model_notify(move |dd| update(dd));
+        }
+        title_box.append(&version_btn);
         header.pack_start(&title_box);
         header.set_title_widget(Some(&gtk::Box::new(gtk::Orientation::Horizontal, 0)));
 
@@ -198,7 +264,6 @@ impl Reader {
         il_toggle.set_tooltip_text(Some("Interlinear: Greek and Hebrew word by word"));
         header.pack_end(&panel_toggle);
         header.pack_end(&par_dd);
-        header.pack_end(&par_toggle);
         header.pack_end(&il_toggle);
         let listen_toggle = gtk::ToggleButton::new();
         listen_toggle.set_icon_name("audio-headphones-symbolic");
@@ -223,6 +288,14 @@ impl Reader {
             more_box.append(&b);
             b
         };
+        // side by side lives in the menu: the header has no room to spare
+        let side_b = menu_item("Side by side", "view-dual-symbolic");
+        {
+            let t = par_toggle.clone();
+            side_b.connect_clicked(move |_| t.set_active(!t.is_active()));
+            let b = side_b.clone();
+            par_toggle.connect_sensitive_notify(move |t| b.set_sensitive(t.is_sensitive()));
+        }
         let listen_b = menu_item("Listen to this chapter", "audio-headphones-symbolic");
         let present_b = menu_item("Present full screen", "view-fullscreen-symbolic");
         let arcs_b = menu_item("Cross-reference rainbow", "emblem-shared-symbolic");
@@ -251,6 +324,10 @@ impl Reader {
         let more_pop = gtk::Popover::new();
         more_pop.set_child(Some(&more_box));
         more.set_popover(Some(&more_pop));
+        {
+            let p = more_pop.clone();
+            side_b.connect_clicked(move |_| p.popdown());
+        }
         header.pack_end(&more);
         let player = crate::audio::Player::new(ctx);
 
@@ -319,7 +396,7 @@ impl Reader {
         tip_label.set_wrap(true);
         tip_label.set_xalign(0.0);
         tip_label.set_hexpand(true);
-        let tip_btn = gtk::Button::with_label("Open Library");
+        let tip_btn = gtk::Button::with_label("Open Downloads");
         tip_btn.add_css_class("suggested-action");
         let tip_close = gtk::Button::from_icon_name("window-close-symbolic");
         tip_close.add_css_class("flat");
@@ -348,9 +425,9 @@ impl Reader {
         let empty = adw::StatusPage::builder()
             .icon_name("bibleapp-book-symbolic")
             .title("No Bibles yet")
-            .description("Download a Bible from the Library to start reading. It suggests the one that turns on the most features, and everything works offline once it’s installed.")
+            .description("Download a Bible from Downloads to start reading. It suggests the one that turns on the most features, and everything works offline once it’s installed.")
             .build();
-        let empty_btn = gtk::Button::with_label("Open Library");
+        let empty_btn = gtk::Button::with_label("Open Downloads");
         empty_btn.add_css_class("pill");
         empty_btn.add_css_class("suggested-action");
         empty_btn.set_halign(gtk::Align::Center);
@@ -464,7 +541,7 @@ impl Reader {
         let com_none = adw::StatusPage::builder()
             .icon_name("bibleapp-book-symbolic")
             .title("No commentaries")
-            .description("Install Calvin, Matthew Henry, the Geneva notes and more from the Library. Only download what you want.")
+            .description("Install Calvin, Matthew Henry, the Geneva notes and more from Downloads. Only download what you want.")
             .build();
         com_none.add_css_class("compact");
         let com_get = gtk::Button::with_label("Get commentaries");
@@ -801,6 +878,10 @@ impl Reader {
         r.par_toggle.connect_toggled(move |t| {
             if let Some(r) = w.upgrade() {
                 r.par_dd.set_visible(t.is_active());
+                // two versions need the width, so the study panel steps aside
+                if t.is_active() {
+                    r.panel_toggle.set_active(false);
+                }
                 r.clamp
                     .set_maximum_size(if t.is_active() { 1200 } else { 760 });
                 r.render();
@@ -888,7 +969,7 @@ impl Reader {
                 .push("commentary".into());
             c.save_config();
         });
-        tip_label.set_markup("<b>Commentaries can sit beside the text.</b> Download Calvin, Matthew Henry and others from the Library when you want them.");
+        tip_label.set_markup("<b>Commentaries can sit beside the text.</b> Download Calvin, Matthew Henry and others from Downloads when you want them.");
         let w = Rc::downgrade(&r);
         r.note_view.buffer().connect_changed(move |_| {
             if let Some(r) = w.upgrade() {
@@ -1040,15 +1121,7 @@ impl Reader {
     }
 
     fn primary(&self) -> Option<Arc<Module>> {
-        let name = self.ctx.config.borrow().bible.clone();
-        let lib = self.ctx.lib();
-        lib.get(&name)
-            .filter(|m| m.kind == Kind::Bible && m.is_readable())
-            .or_else(|| {
-                lib.of_kind(Kind::Bible)
-                    .into_iter()
-                    .find(|m| m.is_readable())
-            })
+        self.ctx.bible()
     }
 
     fn parallel(&self) -> Option<Arc<Module>> {
@@ -1924,7 +1997,7 @@ impl Reader {
             }
         }
         if found == 0 {
-            let l = gtk::Label::new(Some("None of your installed books has an introduction to this book yet. Many commentaries do (Matthew Henry, for example) — get them from the Library."));
+            let l = gtk::Label::new(Some("None of your installed books has an introduction to this book yet. Many commentaries do (Matthew Henry, for example) — get them from Downloads."));
             l.set_wrap(true);
             l.set_xalign(0.0);
             l.set_margin_top(18);
@@ -2856,7 +2929,7 @@ impl Reader {
                 me.il_missing
                     .set_title("Couldn’t open the interlinear data");
                 me.il_missing.set_description(Some(
-                    "Try removing and downloading it again from the Library.",
+                    "Try removing and downloading it again from Downloads.",
                 ));
                 me.il_stack.set_visible_child_name("missing");
                 return;

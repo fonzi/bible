@@ -137,6 +137,12 @@ fn lang_name(code: &str) -> String {
 }
 
 impl LibraryView {
+    /// The legal notice shows until it has been read once ("Understood").
+    fn legal_due(&self) -> bool {
+        let c = self.ctx.config.borrow();
+        c.legal_notice && !self.legal_seen.get() && !c.dismissed_tips.iter().any(|t| t == "legal")
+    }
+
     pub fn new(ctx: &Rc<Ctx>) -> Rc<LibraryView> {
         let stack = adw::ViewStack::new();
         let installed = adw::PreferencesPage::new();
@@ -283,9 +289,14 @@ impl LibraryView {
         let w = Rc::downgrade(&v);
         legal_ok.connect_clicked(move |_| {
             if let Some(v) = w.upgrade() {
-                // hidden until the next start; it can be turned off for good in Preferences
+                // read once is enough: it stays hidden, and Preferences can bring it back
                 v.legal.set_reveal_child(false);
                 v.legal_seen.set(true);
+                let mut c = v.ctx.config.borrow_mut();
+                if !c.dismissed_tips.iter().any(|t| t == "legal") {
+                    c.dismissed_tips.push("legal".into());
+                }
+                c.save();
             }
         });
         v.refresh();
@@ -923,7 +934,7 @@ impl Section for LibraryView {
         "library"
     }
     fn title(&self) -> &'static str {
-        "Library"
+        "Downloads"
     }
     fn icon(&self) -> &'static str {
         "folder-download-symbolic"
@@ -932,8 +943,7 @@ impl Section for LibraryView {
         self.root.clone().upcast()
     }
     fn shown(&self) {
-        self.legal
-            .set_reveal_child(self.ctx.config.borrow().legal_notice && !self.legal_seen.get());
+        self.legal.set_reveal_child(self.legal_due());
         // with no Bible yet, start where the recommended one is
         if self.ctx.lib().of_kind(Kind::Bible).is_empty() {
             self.tabs.set_visible_child_name("browse");
@@ -941,8 +951,7 @@ impl Section for LibraryView {
     }
     fn refresh(&self) {
         self.render_installed();
-        self.legal
-            .set_reveal_child(self.ctx.config.borrow().legal_notice);
+        self.legal.set_reveal_child(self.legal_due());
         let _ = &self.browse_box;
     }
 }

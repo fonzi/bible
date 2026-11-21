@@ -119,11 +119,11 @@ impl WordStudy {
                 .icon_name("bibleapp-words-symbolic")
                 .title("Interlinear data needed")
                 .description(format!(
-                    "Word study uses the {}. Download it from the Library (about 10 MB).",
+                    "Word study uses the {}. Get it from Downloads (about 10 MB).",
                     pack.title().to_lowercase()
                 ))
                 .build();
-            let b = gtk::Button::with_label("Open Library");
+            let b = gtk::Button::with_label("Open Downloads");
             b.add_css_class("pill");
             b.add_css_class("suggested-action");
             b.set_halign(gtk::Align::Center);

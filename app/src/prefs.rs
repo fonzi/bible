@@ -437,18 +437,25 @@ impl Prefs {
         g.add(&trad);
         page.add(&g);
 
-        // Library sources
+        // Download sources
         let sources_group = adw::PreferencesGroup::builder()
-            .title(crate::i18n::t("Library sources"))
-            .description("SWORD repositories the Library downloads from. Add a third-party server by its address — the folder that contains mods.d.tar.gz.")
+            .title(crate::i18n::t("Download sources"))
+            .description("SWORD repositories that Downloads gets modules from. Add a third-party server by its address — the folder that contains mods.d.tar.gz.")
             .build();
         page.add(&sources_group);
         let g = adw::PreferencesGroup::new();
         g.add(&switch(
-            &crate::i18n::t("Show the legal notice in the Library"),
+            &crate::i18n::t("Show the legal notice in Downloads"),
             &crate::i18n::t("A reminder that religious texts are restricted in some countries"),
             cfg.legal_notice,
-            Box::new(|c, v| c.config.borrow_mut().legal_notice = v),
+            Box::new(|c, v| {
+                let mut cfg = c.config.borrow_mut();
+                cfg.legal_notice = v;
+                // turning it on again shows it again, even if it was read
+                if v {
+                    cfg.dismissed_tips.retain(|t| t != "legal");
+                }
+            }),
         ));
         page.add(&g);
 
@@ -620,7 +627,7 @@ impl Prefs {
             e.set_text("");
             p.render_sources();
             p.ctx
-                .toast("Source added. Refresh the Library catalogue to see its modules.");
+                .toast("Source added. Refresh the catalogue in Downloads to see its modules.");
         });
         self.sources_group.add(&add);
         rows.push(add.upcast());

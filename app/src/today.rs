@@ -477,8 +477,8 @@ impl Section for Today {
         if bibles.is_empty() {
             c.append(&label(&crate::i18n::t("Get started"), &["caption-heading", "dim-label"]));
             c.append(&label(&crate::i18n::t("Download a Bible"), &["title-3"]));
-            c.append(&label(&crate::i18n::t("The Library has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline."), &[]));
-            let b = gtk::Button::with_label(&crate::i18n::t("Open Library"));
+            c.append(&label(&crate::i18n::t("Downloads has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline."), &[]));
+            let b = gtk::Button::with_label(&crate::i18n::t("Open Downloads"));
             b.add_css_class("suggested-action");
             b.add_css_class("pill");
             b.set_halign(gtk::Align::Start);
@@ -545,16 +545,16 @@ impl Section for Today {
         let pending: std::cell::RefCell<Vec<gtk::Box>> = Default::default();
         let tile = |w: &gtk::Box, _h: u32| pending.borrow_mut().push(w.clone());
 
-        // reading plan
-        if !bibles.is_empty() {
-            tile(&self.plan_card(&cfg), 3);
-        }
-
         // the passage of the day, built in
         if cfg.daily_passage && !bibles.is_empty() {
             if let Some(card) = self.passage_card(now, trad) {
                 tile(&card, 5);
             }
+        }
+
+        // reading plan
+        if !bibles.is_empty() {
+            tile(&self.plan_card(&cfg), 3);
         }
 
         // devotional
@@ -601,18 +601,19 @@ impl Section for Today {
                     c.append(&b);
                 }
                 None => {
-                    c.append(&label(&crate::i18n::t("Daily devotional"),
-                        &["caption-heading", "dim-label"],
-                    ));
-                    c.append(&label(&crate::i18n::t("Add a devotional"), &["title-4"]));
-                    c.append(&label(&crate::i18n::t("Spurgeon’s Morning and Evening, Daily Light on the Daily Path and others are free in the Library. It opens to today’s entry each day. You can turn this card off in Preferences."), &["dim-label"]));
-                    let b = gtk::Button::with_label(&crate::i18n::t("Browse the Library"));
-                    b.add_css_class("pill");
-                    b.set_halign(gtk::Align::Start);
-                    b.set_margin_top(6);
+                    // nothing installed: one quiet line, not a full card
+                    c.add_css_class("compact-card");
+                    let row = gtk::Box::new(gtk::Orientation::Horizontal, 12);
+                    let l = label(&crate::i18n::t("Add a daily devotional: Spurgeon’s Morning and Evening, Daily Light and others are free."), &["dim-label"]);
+                    l.set_hexpand(true);
+                    row.append(&l);
+                    let b = gtk::Button::with_label(&crate::i18n::t("Browse"));
+                    b.add_css_class("flat");
+                    b.set_valign(gtk::Align::Center);
                     let ctx = self.ctx.clone();
                     b.connect_clicked(move |_| ctx.go("library"));
-                    c.append(&b);
+                    row.append(&b);
+                    c.append(&row);
                 }
             }
             tile(&c, 3);
@@ -628,40 +629,6 @@ impl Section for Today {
         // today in church history
         tile(&self.history_card(now), 4);
 
-        let c = card();
-        c.append(&label(&crate::i18n::t("Your library"), &["caption-heading", "dim-label"]));
-        c.append(&label(
-            &format!(
-                "{} {} · {} {} · {} other",
-                bibles.len(),
-                if bibles.len() == 1 { "Bible" } else { "Bibles" },
-                coms,
-                if coms == 1 {
-                    "commentary"
-                } else {
-                    "commentaries"
-                },
-                lib.modules.len().saturating_sub(bibles.len() + coms)
-            ),
-            &["title-4"],
-        ));
-        let il: Vec<&str> = bible_step::Pack::all()
-            .iter()
-            .filter(|p| bible_step::is_installed(**p))
-            .map(|p| match p {
-                bible_step::Pack::GreekNt => "Greek",
-                bible_step::Pack::HebrewOt => "Hebrew",
-            })
-            .collect();
-        c.append(&label(
-            &if il.is_empty() {
-                "Interlinear: not downloaded yet — tap Αα in the Bible to get it".to_string()
-            } else {
-                format!("Interlinear: {}", il.join(" and "))
-            },
-            &["dim-label"],
-        ));
-        tile(&c, 2);
         // balance the columns by each card's real height at the column width
         let total = self.body.width();
         let colw = if total > 200 { (total - 18) / 2 } else { 480 };
@@ -673,5 +640,35 @@ impl Section for Today {
             col[i].append(&w);
         }
         self.body.append(&cols);
+
+        // what you have, as a quiet footer rather than a card
+        let il: Vec<&str> = bible_step::Pack::all()
+            .iter()
+            .filter(|p| bible_step::is_installed(**p))
+            .map(|p| match p {
+                bible_step::Pack::GreekNt => "Greek",
+                bible_step::Pack::HebrewOt => "Hebrew",
+            })
+            .collect();
+        let foot = gtk::Box::new(gtk::Orientation::Horizontal, 6);
+        foot.set_halign(gtk::Align::Center);
+        foot.set_margin_top(6);
+        let summary = format!(
+            "{} {} · {} {} · {} other · interlinear: {}",
+            bibles.len(),
+            if bibles.len() == 1 { "Bible" } else { "Bibles" },
+            coms,
+            if coms == 1 { "commentary" } else { "commentaries" },
+            lib.modules.len().saturating_sub(bibles.len() + coms),
+            if il.is_empty() { "none yet".to_string() } else { il.join(" and ") }
+        );
+        foot.append(&label(&summary, &["caption", "dim-label"]));
+        let b = gtk::Button::with_label(&crate::i18n::t("Downloads"));
+        b.add_css_class("flat");
+        b.add_css_class("caption");
+        let ctx = self.ctx.clone();
+        b.connect_clicked(move |_| ctx.go("library"));
+        foot.append(&b);
+        self.body.append(&foot);
     }
 }
