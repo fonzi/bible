@@ -1,7 +1,7 @@
 //! The Bible reader: passage and version pickers, parallel versions, highlights,
 //! Markdown notes and a study panel that follows the selected verse.
 
-use crate::ctx::{sidebar_button, zoom_button, Ctx, Section};
+use crate::ctx::{sidebar_button, Ctx, Section};
 use crate::render::{long_markup, spans_to_markup, verse_number, Style};
 use adw::prelude::*;
 use bible_core::notes::ChapterNotes;
@@ -167,9 +167,22 @@ impl Reader {
         header.pack_start(&title_box);
         header.set_title_widget(Some(&gtk::Box::new(gtk::Orientation::Horizontal, 0)));
 
+        // labelled, so the study tools can be found without hovering
         let panel_toggle = gtk::ToggleButton::new();
-        panel_toggle.set_icon_name("sidebar-show-right-symbolic");
+        panel_toggle.set_child(Some(
+            &adw::ButtonContent::builder()
+                .icon_name("sidebar-show-right-symbolic")
+                .label("Study")
+                .build(),
+        ));
         panel_toggle.set_tooltip_text(Some("Study panel"));
+        // The word only shows while the panel is closed: open, the panel
+        // names itself and the header needs the room.
+        panel_toggle.connect_active_notify(|b| {
+            if let Some(c) = b.child().and_downcast::<adw::ButtonContent>() {
+                c.set_label(if b.is_active() { "" } else { "Study" });
+            }
+        });
         panel_toggle.set_active(true);
         let par_toggle = gtk::ToggleButton::new();
         par_toggle.set_icon_name("view-dual-symbolic");
@@ -179,8 +192,8 @@ impl Reader {
         par_dd.set_enable_search(true);
         par_dd.set_tooltip_text(Some("Second version"));
         let il_toggle = gtk::ToggleButton::new();
-        let il_lab = gtk::Label::new(Some("Αα"));
-        il_lab.add_css_class("il-label");
+        let il_lab = gtk::Label::new(None);
+        il_lab.set_markup("<span font_family=\"Literata, Noto Serif, serif\" weight=\"bold\">Αα</span>  Original");
         il_toggle.set_child(Some(&il_lab));
         il_toggle.set_tooltip_text(Some("Interlinear: Greek and Hebrew word by word"));
         header.pack_end(&panel_toggle);
@@ -215,12 +228,31 @@ impl Reader {
         let arcs_b = menu_item("Cross-reference rainbow", "emblem-shared-symbolic");
         let export_b = menu_item("Export chapter as Markdown", "document-save-symbolic");
         let copy_ch_b = menu_item("Copy chapter", "edit-copy-symbolic");
+        // text size lives here now, with its shortcuts shown so they can be learnt
+        let with_key = |b: &gtk::Button, key: &str| {
+            if let Some(r) = b.child().and_downcast::<gtk::Box>() {
+                if let Some(l) = r.last_child().and_downcast::<gtk::Label>() {
+                    l.set_hexpand(true);
+                }
+                let k = gtk::Label::new(Some(key));
+                k.add_css_class("dim-label");
+                k.add_css_class("caption");
+                r.append(&k);
+            }
+        };
+        let bigger_b = menu_item("Larger text", "zoom-in-symbolic");
+        with_key(&bigger_b, "Ctrl +");
+        let smaller_b = menu_item("Smaller text", "zoom-out-symbolic");
+        with_key(&smaller_b, "Ctrl −");
+        for (b, step) in [(&bigger_b, 1), (&smaller_b, -1)] {
+            let c = ctx.clone();
+            b.connect_clicked(move |_| c.zoom(step));
+        }
         let more_pop = gtk::Popover::new();
         more_pop.set_child(Some(&more_box));
         more.set_popover(Some(&more_pop));
         header.pack_end(&more);
         let player = crate::audio::Player::new(ctx);
-        header.pack_end(&zoom_button(ctx));
 
         // ----- passage picker -----
         let picker_stack = gtk::Stack::new();
@@ -586,7 +618,7 @@ impl Reader {
             .sidebar(&panel_tv)
             .sidebar_position(gtk::PackType::End)
             .show_sidebar(true)
-            .min_sidebar_width(300.0)
+            .min_sidebar_width(260.0)
             .max_sidebar_width(400.0)
             .sidebar_width_fraction(0.32)
             .build();
