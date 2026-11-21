@@ -659,7 +659,8 @@ mod tests {
 
     #[test]
     fn builds_from_local_files() {
-        let src = std::env::var("STEP_DATA").unwrap_or_else(|_| "/home/claude/dl/step".into());
+        // set STEP_DATA to a folder of STEP Bible files to run this test
+        let Ok(src) = std::env::var("STEP_DATA") else { return };
         if !Path::new(&src).join("Lexicons").exists() {
             return;
         }

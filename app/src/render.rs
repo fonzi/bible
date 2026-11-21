@@ -280,7 +280,9 @@ mod tests {
 
     #[test]
     fn step_definitions_are_valid_markup() {
-        let src = std::path::Path::new("/home/claude/dl/step");
+        // set STEP_DATA to a folder of STEP Bible files to run this test
+        let Ok(src) = std::env::var("STEP_DATA") else { return };
+        let src = std::path::Path::new(&src);
         if !src.join("Lexicons").exists() {
             return;
         }
