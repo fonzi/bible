@@ -654,9 +654,21 @@ impl Reader {
         let w_empty = adw::StatusPage::builder()
             .icon_name("bibleapp-words-symbolic")
             .title("Pick a word")
-            .description("Turn on the interlinear (Αα) and tap a Greek or Hebrew word to see its meaning, grammar and dictionary entries.")
+            .description("Turn on the original languages and tap a Greek or Hebrew word to see its meaning, grammar and dictionary entries.")
             .build();
         w_empty.add_css_class("compact");
+        // turn it on from here, not only from the header
+        {
+            let b = gtk::Button::with_label("Show Greek and Hebrew");
+            b.add_css_class("pill");
+            b.add_css_class("suggested-action");
+            b.set_halign(gtk::Align::Center);
+            let t = il_toggle.clone();
+            b.connect_clicked(move |_| t.set_active(true));
+            let b2 = b.clone();
+            il_toggle.connect_active_notify(move |t| b2.set_visible(!t.is_active()));
+            w_empty.set_child(Some(&b));
+        }
         let w_stack = gtk::Stack::new();
         w_stack.add_named(
             &gtk::ScrolledWindow::builder()
