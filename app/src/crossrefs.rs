@@ -125,10 +125,12 @@ const ORDER_HELP: [&str; 12] = [
 ];
 
 /// What each view means.
-const MODE_HELP: [&str; 3] = [
+const MODE_HELP: [&str; 5] = [
     "Rainbow: each arc joins two passages that refer to each other, the colour showing how far apart they are.",
     "Circle (beta): the books run clockwise from the top, each chord a cross-reference; dense bundles show books that lean on each other.",
     "Matrix (beta): a dot for every cross-reference, from across and to down. The diagonal is passages quoting their neighbours; squares and stripes are groups of books that echo each other, repeating at every zoom level like a fractal.",
+    "Cube (beta, 3D): the matrix with depth. Across is where a reference starts, down is where it lands, and depth is when the citing book was written, so later books reaching back to earlier ones climb through the cube. Drag to turn it.",
+    "Globe (beta, 3D): the Old Testament runs round the northern half and the New Testament round the southern half. Links within a Testament stay near its ring; links between the Testaments cut through the middle. Drag to turn it.",
 ];
 
 /// The literary form of a chapter, most specific first.
@@ -441,6 +443,10 @@ pub struct CrossRefs {
     title: adw::WindowTitle,
     stack: gtk::Stack,
     area: gtk::DrawingArea,
+    /// the cube and globe, shown in place of the flat drawing
+    space: Rc<crate::xref3d::Space>,
+    pics: gtk::Stack,
+    is_3d: Cell<bool>,
     status: adw::StatusPage,
     progress: gtk::ProgressBar,
     info: gtk::Label,
@@ -514,8 +520,13 @@ impl CrossRefs {
         busy.add_css_class("busy-card");
         busy.set_can_target(false);
         busy.set_visible(false);
+        let space = crate::xref3d::Space::new();
+        let pics = gtk::Stack::new();
+        pics.set_transition_type(gtk::StackTransitionType::Crossfade);
+        pics.add_named(&area, Some("flat"));
+        pics.add_named(&space.area, Some("space"));
         let overlay = gtk::Overlay::new();
-        overlay.set_child(Some(&area));
+        overlay.set_child(Some(&pics));
         overlay.add_overlay(&busy);
         overlay.set_vexpand(true);
         view.append(&overlay);
@@ -567,6 +578,8 @@ impl CrossRefs {
             "Rainbow",
             "Circle (beta)",
             "Matrix (beta)",
+            "Cube (beta, 3D)",
+            "Globe (beta, 3D)",
         ]);
         modes.set_tooltip_text(Some("How to draw the cross-references"));
         let zin = gtk::Button::from_icon_name("zoom-in-symbolic");
@@ -640,6 +653,9 @@ impl CrossRefs {
             title,
             stack,
             area,
+            space: space.clone(),
+            pics: pics.clone(),
+            is_3d: Cell::new(false),
             status,
             progress,
             info,
@@ -677,6 +693,20 @@ impl CrossRefs {
         let w = Rc::downgrade(&x);
         modes.connect_selected_notify(move |d| {
             let Some(x) = w.upgrade() else { return };
+            let shape = match d.selected() {
+                3 => Some(crate::xref3d::Shape::Cube),
+                4 => Some(crate::xref3d::Shape::Globe),
+                _ => None,
+            };
+            x.is_3d.set(shape.is_some());
+            if let Some(sh) = shape {
+                x.space.set_shape(sh);
+                x.feed_space();
+                x.pics.set_visible_child_name("space");
+                x.describe();
+                return;
+            }
+            x.pics.set_visible_child_name("flat");
             x.mode.set(match d.selected() {
                 1 => Mode::Circle,
                 2 => Mode::Matrix,
@@ -695,6 +725,14 @@ impl CrossRefs {
             let w = Rc::downgrade(&x);
             b.connect_clicked(move |_| {
                 let Some(x) = w.upgrade() else { return };
+                if x.is_3d.get() {
+                    if f == 0.0 {
+                        x.space.reset();
+                    } else {
+                        x.space.zoom_by(f);
+                    }
+                    return;
+                }
                 if f == 0.0 {
                     x.reset();
                 } else {
@@ -924,6 +962,7 @@ impl CrossRefs {
         *self.vlinks.borrow_mut() = Arc::new(links);
         *self.source.borrow_mut() = source.to_string();
         self.set_order(self.order.get());
+        self.feed_space();
         self.stack.set_visible_child_name("view");
         self.area.queue_draw();
         // for screenshots and tests: BIBLE_APP_XREF="rainbow|circle|matrix zoom book.chapter.verse"
@@ -943,7 +982,11 @@ impl CrossRefs {
                 Some((i as u16, (r.verse > 0).then_some(r.verse)))
             });
             self.selected.set(pick);
-            self.modes.set_selected(self.mode.get() as u32);
+            self.modes.set_selected(match p.first().copied() {
+                Some("cube") => 3,
+                Some("globe") => 4,
+                _ => self.mode.get() as u32,
+            });
             let u = pick.map(|(i, v)| self.u(i, v)).unwrap_or(0.5);
             self.pending.set(Some((u, zoom)));
             self.describe();
@@ -1168,6 +1211,10 @@ impl CrossRefs {
 
     /// Back to the whole Bible with nothing selected.
     fn reset(&self) {
+        if self.is_3d.get() {
+            self.space.reset();
+            return;
+        }
         self.selected.set(None);
         self.describe();
         self.set_view(View::HOME);
@@ -1237,7 +1284,22 @@ impl CrossRefs {
             .collect()
     }
 
+    /// Give the cube and globe this Bible's chapters and links.
+    fn feed_space(&self) {
+        if self.is_3d.get() {
+            self.space
+                .set_data(self.chs.borrow().clone(), self.links.borrow().as_ref().clone());
+        }
+    }
+
     fn describe(&self) {
+        if self.is_3d.get() {
+            self.read.set_visible(false);
+            self.info.set_text(
+                "Drag to turn, scroll to zoom · ⤢ resets · colours show how far apart the passages are",
+            );
+            return;
+        }
         let total = self.vlinks.borrow().len();
         let source = self.source.borrow().clone();
         self.read.set_visible(self.selected.get().is_some());

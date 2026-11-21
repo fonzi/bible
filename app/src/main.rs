@@ -33,6 +33,7 @@ mod window;
 mod update;
 mod wiki;
 mod wordstudy;
+mod xref3d;
 
 use adw::prelude::*;
 use std::cell::RefCell;

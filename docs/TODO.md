@@ -40,3 +40,9 @@ spinner on the cross-reference map.
   and feast names (from the Bible module's language where possible), dates
   in the local format, and the website. To add a language, copy po/es.po to
   po/xx.po and add it to CATALOGS in app/src/i18n.rs.
+
+## Cross-references over time (later)
+
+An animation of the cross-reference views through time: books appear in the
+order they were written, and their links light up as each one arrives.
+Suggested 2026-11-21.
