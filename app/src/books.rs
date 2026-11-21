@@ -75,8 +75,15 @@ impl Books {
         let lh = adw::HeaderBar::new();
         lh.pack_start(&sidebar_button(ctx));
         lh.set_title_widget(Some(&adw::WindowTitle::new("Reading room", "")));
-        let more = gtk::Button::from_icon_name("list-add-symbolic");
-        more.set_tooltip_text(Some("Get more from Downloads"));
+        let more = gtk::Button::builder()
+            .child(
+                &adw::ButtonContent::builder()
+                    .icon_name("folder-download-symbolic")
+                    .label("Get more")
+                    .build(),
+            )
+            .tooltip_text("Get more books in Downloads")
+            .build();
         let c = ctx.clone();
         more.connect_clicked(move |_| c.go("library"));
         lh.pack_end(&more);
@@ -504,18 +511,58 @@ impl Section for Books {
             if ms.is_empty() {
                 continue;
             }
-            let g = adw::PreferencesGroup::builder().title(title).build();
+            let g = adw::PreferencesGroup::builder()
+                .title(title)
+                .description(match kind {
+                    Kind::Book => "Classic works to read straight through or dip into",
+                    Kind::Devotional => "Each opens to today’s entry",
+                    _ => "Look up a word; the Bible links here from Strong’s numbers",
+                })
+                .build();
             for m in ms {
-                let sub = if kind == Kind::Devotional {
-                    "Opens to today’s entry".to_string()
+                // the module's own description, first sentence, cleaned of RTF
+                let about: String = m
+                    .conf
+                    .get("About")
+                    .unwrap_or("")
+                    .split("\\par")
+                    .next()
+                    .unwrap_or("")
+                    .replace(['{', '}'], "")
+                    .split(". ")
+                    .next()
+                    .unwrap_or("")
+                    .chars()
+                    .take(110)
+                    .collect();
+                let mut about = about.trim().trim_end_matches('.').to_string();
+                if about.contains("http") || about.chars().count() > 100 {
+                    about.clear();
+                }
+                let lic = m.license();
+                let tail = if lic.starts_with("See ") {
+                    m.abbreviation().to_string()
                 } else {
-                    format!("{} · {}", m.abbreviation(), m.license())
+                    format!("{} · {}", m.abbreviation(), lic)
+                };
+                let sub = if about.is_empty() || about == m.description() {
+                    tail
+                } else {
+                    format!("{about}\n{tail}")
                 };
                 let row = adw::ActionRow::builder()
                     .title(glib::markup_escape_text(&m.description()).as_str())
                     .subtitle(glib::markup_escape_text(&sub).as_str())
                     .activatable(true)
                     .build();
+                row.set_subtitle_lines(2);
+                let icon = gtk::Image::from_icon_name(match kind {
+                    Kind::Book => "accessories-text-editor-symbolic",
+                    Kind::Devotional => "weather-clear-symbolic",
+                    _ => "accessories-dictionary-symbolic",
+                });
+                icon.add_css_class("dim-label");
+                row.add_prefix(&icon);
                 row.add_suffix(&gtk::Image::from_icon_name("go-next-symbolic"));
                 let c = self.ctx.clone();
                 let name = m.name.clone();

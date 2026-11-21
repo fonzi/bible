@@ -132,6 +132,9 @@ impl Ctx {
     pub fn go(&self, id: &str) {
         if let Some(stack) = self.stack.get() {
             stack.set_visible_child_name(id);
+            if let Some(w) = stack.visible_child() {
+                label_icon_buttons(&w);
+            }
         }
         if let Some(lb) = self.sidebar.get() {
             let sections = self.sections.borrow();
@@ -364,4 +367,66 @@ pub fn page(
     tv.add_top_bar(&hb);
     tv.set_content(Some(content));
     (tv, hb)
+}
+
+/// Screen readers name a button by its label; an icon-only button has none,
+/// so give each one its tooltip as its accessible name.
+pub fn label_icon_buttons(w: &gtk::Widget) {
+
+    let is_button = w.is::<gtk::Button>() || w.is::<gtk::MenuButton>();
+    if is_button {
+        let has_text = {
+            let mut found = false;
+            let mut stack = vec![w.clone()];
+            while let Some(x) = stack.pop() {
+                if let Some(l) = x.downcast_ref::<gtk::Label>() {
+                    if !l.text().trim().is_empty() {
+                        found = true;
+                        break;
+                    }
+                }
+                let mut c = x.first_child();
+                while let Some(ch) = c {
+                    c = ch.next_sibling();
+                    stack.push(ch);
+                }
+            }
+            found
+        };
+        if !has_text {
+            match w.tooltip_text() {
+                Some(t) => w.update_property(&[gtk::accessible::Property::Label(&t)]),
+                // BIBLE_APP_A11Y_REPORT=1 lists buttons that still have no name
+                None if std::env::var_os("BIBLE_APP_A11Y_REPORT").is_some() => {
+                    let icon = w
+                        .downcast_ref::<gtk::Button>()
+                        .and_then(|b| b.icon_name())
+                        .or_else(|| w.downcast_ref::<gtk::MenuButton>().and_then(|b| b.icon_name()))
+                        .map(|s| s.to_string())
+                        .unwrap_or_default();
+                    let mut chain = Vec::new();
+                    let mut p = w.parent();
+                    while let Some(x) = p {
+                        chain.push(x.type_().name().to_string());
+                        p = x.parent();
+                        if chain.len() > 3 {
+                            break;
+                        }
+                    }
+                    eprintln!("A11Y unnamed button: {} icon={icon} in {}", w.type_().name(), chain.join("<"));
+                }
+                None => {}
+            }
+        }
+    }
+    // the toolkit names the insides of its own controls
+    let own = ["GtkWindowControls", "AdwBackButton", "GtkSpinButton", "GtkMenuButton", "AdwBanner"];
+    if own.contains(&w.type_().name()) {
+        return;
+    }
+    let mut c = w.first_child();
+    while let Some(ch) = c {
+        c = ch.next_sibling();
+        label_icon_buttons(&ch);
+    }
 }

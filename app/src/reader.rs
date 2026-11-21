@@ -356,6 +356,7 @@ impl Reader {
         chapter_box.set_row_spacing(4);
         chapter_box.set_column_spacing(4);
         let back = gtk::Button::from_icon_name("go-previous-symbolic");
+        back.set_tooltip_text(Some("Back to books"));
         back.add_css_class("flat");
         let picker_book_title = gtk::Label::new(None);
         picker_book_title.add_css_class("heading");

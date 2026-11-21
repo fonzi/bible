@@ -127,8 +127,8 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
         today::Today::new(&ctx),
         reader::Reader::new(&ctx),
         books::Books::new(&ctx),
-        timeline::TimelineView::new(&ctx),
         plans::PlansView::new(&ctx),
+        timeline::TimelineView::new(&ctx),
         search::Search::new(&ctx),
         notes_view::NotesView::new(&ctx),
         bookmarks::BookmarksView::new(&ctx),
@@ -158,6 +158,33 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
     let _ = ctx.sidebar.set(list.clone());
     let c = ctx.clone();
     let ids: Vec<&'static str> = listed.iter().map(|s| s.id()).collect();
+    // small headings group the places: reading, exploring, your own things
+    {
+        let ids = ids.clone();
+        list.set_header_func(move |row, _| {
+            let heading = match ids.get(row.index() as usize).copied() {
+                Some("timeline") => Some("Explore"),
+                Some("notes") => Some("Yours"),
+                Some("library") => Some(""),
+                _ => None,
+            };
+            row.set_header(heading.map(|h| {
+                if h.is_empty() {
+                    let s = gtk::Separator::new(gtk::Orientation::Horizontal);
+                    s.set_margin_top(6);
+                    s.set_margin_bottom(6);
+                    s.set_margin_start(12);
+                    s.set_margin_end(12);
+                    s.upcast::<gtk::Widget>()
+                } else {
+                    let l = gtk::Label::new(Some(&crate::i18n::t(h)));
+                    l.set_xalign(0.0);
+                    l.add_css_class("sidebar-heading");
+                    l.upcast::<gtk::Widget>()
+                }
+            }).as_ref());
+        });
+    }
     list.connect_row_activated(move |_, row| {
         if let Some(id) = ids.get(row.index() as usize) {
             c.go(id);
@@ -273,6 +300,8 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
     {
         ctx.open_ref(&r);
     }
+    // name every icon-only button for screen readers (pages do it again when shown)
+    crate::ctx::label_icon_buttons(window.upcast_ref());
     if present {
         window.present();
     }

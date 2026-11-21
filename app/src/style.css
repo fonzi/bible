@@ -137,3 +137,6 @@ window.splash > * {
 }
 
 .busy-card { padding: 28px 40px; border-radius: 18px; }
+
+/* sidebar group headings */
+.sidebar-heading { font-size: 0.8em; font-weight: 700; opacity: 0.55; margin: 14px 18px 4px 18px; }

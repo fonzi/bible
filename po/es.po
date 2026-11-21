@@ -321,3 +321,9 @@ msgstr "Aspecto y sonido"
 msgid "General"
 msgstr "General"
 
+
+msgid "Explore"
+msgstr "Explorar"
+
+msgid "Yours"
+msgstr "Lo tuyo"
