@@ -222,15 +222,26 @@ impl Prefs {
             preview.set_sensitive(r.selected() != 0);
         });
         look.add(&snd);
-        look.add(&switch(
-            &crate::i18n::t("Follow the church year"),
-            &crate::i18n::t("The accent colour follows the liturgical colour of the day: violet in Advent and Lent, gold at feasts, green in Ordinary Time, red at Pentecost"),
-            cfg.season_accent,
-            Box::new(|c, v| {
-                c.config.borrow_mut().season_accent = v;
-                crate::window::load_css(c);
-            }),
-        ));
+        let anames: Vec<String> = crate::window::ACCENTS.iter().map(|a| crate::i18n::t(a.1)).collect();
+        let anames: Vec<&str> = anames.iter().map(|s| s.as_str()).collect();
+        let arow = adw::ComboRow::builder()
+            .title(crate::i18n::t("Accent colour"))
+            .subtitle(crate::i18n::t("The church year follows the liturgical colour of the day: violet in Advent and Lent, gold at feasts, green in Ordinary Time, red at Pentecost"))
+            .model(&gtk::StringList::new(&anames))
+            .build();
+        arow.set_selected(
+            crate::window::ACCENTS
+                .iter()
+                .position(|a| a.0 == cfg.accent)
+                .unwrap_or(0) as u32,
+        );
+        let c = ctx.clone();
+        arow.connect_selected_notify(move |r| {
+            c.config.borrow_mut().accent = crate::window::ACCENTS[r.selected() as usize].0.to_string();
+            c.save_config();
+            crate::window::load_css(&c);
+        });
+        look.add(&arow);
         g.add(&switch(
             &crate::i18n::t("Classic typography"),
             &crate::i18n::t("Old-style type like an early printed Bible, with a large initial letter opening each chapter"),

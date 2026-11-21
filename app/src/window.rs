@@ -15,6 +15,17 @@ thread_local! {
 }
 
 /// (Re)load the app stylesheet; text size and highlight colours come from settings.
+/// Accent choices in Preferences: id, name. "white" is shown as gold.
+pub const ACCENTS: [(&str, &str); 7] = [
+    ("season", "Follow the church year"),
+    ("system", "Desktop setting"),
+    ("purple", "Violet"),
+    ("white", "Gold"),
+    ("green", "Green"),
+    ("red", "Red"),
+    ("blue", "Blue"),
+];
+
 /// The accent for a liturgical colour: (background with white text, text on
 /// the page), tuned for contrast in light and dark. White feasts use gold,
 /// since white can't work as an accent.
@@ -26,6 +37,8 @@ pub fn season_accent(colour: &str, dark: bool) -> (&'static str, &'static str) {
         ("white", true) => ("#946600", "#e6c06a"),
         ("red", false) => ("#b02a25", "#a3241f"),
         ("red", true) => ("#b8322c", "#f5958f"),
+        ("blue", false) => ("#1c62c4", "#1a5fb4"),
+        ("blue", true) => ("#2a6fd1", "#8cb8f2"),
         ("black", false) => ("#3d3846", "#3d3846"),
         ("black", true) => ("#5e5c64", "#c0bfbc"),
         (_, false) => ("#237a4b", "#1f6d43"),
@@ -87,12 +100,18 @@ pub fn load_css(ctx: &Ctx) {
         css.push_str(&format!(".season-{name} {{ background-color: {hex}; }}\n"));
     }
     // the app is dressed for the day: its accent follows the liturgical colour
-    if cfg.season_accent {
-        let today = chrono::Local::now().date_naive();
-        let trad = bible_core::churchyear::Tradition::from_name(&cfg.tradition);
-        let colour = bible_core::churchyear::day_info(today, trad).colour;
+    let chosen = match cfg.accent.as_str() {
+        "system" => None,
+        "season" | "" => {
+            let today = chrono::Local::now().date_naive();
+            let trad = bible_core::churchyear::Tradition::from_name(&cfg.tradition);
+            Some(bible_core::churchyear::day_info(today, trad).colour.name().to_string())
+        }
+        other => Some(other.to_string()),
+    };
+    if let Some(colour) = chosen {
         let dark = adw::StyleManager::default().is_dark();
-        let (bg, text) = season_accent(colour.name(), dark);
+        let (bg, text) = season_accent(&colour, dark);
         css.push_str(&format!(
             "@define-color accent_bg_color {bg};\n\
              @define-color accent_fg_color #ffffff;\n\
@@ -362,7 +381,7 @@ mod tests {
 
     #[test]
     fn seasonal_accents_are_readable() {
-        for c in ["purple", "white", "green", "red", "black"] {
+        for c in ["purple", "white", "green", "red", "black", "blue"] {
             for dark in [false, true] {
                 let (bg, text) = season_accent(c, dark);
                 assert!(contrast("#ffffff", bg) >= 4.5, "{c} dark={dark}: white on {bg}");

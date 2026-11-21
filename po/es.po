@@ -331,5 +331,26 @@ msgstr "Lo tuyo"
 msgid "Follow the church year"
 msgstr "Seguir el año litúrgico"
 
-msgid "The accent colour follows the liturgical colour of the day: violet in Advent and Lent, gold at feasts, green in Ordinary Time, red at Pentecost"
-msgstr "El color de acento sigue el color litúrgico del día: morado en Adviento y Cuaresma, dorado en las fiestas, verde en el Tiempo Ordinario, rojo en Pentecostés"
+msgid "Desktop setting"
+msgstr "Ajuste del escritorio"
+
+msgid "Violet"
+msgstr "Morado"
+
+msgid "Gold"
+msgstr "Dorado"
+
+msgid "Green"
+msgstr "Verde"
+
+msgid "Red"
+msgstr "Rojo"
+
+msgid "Blue"
+msgstr "Azul"
+
+msgid "Accent colour"
+msgstr "Color de acento"
+
+msgid "The church year follows the liturgical colour of the day: violet in Advent and Lent, gold at feasts, green in Ordinary Time, red at Pentecost"
+msgstr "El año litúrgico sigue el color del día: morado en Adviento y Cuaresma, dorado en las fiestas, verde en el Tiempo Ordinario, rojo en Pentecostés"
