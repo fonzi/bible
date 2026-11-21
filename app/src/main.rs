@@ -29,6 +29,7 @@ mod searchprovider;
 mod timeline;
 mod today;
 mod window;
+mod update;
 mod wiki;
 mod wordstudy;
 

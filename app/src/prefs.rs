@@ -406,6 +406,42 @@ impl Prefs {
         ));
         page.add(&g);
 
+        // updates
+        let g = adw::PreferencesGroup::builder().title("Updates").build();
+        g.add(&switch(
+            "Check for updates",
+            "Once a day, ask GitHub whether a new version is out. Nothing else is sent",
+            cfg.check_updates,
+            Box::new(|c, v| c.config.borrow_mut().check_updates = v),
+        ));
+        let now = adw::ActionRow::builder()
+            .title("Check now")
+            .subtitle(format!("You have version {}", crate::update::CURRENT))
+            .activatable(true)
+            .build();
+        let busy = crate::loader::new(28);
+        busy.set_visible(false);
+        now.add_suffix(&busy);
+        now.add_suffix(&gtk::Image::from_icon_name("view-refresh-symbolic"));
+        let c = ctx.clone();
+        now.connect_activated(move |row| {
+            let Some(banner) = c.update_banner.get() else { return };
+            busy.set_visible(true);
+            row.set_subtitle("Checking…");
+            let (row, busy) = (row.clone(), busy.clone());
+            crate::update::check(
+                &c,
+                banner,
+                true,
+                Some(Box::new(move |msg| {
+                    busy.set_visible(false);
+                    row.set_subtitle(&msg);
+                })),
+            );
+        });
+        g.add(&now);
+        page.add(&g);
+
         // About
         let g = adw::PreferencesGroup::new();
         let logs = adw::ActionRow::builder()

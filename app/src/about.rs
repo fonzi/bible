@@ -46,8 +46,22 @@ impl About {
             "Licence",
             "GNU General Public License, version 3 or later",
         ));
-        g.add(&row("Created by", "[Your name]"));
-        g.add(&row("Website and source code", "[Repository URL]"));
+        for (title, url) in [
+            ("Website", "https://fonzi.github.io/bible/"),
+            ("Source code", "https://github.com/fonzi/bible"),
+            ("Report a problem", "https://github.com/fonzi/bible/issues"),
+        ] {
+            let r = adw::ActionRow::builder()
+                .title(title)
+                .subtitle(url)
+                .activatable(true)
+                .build();
+            r.add_suffix(&gtk::Image::from_icon_name("adw-external-link-symbolic"));
+            r.connect_activated(move |_| {
+                gtk::UriLauncher::new(url).launch(gtk::Window::NONE, gtk::gio::Cancellable::NONE, |_| {});
+            });
+            g.add(&r);
+        }
         body.append(&g);
 
         let g = adw::PreferencesGroup::builder()

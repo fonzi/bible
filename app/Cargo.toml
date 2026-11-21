@@ -25,7 +25,7 @@ urlencoding = "2"
 
 [package.metadata.deb]
 name = "bible-app"
-maintainer = "Alfonso Vazquez <626330+fonzi@users.noreply.github.com>"
+maintainer = "fonzi <626330+fonzi@users.noreply.github.com>"
 copyright = "2026, Bible app developers"
 license-file = ["../LICENSE", "0"]
 section = "text"

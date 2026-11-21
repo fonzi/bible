@@ -197,8 +197,15 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
     side.add_top_bar(&side_header);
     side.set_content(Some(&side_box));
 
+    // "a new version is available" across the top of every page
+    let update_banner = adw::Banner::new("");
+    let _ = ctx.update_banner.set(update_banner.clone());
+    let main = gtk::Box::new(gtk::Orientation::Vertical, 0);
+    main.append(&update_banner);
+    stack.set_vexpand(true);
+    main.append(&stack);
     let toasts = adw::ToastOverlay::new();
-    toasts.set_child(Some(&stack));
+    toasts.set_child(Some(&main));
     let _ = ctx.toasts.set(toasts.clone());
 
     let split = adw::OverlaySplitView::builder()
@@ -209,6 +216,11 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
         .build();
     let _ = ctx.split.set(split.clone());
     window.set_content(Some(&split));
+    // look for an update a few seconds after start, at most once a day
+    {
+        let (c, b) = (ctx.clone(), update_banner.clone());
+        gtk::glib::timeout_add_seconds_local_once(5, move || crate::update::check(&c, &b, false, None));
+    }
 
     let bp = adw::Breakpoint::new(adw::BreakpointCondition::parse("max-width: 860sp").unwrap());
     bp.add_setter(&split, "collapsed", Some(&true.to_value()));

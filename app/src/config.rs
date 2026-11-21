@@ -51,6 +51,10 @@ pub struct Config {
     pub obsidian_links: bool,
     pub tradition: String,
     pub legal_notice: bool,
+    /// look for a new version once a day
+    pub check_updates: bool,
+    /// the day updates were last checked (YYYY-MM-DD)
+    pub update_checked: String,
     pub sources: Vec<SourceCfg>,
     pub palette: Vec<HighlightColour>,
     pub bible: String,
@@ -109,6 +113,8 @@ impl Default for Config {
             obsidian_links: true,
             tradition: "Western".into(),
             legal_notice: true,
+            check_updates: true,
+            update_checked: String::new(),
             sources: bible_sword::install::default_sources()
                 .into_iter()
                 .map(|s| SourceCfg {
