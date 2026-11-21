@@ -26,8 +26,30 @@ pub fn apply_style(style: &str) {
 
 impl Prefs {
     pub fn new(ctx: &Rc<Ctx>) -> Rc<Prefs> {
+        // four pages instead of one long scroll
         let page = adw::PreferencesPage::new();
-        let (root, _) = page_wrap(ctx, &page);
+        let p_read = adw::PreferencesPage::new();
+        let p_today = adw::PreferencesPage::new();
+        let p_dl = adw::PreferencesPage::new();
+        let views = adw::ViewStack::new();
+        for (pg, name, title, icon) in [
+            (&page, "general", "General", "preferences-system-symbolic"),
+            (&p_read, "reading", "Reading", "accessories-dictionary-symbolic"),
+            (&p_today, "today", "Today", "weather-clear-symbolic"),
+            (&p_dl, "downloads", "Downloads", "folder-download-symbolic"),
+        ] {
+            views.add_titled_with_icon(pg, Some(name), &crate::i18n::t(title), icon);
+        }
+        let (root, hb) = page_wrap(ctx, &views);
+        let switcher = adw::ViewSwitcher::builder()
+            .stack(&views)
+            .policy(adw::ViewSwitcherPolicy::Wide)
+            .build();
+        hb.set_title_widget(Some(&switcher));
+        // for screenshots and tests: BIBLE_APP_PREFS_PAGE=reading|today|downloads
+        if let Ok(p) = std::env::var("BIBLE_APP_PREFS_PAGE") {
+            views.set_visible_child_name(&p);
+        }
         let cfg = ctx.config.borrow().clone();
 
         // Appearance and reading
@@ -142,7 +164,9 @@ impl Prefs {
             cfg.red_letters,
             Box::new(|c, v| c.config.borrow_mut().red_letters = v),
         ));
-        g.add(&switch(
+        let look = adw::PreferencesGroup::builder().title(crate::i18n::t("Look and sound")).build();
+        page.add(&look);
+        look.add(&switch(
             &crate::i18n::t("Splash screen"),
             &crate::i18n::t("A short animation while the Bible opens"),
             cfg.splash,
@@ -156,7 +180,7 @@ impl Prefs {
             c.config.borrow_mut().splash_style = crate::splash::STYLES[r.selected() as usize].0.to_string();
             c.save_config();
         });
-        g.add(&st);
+        look.add(&st);
         let lnames: Vec<&str> = crate::loader::STYLES.iter().map(|s| s.1).collect();
         let lrow = adw::ComboRow::builder()
             .title(crate::i18n::t("Loading animation"))
@@ -174,7 +198,7 @@ impl Prefs {
             c.config.borrow_mut().loader = id.to_string();
             c.save_config();
         });
-        g.add(&lrow);
+        look.add(&lrow);
         let names: Vec<&str> = crate::sounds::SOUNDS.iter().map(|s| s.1).collect();
         let snd = adw::ComboRow::builder()
             .title(crate::i18n::t("Startup sound"))
@@ -197,7 +221,7 @@ impl Prefs {
             c.save_config();
             preview.set_sensitive(r.selected() != 0);
         });
-        g.add(&snd);
+        look.add(&snd);
         g.add(&switch(
             &crate::i18n::t("Classic typography"),
             &crate::i18n::t("Old-style type like an early printed Bible, with a large initial letter opening each chapter"),
@@ -225,7 +249,7 @@ impl Prefs {
                 }
             }),
         ));
-        page.add(&g);
+        p_read.add(&g);
 
         // Notes
         let g = adw::PreferencesGroup::builder()
@@ -275,7 +299,7 @@ impl Prefs {
             pal.add_row(&e);
         }
         g.add(&pal);
-        page.add(&g);
+        p_read.add(&g);
 
         // Today
         // Wikipedia articles for the book introductions, one by one
@@ -356,7 +380,7 @@ impl Prefs {
                 exp.add_row(&row);
             }
             g.add(&exp);
-            page.add(&g);
+            p_dl.add(&g);
         }
         let g = adw::PreferencesGroup::builder().title(crate::i18n::t("Today")).build();
         let daily = adw::ComboRow::builder()
@@ -410,7 +434,7 @@ impl Prefs {
             });
             g.add(&which);
         }
-        page.add(&g);
+        p_today.add(&g);
 
         // Church calendar
         let g = adw::PreferencesGroup::builder()
@@ -435,14 +459,14 @@ impl Prefs {
             c.refresh_all();
         });
         g.add(&trad);
-        page.add(&g);
+        p_today.add(&g);
 
         // Download sources
         let sources_group = adw::PreferencesGroup::builder()
             .title(crate::i18n::t("Download sources"))
             .description("SWORD repositories that Downloads gets modules from. Add a third-party server by its address — the folder that contains mods.d.tar.gz.")
             .build();
-        page.add(&sources_group);
+        p_dl.add(&sources_group);
         let g = adw::PreferencesGroup::new();
         g.add(&switch(
             &crate::i18n::t("Show the legal notice in Downloads"),
@@ -457,7 +481,7 @@ impl Prefs {
                 }
             }),
         ));
-        page.add(&g);
+        p_dl.add(&g);
 
         // updates
         let g = adw::PreferencesGroup::builder().title(crate::i18n::t("Updates")).build();
@@ -661,7 +685,7 @@ impl Prefs {
     }
 }
 
-fn page_wrap(ctx: &Rc<Ctx>, content: &adw::PreferencesPage) -> (adw::ToolbarView, adw::HeaderBar) {
+fn page_wrap(ctx: &Rc<Ctx>, content: &adw::ViewStack) -> (adw::ToolbarView, adw::HeaderBar) {
     page(ctx, "Preferences", concat!("Version ", env!("CARGO_PKG_VERSION")), content)
 }
 

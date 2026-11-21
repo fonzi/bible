@@ -314,3 +314,10 @@ msgstr "¡Terminaste el plan!"
 
 msgid "Your library"
 msgstr "Tu biblioteca"
+
+msgid "Look and sound"
+msgstr "Aspecto y sonido"
+
+msgid "General"
+msgstr "General"
+
