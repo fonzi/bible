@@ -4,6 +4,9 @@ An offline Bible app for GNOME. It works offline first, then reaches into
 the wider Christian tradition as far as you want to take it. Written in Rust
 with GTK 4 and libadwaita. Free software under the GPL-3.0-or-later.
 
+**Website:** [fonzi.github.io/bible](https://fonzi.github.io/bible/) ·
+**Download:** [latest release](https://github.com/fonzi/bible/releases/latest)
+
 ![Today](website/screenshots/today.png)
 
 ## Features
