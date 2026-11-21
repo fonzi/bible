@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Bible
+GenericName=Bible Study
+Comment=Read, compare and study the Bible offline
+Exec=bible-app %U
+Icon=io.github.fonzi.Bible
+Terminal=false
+Categories=GNOME;GTK;Education;Literature;
+Keywords=bible;scripture;sword;commentary;study;kjv;
+MimeType=x-scheme-handler/bible;
+StartupNotify=true
+DBusActivatable=false

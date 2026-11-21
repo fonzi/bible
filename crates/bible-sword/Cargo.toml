@@ -1,0 +1,11 @@
+[package]
+name = "bible-sword"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+bible-core = { path = "../bible-core" }
+flate2 = "1"
+tar = "0.4"
+ureq = { version = "2", features = ["native-certs"] }

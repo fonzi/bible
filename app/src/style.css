@@ -1,0 +1,136 @@
+/* Bible app styles, on top of libadwaita */
+.verses { background: transparent; }
+.verses > row { padding: 3px 10px; border-radius: 8px; }
+.verses > row.verse-row:hover { background-color: alpha(currentColor, 0.04); }
+.verses > row.verse-selected { background-color: alpha(@accent_bg_color, 0.12); }
+.scripture { font-family: "Literata", "Source Serif 4", "Noto Serif", "DejaVu Serif", serif; line-height: 1.45; }
+.chapter-heading { font-family: "Literata", "Noto Serif", serif; font-size: 26pt; font-weight: 600; margin: 4px 0 14px 0; }
+.verse-title { font-weight: 700; margin-top: 14px; opacity: 0.85; }
+.note-mark { color: @accent_color; margin-top: 6px; }
+.commentary { font-family: "Literata", "Noto Serif", serif; line-height: 1.5; }
+.note-editor, .md-editor { font-size: 11pt; }
+.serif { font-family: "Literata", "Noto Serif", serif; }
+button.swatch { min-width: 28px; min-height: 28px; padding: 0; margin: 0; border-radius: 999px; }
+.swatch-current { box-shadow: 0 0 0 2px @popover_bg_color, 0 0 0 4px @accent_bg_color; }
+.swatch-dot { min-width: 14px; min-height: 14px; border-radius: 999px; }
+.tip-bar { background-color: alpha(@accent_bg_color, 0.14); padding: 10px 14px; border-radius: 12px; margin: 12px 24px 0 24px; }
+.warning-bar { background-color: alpha(@warning_bg_color, 0.22); padding: 12px 16px; border-radius: 12px; margin: 12px; }
+.today-card { padding: 18px 20px; }
+.season-swatch { min-width: 48px; min-height: 48px; border-radius: 12px; }
+.app-version { padding: 3px 12px; border-radius: 999px; background-color: alpha(@accent_bg_color, 0.15); color: @accent_color; font-weight: 600; }
+.il-pane { background-color: @window_bg_color; border-left: 1px solid alpha(currentColor, 0.1); }
+.il-label { font-family: "Literata", "Noto Serif", serif; font-weight: 700; }
+button.word-card { padding: 6px 10px; border-radius: 10px; background-color: alpha(currentColor, 0.04); }
+button.word-card:hover { background-color: alpha(@accent_bg_color, 0.12); }
+button.word-card.variant { opacity: 0.55; }
+.word-card .orig { font-family: "SBL BibLit", "Gentium Plus", "Noto Serif", "Noto Serif Hebrew", serif; font-size: 17pt; }
+.orig-lemma { font-family: "Gentium Plus", "Noto Serif", "Noto Serif Hebrew", serif; font-size: 26pt; }
+.book-text { line-height: 1.5; }
+
+/* "c. 931–853 BC · Divided kingdom" under a chapter heading */
+.when-chip {
+  padding: 2px 8px;
+  margin-left: -8px;
+  min-height: 24px;
+  font-size: 0.9em;
+  color: alpha(currentColor, 0.65);
+}
+.when-chip:hover {
+  color: @accent_color;
+}
+
+.map-frame {
+  border-radius: 12px;
+}
+.map-frame > * {
+  border-radius: 12px;
+}
+
+.recommended-badge {
+  background: alpha(@accent_bg_color, 0.15);
+  color: @accent_color;
+  border-radius: 99px;
+  padding: 2px 10px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.player-bar {
+  padding: 8px 12px;
+  border-top: 1px solid alpha(currentColor, 0.12);
+  background: alpha(@window_bg_color, 0.97);
+}
+
+row.plan-next {
+  background: alpha(@accent_bg_color, 0.08);
+}
+
+.tag-chip {
+  padding: 2px 12px;
+  min-height: 26px;
+}
+
+.present {
+  background: #0d0d0f;
+  color: #f6f5f4;
+}
+.present-text {
+  font-family: "Noto Serif", "Source Serif Pro", serif;
+  font-size: 42pt;
+  line-height: 1.35;
+}
+.present-text.present-long {
+  font-size: 30pt;
+}
+.present-ref {
+  font-size: 18pt;
+  font-weight: bold;
+  color: alpha(#f6f5f4, 0.6);
+  letter-spacing: 1px;
+}
+.present-hint {
+  color: alpha(#f6f5f4, 0.45);
+  transition: opacity 600ms;
+}
+
+levelbar.study-bar block.filled {
+  background-color: @accent_bg_color;
+}
+levelbar.study-bar trough {
+  min-height: 8px;
+}
+
+.daily-passage {
+  font-size: 1.15em;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.fast-cell {
+  border-radius: 8px;
+  padding: 6px 8px;
+  min-height: 52px;
+  background: alpha(currentColor, 0.04);
+}
+.fast-today {
+  outline: 2px solid @accent_color;
+  outline-offset: -2px;
+}
+.fast-swatch {
+  min-width: 14px;
+  min-height: 14px;
+  border-radius: 4px;
+  background: alpha(currentColor, 0.1);
+}
+.fast-strict { background: alpha(#c01c28, 0.30); }
+.fast-day { background: alpha(#9141ac, 0.22); }
+.fast-abstinence { background: alpha(#e5a50a, 0.25); }
+.fast-free { background: alpha(#2ec27e, 0.22); }
+
+window.splash,
+window.splash > * {
+  background: transparent;
+  box-shadow: none;
+}
+
+.busy-card { padding: 28px 40px; border-radius: 18px; }

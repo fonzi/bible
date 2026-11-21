@@ -1,0 +1,54 @@
+[package]
+name = "bible-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Offline Bible study for GNOME"
+homepage = "https://fonzi.github.io/bible/"
+repository = "https://github.com/fonzi/bible"
+
+[dependencies]
+bible-core = { path = "../crates/bible-core" }
+bible-sword = { path = "../crates/bible-sword" }
+bible-step = { path = "../crates/bible-step" }
+gtk = { package = "gtk4", version = "0.9", features = ["v4_14"] }
+adw = { package = "libadwaita", version = "0.7", features = ["v1_5"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dirs = "5"
+chrono = "0.4"
+pangocairo = "0.20"
+gstreamer = "0.23"
+cairo-rs = { version = "0.20", features = ["png"] }
+scraper = "0.20"
+urlencoding = "2"
+
+[package.metadata.deb]
+name = "bible-app"
+maintainer = "Alfonso Vazquez <626330+fonzi@users.noreply.github.com>"
+copyright = "2026, Bible app developers"
+license-file = ["../LICENSE", "0"]
+section = "text"
+priority = "optional"
+depends = "$auto, libgtk-4-1 (>= 4.14), libadwaita-1-0 (>= 1.5), libgtk-4-media-gstreamer, gstreamer1.0-plugins-good"
+recommends = "fonts-ebgaramond"
+extended-description = """\
+An offline Bible study app for GNOME. Reads SWORD modules (Bibles and \
+commentaries, dictionaries, books, devotionals) with its own GPL-3 implementation, downloads new ones from \
+CrossWire and other repositories, shows versions side by side, and keeps \
+notes and highlights as plain Markdown files. Interlinear Greek and \
+Hebrew data from STEP Bible (CC BY 4.0) is downloaded on demand. \
+Includes a timeline of biblical, world and church history and maps of \
+the places named in each chapter."""
+assets = [
+  ["target/release/bible-app", "usr/bin/", "755"],
+  ["../data/io.github.fonzi.Bible.desktop", "usr/share/applications/", "644"],
+  ["../data/io.github.fonzi.Bible.metainfo.xml", "usr/share/metainfo/", "644"],
+  ["../data/icons/hicolor/scalable/apps/io.github.fonzi.Bible.svg", "usr/share/icons/hicolor/scalable/apps/", "644"],
+  ["../data/icons/hicolor/symbolic/apps/io.github.fonzi.Bible-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
+  ["../data/icons/hicolor/symbolic/apps/bibleapp-book-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
+  ["../data/icons/hicolor/symbolic/apps/bibleapp-books-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
+  ["../data/icons/hicolor/symbolic/apps/bibleapp-words-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/", "644"],
+  ["../data/io.github.fonzi.Bible.search-provider.ini", "usr/share/gnome-shell/search-providers/", "644"],
+  ["../data/io.github.fonzi.Bible.service", "usr/share/dbus-1/services/", "644"],
+]

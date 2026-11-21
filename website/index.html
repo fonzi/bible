@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bible: offline Bible study for GNOME</title>
+<meta name="description" content="A free, open-source, offline Bible app for GNOME: interlinear Greek and Hebrew, a zoomable cross-reference map, book introductions, maps, a timeline, notes, reading plans and the church year.">
+<link rel="icon" href="icon.svg">
+<style>
+:root{--bg:#fafaf8;--fg:#1d1d1b;--muted:#5e5c58;--card:#fff;--line:#e4e2dc;--accent:#3584e4;--gold:#b8761a}
+@media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#f2f1ee;--muted:#b0aea8;--card:#2a2a2a;--line:#3a3a38;--accent:#78aeed;--gold:#e9b45a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 "Cantarell","Inter",system-ui,sans-serif}
+a{color:var(--accent)}main{max-width:1080px;margin:0 auto;padding:0 24px}
+header{text-align:center;padding:72px 0 40px}header img{width:112px;height:112px}
+h1{font-size:44px;margin:12px 0 4px;font-weight:700;letter-spacing:-.5px}.lead{font-size:21px;color:var(--muted);max-width:640px;margin:0 auto 28px}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{display:inline-block;padding:12px 26px;border-radius:999px;text-decoration:none;font-weight:600;border:1px solid var(--line);color:var(--fg)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.hero{width:100%;border-radius:14px;border:1px solid var(--line);margin:28px 0 8px;box-shadow:0 10px 40px rgba(0,0,0,.12)}
+h2{font-size:28px;margin:64px 0 16px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}.card h3{margin:0 0 6px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:15.5px}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:18px}.shots figure{margin:0}.shots img{width:100%;border-radius:12px;border:1px solid var(--line)}
+figcaption{color:var(--muted);font-size:14px;text-align:center;margin-top:6px}
+pre{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;font-size:15px}
+.vision{max-width:720px;margin:0 auto;text-align:center;font-size:19px}.vision em{color:var(--gold);font-style:normal;font-weight:600}
+footer{color:var(--muted);font-size:14px;text-align:center;padding:56px 0 40px;border-top:1px solid var(--line);margin-top:72px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<img src="icon.svg" alt="">
+<h1>Bible</h1>
+<p class="lead">An offline Bible app for GNOME. Free and open source, with the riches of the whole Christian tradition, as far as you want to go.</p>
+<div class="btns">
+<a class="btn primary" href="https://github.com/fonzi/bible/releases/latest">Download for Linux</a>
+<a class="btn" href="https://github.com/fonzi/bible">Source code</a>
+</div>
+<img class="hero" src="screenshots/today.png" alt="The Today page: the church day, where you left off, the passage of the day, a reading plan and today in church history">
+</header>
+
+<p class="vision"><em>Offline first.</em> Everything you download stays with you and works without a connection. Then it reaches as far into Christendom as you want: original languages, cross-references, maps, history, the church year.</p>
+
+<h2>What's inside</h2>
+<div class="grid">
+<div class="card"><h3>Read offline</h3><p>Bibles, commentaries, dictionaries, books and devotionals from SWORD repositories, side by side, with the words of Christ in red.</p></div>
+<div class="card"><h3>Greek and Hebrew</h3><p>Word-by-word interlinear from STEP Bible, with glosses, plain-English grammar, lexicon entries and every occurrence of a word.</p></div>
+<div class="card"><h3>Cross-reference map</h3><p>343,000 cross-references as a rainbow of arcs. Zoom to one verse, or reorder the books by date, writer, language, culture or literary form.</p></div>
+<div class="card"><h3>Every book introduced</h3><p>Built-in introductions to all 66 books and the Apocrypha, with maps, a timeline, and full Wikipedia articles with pictures that read offline once downloaded.</p></div>
+<div class="card"><h3>Notes you own</h3><p>Highlights in named colours, Markdown notes that work with Obsidian, bookmarks with tags, and export.</p></div>
+<div class="card"><h3>The church year</h3><p>Today's feast or season for your tradition (Catholic, Orthodox, Anglican, Protestant), a passage of the day, church history and an optional fasting calendar.</p></div>
+<div class="card"><h3>Listen and follow</h3><p>Chapter audio with GNOME media controls, reading plans that wait for you, and a full-screen presentation mode.</p></div>
+<div class="card"><h3>Made for GNOME</h3><p>Built with GTK 4 and libadwaita, light and dark, with GNOME Shell search and classic printed-Bible typography if you like.</p></div>
+</div>
+
+<h2>A closer look</h2>
+<div class="shots">
+<figure><img src="screenshots/reader.png" alt="Reading John 1 with a commentary beside it" loading="lazy"><figcaption>Reading with a commentary alongside</figcaption></figure>
+<figure><img src="screenshots/rainbow.png" alt="Every cross-reference drawn as rainbow arcs" loading="lazy"><figcaption>The cross-reference rainbow</figcaption></figure>
+<figure><img src="screenshots/intro.png" alt="The introduction to Revelation with a map of its places" loading="lazy"><figcaption>Book introductions with maps</figcaption></figure>
+<figure><img src="screenshots/timeline.png" alt="A timeline of the kings of Israel and Judah" loading="lazy"><figcaption>From the patriarchs to the apostles</figcaption></figure>
+</div>
+
+<h2>Install</h2>
+<p style="text-align:center;color:var(--muted)">Download the <code>.deb</code> from the <a href="https://github.com/fonzi/bible/releases/latest">latest release</a>, then run:</p>
+<pre>sudo apt install ./bible-app_*_amd64.deb</pre>
+<p style="text-align:center;color:var(--muted);font-size:15px">Needs GTK 4.14+ and libadwaita 1.5+ (Ubuntu 24.04+, Debian 13+). Windows and macOS builds are planned.</p>
+
+<footer>
+Free software under the <a href="https://github.com/fonzi/bible/blob/main/LICENSE">GPL-3.0-or-later</a>.
+Data from STEP Bible (Tyndale House), OpenBible.info, Wikipedia and Wikimedia Commons, Natural Earth, CrossWire and eBible.org. See the About page in the app for full credits.
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.fonzi.Bible</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Bible</name>
+  <summary>Read, compare and study the Bible offline</summary>
+  <description>
+    <p>An offline Bible study app for GNOME. Download Bibles, commentaries and books from SWORD repositories once, then read without a connection.</p>
+    <ul>
+      <li>Read versions side by side</li>
+      <li>Highlight verses in named colours</li>
+      <li>Keep notes as plain Markdown files that work with Obsidian</li>
+      <li>See the commentary for the verse you are reading</li>
+      <li>Follow the church year on the Today page</li>
+      <li>Study the Greek and Hebrew word by word, with a lexicon</li>
+      <li>Read books, dictionaries and daily devotionals</li>
+      <li>Explore every cross-reference as a zoomable rainbow, ordered by date, writer, language, genre and more</li>
+      <li>See places on maps and events on a timeline, with Wikipedia introductions to every book</li>
+      <li>Listen to chapters, follow reading plans, and keep fasts and feasts</li>
+    </ul>
+  </description>
+  <developer id="io.github.fonzi">
+    <name>Alfonso Vazquez</name>
+  </developer>
+  <url type="homepage">https://fonzi.github.io/bible/</url>
+  <url type="bugtracker">https://github.com/fonzi/bible/issues</url>
+  <url type="vcs-browser">https://github.com/fonzi/bible</url>
+  <launchable type="desktop-id">io.github.fonzi.Bible.desktop</launchable>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.6.1" date="2026-11-21">
+      <description>
+        <ul>
+          <li>Choose your loading animation: a turning cross, a Chi-Rho, an ichthys or a Trinity knot, used wherever the app waits</li>
+          <li>Search suggests searches to try</li>
+          <li>More church-history dates, so Today always has one</li>
+          <li>A larger test suite</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.6.0" date="2026-11-21">
+      <description>
+        <ul>
+          <li>Introductions for the 18 deuterocanonical books (Apocrypha), built in, with their full Wikipedia articles to download</li>
+          <li>Gentler Wikipedia downloads that use standard picture sizes, to avoid rate limits</li>
+          <li>A large spinner in the middle of the cross-reference map while it draws</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.5.3" date="2026-11-18">
+      <description>
+        <ul>
+          <li>Wikipedia downloads go gently and retry when rate-limited, and say why any failed</li>
+          <li>Preferences → Book introductions lists every book to download, update or remove one by one</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.5.2" date="2026-11-18">
+      <description>
+        <ul>
+          <li>New startup sound: the opening of a Gregorian Kyrie, sung</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.5.1" date="2026-11-18">
+      <description>
+        <ul>
+          <li>Cross-references no longer freeze the app: drawing happens in the background with a spinner</li>
+          <li>Reset view (and Esc), a Read button for the selected passage, a colour legend and a slide-in explanations panel</li>
+          <li>Intro in the verse dropdown</li>
+          <li>Full Wikipedia articles with pictures for book introductions, saved for offline reading</li>
+          <li>Classic typography changes only the text, not the page background</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.5.0" date="2026-11-18">
+      <description>
+        <ul>
+          <li>Fixed a crash when playing downloaded audio; playback now uses its own GStreamer player</li>
+          <li>A log file, with “Open log folder” in Preferences</li>
+          <li>Audio shows in GNOME’s media controls, with cover art</li>
+          <li>Over 340,000 built-in cross-references, so the rainbow works with every Bible</li>
+          <li>Cross-references: zoom down to single verses, see every link meeting at one verse, and experimental circle and matrix views</li>
+          <li>Order the books by events, age written, writers, language, culture, genre, literary form (songs, parables, prayers…), Hebrew Bible order and more, with explanations on hover</li>
+          <li>The Today screen is now tiled</li>
+          <li>Optional two-second startup sound: Old Hundredth, Amazing Grace, Holy Holy Holy or a bell, synthesised from public-domain tunes, with a preview button</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.4.0" date="2026-11-18">
+      <description>
+        <p>Listen, plan, study and present.</p>
+        <ul>
+          <li>Chapter audio: download a chapter or a whole book and listen as you read</li>
+          <li>Reading plans, with today's reading on the Today page</li>
+          <li>A passage of the day, today in church history, and what is happening in the chapter you are reading</li>
+          <li>Introductions to every book, with a map of its places, built in</li>
+          <li>Bookmarks with tags, and Markdown export</li>
+          <li>Word study for any Greek or Hebrew word</li>
+          <li>The cross-reference rainbow</li>
+          <li>Presentation mode, a verse picker and GNOME Shell search</li>
+          <li>Optional fasting calendar, classic typography and splash screen</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.3.1" date="2026-11-16">
+      <description><p>The Library recommends the Bible that turns on the most features, and lists what each Bible supports: Strong's words, grammar, footnotes, cross-references, red letters and headings.</p></description>
+    </release>
+    <release version="0.3.0" date="2026-11-16">
+      <description>
+        <p>A timeline and maps.</p>
+        <ul>
+          <li>Timeline of biblical history, the kings of Israel and Judah, prophets, who was in power, world events and church history</li>
+          <li>Every chapter shows when it happened, linked to the timeline</li>
+          <li>Map of the places named in each chapter, on real geography</li>
+          <li>Footnotes and cross-references in the Bible text open in place</li>
+          <li>A "Most popular" group when browsing the library</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.0" date="2026-11-16">
+      <description><p>Interlinear Greek and Hebrew with a lexicon, dictionaries, books and daily devotionals.</p></description>
+    </release>
+    <release version="0.1.0" date="2026-11-16"/>
+  </releases>
+</component>
