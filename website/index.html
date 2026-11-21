@@ -41,6 +41,12 @@ nav .links a:hover{color:var(--gold)}
 .feature h2{font:400 36px/1.15 var(--serif);margin:0 0 14px}
 .feature p{margin:0 0 12px;color:var(--muted)}
 .kicker{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.modes{padding:72px 0;border-bottom:1px solid var(--rule)}
+.modes h2{font:400 36px/1.15 var(--serif);margin:0 0 28px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pair figure{margin:0}
+.pair figcaption{text-align:center;color:var(--muted);font-size:14px;margin-top:10px}
+picture{display:block}
 .more{padding:72px 0;border-bottom:1px solid var(--rule)}
 .more h2{font:400 36px/1.15 var(--serif);margin:0 0 28px}
 .more dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px 48px;margin:0}
@@ -55,6 +61,7 @@ footer{border-top:1px solid var(--rule);padding:32px 0 48px;color:var(--muted);f
   .feature.flip .text{order:0}
   .hero h1{font-size:44px}
   nav .links{display:none}
+  .pair{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -74,7 +81,10 @@ footer{border-top:1px solid var(--rule);padding:32px 0 48px;color:var(--muted);f
 </div>
 <p class="note">Free software, GPL-3.0. No account, no tracking.</p>
 </div>
-<img class="shot" src="screenshots/today.png" width="1280" height="820" alt="The Today page: the church day, where you left off, the passage of the day, a reading plan and today in church history">
+<picture>
+<source srcset="screenshots/today-dark.png" media="(prefers-color-scheme: dark)">
+<img class="shot" src="screenshots/today-light.png" width="1280" height="820" alt="The Today page: the church day, where you left off, the passage of the day, a reading plan and today in church history">
+</picture>
 </section>
 </div>
 
@@ -91,7 +101,10 @@ footer{border-top:1px solid var(--rule);padding:32px 0 48px;color:var(--muted);f
 <p>Download translations, commentaries, dictionaries and devotionals once from SWORD repositories, then read without a connection.</p>
 <p>Tap any word for the Greek or Hebrew behind it, with grammar in plain English and every other place it appears.</p>
 </div>
-<img class="shot" src="screenshots/reader.png" width="1280" height="820" alt="Reading John 1 with a commentary beside it" loading="lazy">
+<picture>
+<source srcset="screenshots/reader-dark.png" media="(prefers-color-scheme: dark)">
+<img class="shot" src="screenshots/reader-light.png" width="1280" height="820" alt="Reading John 1 with a commentary beside it" loading="lazy">
+</picture>
 </section>
 
 <section class="feature flip">
@@ -121,6 +134,15 @@ footer{border-top:1px solid var(--rule);padding:32px 0 48px;color:var(--muted);f
 <p>A timeline of the kings, prophets and events of the Bible, with today in church history and the feast or season of your tradition on the Today page.</p>
 </div>
 <img class="shot" src="screenshots/timeline.png" width="1280" height="820" alt="A timeline of the kings of Israel and Judah" loading="lazy">
+</section>
+
+<section class="modes">
+<div class="kicker">Light or dark</div>
+<h2>Follows your desktop, day and night</h2>
+<div class="pair">
+<figure><img class="shot" src="screenshots/today-light.png" width="1280" height="820" alt="Today in light mode" loading="lazy"><figcaption>Light</figcaption></figure>
+<figure><img class="shot" src="screenshots/today-dark.png" width="1280" height="820" alt="Today in dark mode" loading="lazy"><figcaption>Dark</figcaption></figure>
+</div>
 </section>
 
 <section class="more">

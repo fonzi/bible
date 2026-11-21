@@ -7,7 +7,10 @@ with GTK 4 and libadwaita. Free software under the GPL-3.0-or-later.
 **Website:** [fonzi.github.io/bible](https://fonzi.github.io/bible/) ·
 **Download:** [latest release](https://github.com/fonzi/bible/releases/latest)
 
-![Today](website/screenshots/today.png)
+| Light | Dark |
+|---|---|
+| ![Today in light mode](website/screenshots/today-light.png) | ![Today in dark mode](website/screenshots/today-dark.png) |
+| ![Reading in light mode](website/screenshots/reader-light.png) | ![Reading in dark mode](website/screenshots/reader-dark.png) |
 
 ## Features
 
@@ -39,8 +42,8 @@ with GTK 4 and libadwaita. Free software under the GPL-3.0-or-later.
 
 | | |
 |---|---|
-| ![Reader](website/screenshots/reader.png) | ![Cross-references](website/screenshots/rainbow.png) |
-| ![Book introduction](website/screenshots/intro.png) | ![Timeline](website/screenshots/timeline.png) |
+| ![Cross-references](website/screenshots/rainbow.png) | ![Book introduction](website/screenshots/intro.png) |
+| ![Timeline](website/screenshots/timeline.png) | |
 
 ## Install
 
