@@ -78,7 +78,10 @@ pub fn check(ctx: &Rc<Ctx>, banner: &adw::Banner, force: bool, report: Option<Bo
     let today = chrono::Local::now().format("%Y-%m-%d").to_string();
     {
         let cfg = ctx.config.borrow();
-        if !force && (!cfg.check_updates || cfg.update_checked == today) {
+        if cfg.offline || (!force && (!cfg.check_updates || cfg.update_checked == today)) {
+            if let (true, Some(f)) = (cfg.offline, &report) {
+                f("Work offline is on".into());
+            }
             return;
         }
     }

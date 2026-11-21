@@ -108,6 +108,22 @@ fn bypass_proxy(url: &str) -> bool {
         .any(|e| e == "*" || host == e || host.ends_with(&format!(".{e}")))
 }
 
+
+/// Work offline: when set, every download refuses before touching the network.
+static OFFLINE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+pub fn set_offline(on: bool) {
+    OFFLINE.store(on, std::sync::atomic::Ordering::Relaxed);
+}
+
+pub fn is_offline() -> bool {
+    OFFLINE.load(std::sync::atomic::Ordering::Relaxed)
+}
+
+fn offline_error() -> io::Error {
+    io::Error::other("Work offline is on (turn it off in Preferences to download)")
+}
+
 fn agent(url: &str) -> ureq::Agent {
     ureq::AgentBuilder::new()
         .timeout_connect(Duration::from_secs(20))
@@ -123,6 +139,9 @@ pub fn get_bytes(url: &str) -> io::Result<Option<Vec<u8>>> {
 }
 
 fn get(url: &str) -> io::Result<Option<Vec<u8>>> {
+    if is_offline() {
+        return Err(offline_error());
+    }
     match agent(url).get(url).call() {
         Ok(resp) => {
             let mut buf = Vec::new();
@@ -143,6 +162,9 @@ pub fn download_file(
     dest: &Path,
     progress: &mut dyn FnMut(u64, u64),
 ) -> io::Result<u64> {
+    if is_offline() {
+        return Err(offline_error());
+    }
     let resp = match agent(url).get(url).call() {
         Ok(r) => r,
         Err(ureq::Error::Status(404, _)) => {

@@ -53,6 +53,8 @@ pub struct Config {
     pub legal_notice: bool,
     /// look for a new version once a day
     pub check_updates: bool,
+    /// never touch the network (the internet kill switch)
+    pub offline: bool,
     /// the day updates were last checked (YYYY-MM-DD)
     pub update_checked: String,
     pub sources: Vec<SourceCfg>,
@@ -114,6 +116,7 @@ impl Default for Config {
             tradition: "Western".into(),
             legal_notice: true,
             check_updates: true,
+            offline: false,
             update_checked: String::new(),
             sources: bible_sword::install::default_sources()
                 .into_iter()

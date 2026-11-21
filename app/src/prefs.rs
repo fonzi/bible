@@ -31,6 +31,25 @@ impl Prefs {
         let cfg = ctx.config.borrow().clone();
 
         // Appearance and reading
+        // the internet kill switch, first so it's easy to find
+        let g = adw::PreferencesGroup::new();
+        let off = adw::SwitchRow::builder()
+            .title("Work offline")
+            .subtitle("Never connect to the internet: no downloads, update checks or Wikipedia. Everything you've downloaded keeps working")
+            .active(cfg.offline)
+            .build();
+        off.add_prefix(&gtk::Image::from_icon_name("network-offline-symbolic"));
+        let c = ctx.clone();
+        off.connect_active_notify(move |r| {
+            let on = r.is_active();
+            bible_sword::install::set_offline(on);
+            bible_step::set_offline(on);
+            c.config.borrow_mut().offline = on;
+            c.save_config();
+        });
+        g.add(&off);
+        page.add(&g);
+
         let g = adw::PreferencesGroup::builder().title("Reading").build();
         let style = adw::ComboRow::builder()
             .title("Style")

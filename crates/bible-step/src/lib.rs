@@ -422,7 +422,26 @@ pub fn remove(p: Pack) -> io::Result<()> {
     Ok(())
 }
 
+
+/// Work offline: when set, every download refuses before touching the network.
+static OFFLINE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+pub fn set_offline(on: bool) {
+    OFFLINE.store(on, std::sync::atomic::Ordering::Relaxed);
+}
+
+pub fn is_offline() -> bool {
+    OFFLINE.load(std::sync::atomic::Ordering::Relaxed)
+}
+
+fn offline_error() -> io::Error {
+    io::Error::other("Work offline is on (turn it off in Preferences to download)")
+}
+
 fn fetch(path: &str) -> io::Result<Box<dyn Read + Send>> {
+    if is_offline() {
+        return Err(offline_error());
+    }
     let url = format!("{BASE}{}", path.replace(' ', "%20").replace('+', "%2B"));
     let agent = ureq::AgentBuilder::new()
         .timeout_connect(Duration::from_secs(20))

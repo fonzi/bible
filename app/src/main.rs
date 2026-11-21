@@ -80,6 +80,8 @@ fn main() -> gtk::glib::ExitCode {
         let first = CTX.with(|c| c.borrow().is_none());
         let cfg = config::Config::load();
         loader::set_style(&cfg.loader);
+        bible_sword::install::set_offline(cfg.offline);
+        bible_step::set_offline(cfg.offline);
         if first {
             sounds::play(&cfg.startup_sound);
         }
