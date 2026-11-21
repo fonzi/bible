@@ -55,6 +55,8 @@ pub struct Config {
     pub check_updates: bool,
     /// never touch the network (the internet kill switch)
     pub offline: bool,
+    /// interface language: "" follows the desktop, else a code like "es"
+    pub language: String,
     /// the day updates were last checked (YYYY-MM-DD)
     pub update_checked: String,
     pub sources: Vec<SourceCfg>,
@@ -117,6 +119,7 @@ impl Default for Config {
             legal_notice: true,
             check_updates: true,
             offline: false,
+            language: String::new(),
             update_checked: String::new(),
             sources: bible_sword::install::default_sources()
                 .into_iter()

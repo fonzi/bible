@@ -352,7 +352,7 @@ pub fn page(
     let tv = adw::ToolbarView::new();
     let hb = adw::HeaderBar::new();
     hb.pack_start(&sidebar_button(ctx));
-    hb.set_title_widget(Some(&adw::WindowTitle::new(title, subtitle)));
+    hb.set_title_widget(Some(&adw::WindowTitle::new(&crate::i18n::t(title), subtitle)));
     tv.add_top_bar(&hb);
     tv.set_content(Some(content));
     (tv, hb)

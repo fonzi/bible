@@ -114,9 +114,9 @@ pub fn check(ctx: &Rc<Ctx>, banner: &adw::Banner, force: bool, report: Option<Bo
 }
 
 fn offer(_ctx: &Rc<Ctx>, banner: &adw::Banner, r: Release) {
-    banner.set_title(&format!("Bible {} is available. You have {CURRENT}.", r.version));
+    banner.set_title(&crate::i18n::t("Bible {} is available. You have {}.").replacen("{}", &r.version, 1).replacen("{}", CURRENT, 1));
     let can_install = r.deb_url.is_some() && glib::find_program_in_path("pkexec").is_some();
-    banner.set_button_label(Some(if can_install { "Update" } else { "Download" }));
+    banner.set_button_label(Some(&crate::i18n::t(if can_install { "Update" } else { "Download" })));
     banner.set_revealed(true);
     // 0: offering, 1: updating, 2: updated and ready to restart
     let state = Rc::new(std::cell::Cell::new(0u8));
@@ -140,14 +140,14 @@ fn offer(_ctx: &Rc<Ctx>, banner: &adw::Banner, r: Release) {
                 match res {
                     Ok(()) => {
                         state.set(2);
-                        b.set_title(&format!("Updated to {version}. Restart to use it."));
-                        b.set_button_label(Some("Restart"));
+                        b.set_title(&crate::i18n::t("Updated to {}. Restart to use it.").replacen("{}", &version, 1));
+                        b.set_button_label(Some(&crate::i18n::t("Restart")));
                     }
                     Err(e) => {
                         crate::log::error(&format!("update: {e}"));
                         state.set(0);
                         b.set_title(&format!("Couldn’t update: {e}."));
-                        b.set_button_label(Some("Try again"));
+                        b.set_button_label(Some(&crate::i18n::t("Try again")));
                     }
                 }
             });

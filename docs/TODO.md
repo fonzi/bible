@@ -31,3 +31,12 @@ spinner on the cross-reference map.
   (gregobase.selapa.net), public-domain Liber Usualis and Graduale scans,
   and freely licensed recordings on Wikimedia Commons; downloaded when the
   user clicks.
+- **Church fathers (next up).** A download option for patristic writings:
+  the public-domain Ante-Nicene, Nicene and Post-Nicene Fathers (Schaff,
+  1885–1900; CrossWire has some as SWORD books, CCEL has the full set),
+  shown in Books, with each father's verse comments linked from the reader.
+- **Translations.** Spanish is started (po/es.po): the sidebar, page titles,
+  Today and Preferences. Still to do: the rest of the interface, book names
+  and feast names (from the Bible module's language where possible), dates
+  in the local format, and the website. To add a language, copy po/es.po to
+  po/xx.po and add it to CATALOGS in app/src/i18n.rs.

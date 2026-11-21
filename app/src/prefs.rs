@@ -34,8 +34,8 @@ impl Prefs {
         // the internet kill switch, first so it's easy to find
         let g = adw::PreferencesGroup::new();
         let off = adw::SwitchRow::builder()
-            .title("Work offline")
-            .subtitle("Never connect to the internet: no downloads, update checks or Wikipedia. Everything you've downloaded keeps working")
+            .title(crate::i18n::t("Work offline"))
+            .subtitle(crate::i18n::t("Never connect to the internet: no downloads, update checks or Wikipedia. Everything you've downloaded keeps working"))
             .active(cfg.offline)
             .build();
         off.add_prefix(&gtk::Image::from_icon_name("network-offline-symbolic"));
@@ -48,11 +48,38 @@ impl Prefs {
             c.save_config();
         });
         g.add(&off);
+        // interface language
+        let mut names = vec![crate::i18n::t("Follow the system"), "English".to_string()];
+        names.extend(crate::i18n::CATALOGS.iter().map(|c| c.1.to_string()));
+        let name_refs: Vec<&str> = names.iter().map(String::as_str).collect();
+        let lang = adw::ComboRow::builder()
+            .title(crate::i18n::t("Language"))
+            .subtitle(crate::i18n::t("Takes effect the next time the app opens"))
+            .model(&gtk::StringList::new(&name_refs))
+            .build();
+        lang.add_prefix(&gtk::Image::from_icon_name("preferences-desktop-locale-symbolic"));
+        let current = match cfg.language.as_str() {
+            "" | "system" => 0,
+            "en" => 1,
+            code => crate::i18n::CATALOGS.iter().position(|c| c.0 == code).map(|i| i + 2).unwrap_or(0),
+        };
+        lang.set_selected(current as u32);
+        let c = ctx.clone();
+        lang.connect_selected_notify(move |r| {
+            let code = match r.selected() {
+                0 => String::new(),
+                1 => "en".to_string(),
+                i => crate::i18n::CATALOGS.get(i as usize - 2).map(|c| c.0.to_string()).unwrap_or_default(),
+            };
+            c.config.borrow_mut().language = code;
+            c.save_config();
+        });
+        g.add(&lang);
         page.add(&g);
 
-        let g = adw::PreferencesGroup::builder().title("Reading").build();
+        let g = adw::PreferencesGroup::builder().title(crate::i18n::t("Reading")).build();
         let style = adw::ComboRow::builder()
-            .title("Style")
+            .title(crate::i18n::t("Style"))
             .model(&gtk::StringList::new(&["Follow system", "Light", "Dark"]))
             .build();
         style.set_selected(match cfg.style.as_str() {
@@ -110,19 +137,19 @@ impl Prefs {
             Box::new(|c, v| c.config.borrow_mut().verse_numbers = v),
         ));
         g.add(&switch(
-            "Words of Christ in red",
-            "When the version marks them",
+            &crate::i18n::t("Words of Christ in red"),
+            &crate::i18n::t("When the version marks them"),
             cfg.red_letters,
             Box::new(|c, v| c.config.borrow_mut().red_letters = v),
         ));
         g.add(&switch(
-            "Splash screen",
-            "A short animation while the Bible opens",
+            &crate::i18n::t("Splash screen"),
+            &crate::i18n::t("A short animation while the Bible opens"),
             cfg.splash,
             Box::new(|c, v| c.config.borrow_mut().splash = v),
         ));
         let names: Vec<&str> = crate::splash::STYLES.iter().map(|s| s.1).collect();
-        let st = adw::ComboRow::builder().title("Splash style").model(&gtk::StringList::new(&names)).build();
+        let st = adw::ComboRow::builder().title(crate::i18n::t("Splash style")).model(&gtk::StringList::new(&names)).build();
         st.set_selected(crate::splash::STYLES.iter().position(|s| s.0 == cfg.splash_style).unwrap_or(0) as u32);
         let c = ctx.clone();
         st.connect_selected_notify(move |r| {
@@ -132,8 +159,8 @@ impl Prefs {
         g.add(&st);
         let lnames: Vec<&str> = crate::loader::STYLES.iter().map(|s| s.1).collect();
         let lrow = adw::ComboRow::builder()
-            .title("Loading animation")
-            .subtitle("Shown while the app is busy, such as drawing or downloading")
+            .title(crate::i18n::t("Loading animation"))
+            .subtitle(crate::i18n::t("Shown while the app is busy, such as drawing or downloading"))
             .model(&gtk::StringList::new(&lnames))
             .build();
         lrow.set_selected(crate::loader::STYLES.iter().position(|s| s.0 == cfg.loader).unwrap_or(0) as u32);
@@ -150,8 +177,8 @@ impl Prefs {
         g.add(&lrow);
         let names: Vec<&str> = crate::sounds::SOUNDS.iter().map(|s| s.1).collect();
         let snd = adw::ComboRow::builder()
-            .title("Startup sound")
-            .subtitle("A two-second hymn opening when the app starts, synthesised from public-domain tunes")
+            .title(crate::i18n::t("Startup sound"))
+            .subtitle(crate::i18n::t("A two-second hymn opening when the app starts, synthesised from public-domain tunes"))
             .model(&gtk::StringList::new(&names))
             .build();
         snd.set_selected(crate::sounds::SOUNDS.iter().position(|s| s.0 == cfg.startup_sound).unwrap_or(0) as u32);
@@ -172,8 +199,8 @@ impl Prefs {
         });
         g.add(&snd);
         g.add(&switch(
-            "Classic typography",
-            "Old-style type like an early printed Bible, with a large initial letter opening each chapter",
+            &crate::i18n::t("Classic typography"),
+            &crate::i18n::t("Old-style type like an early printed Bible, with a large initial letter opening each chapter"),
             cfg.vintage,
             Box::new(|c, v| {
                 c.config.borrow_mut().vintage = v;
@@ -181,14 +208,14 @@ impl Prefs {
             }),
         ));
         g.add(&switch(
-            "Show the Apocrypha / Deuterocanon",
-            "Only for versions that include these books",
+            &crate::i18n::t("Show the Apocrypha / Deuterocanon"),
+            &crate::i18n::t("Only for versions that include these books"),
             cfg.show_apocrypha,
             Box::new(|c, v| c.config.borrow_mut().show_apocrypha = v),
         ));
         g.add(&switch(
-            "Feature tips",
-            "Small hints about things you can do",
+            &crate::i18n::t("Feature tips"),
+            &crate::i18n::t("Small hints about things you can do"),
             cfg.feature_tips,
             Box::new(|c, v| {
                 let mut cfg = c.config.borrow_mut();
@@ -202,26 +229,26 @@ impl Prefs {
 
         // Notes
         let g = adw::PreferencesGroup::builder()
-            .title("Notes")
+            .title(crate::i18n::t("Notes"))
             .description("Notes and highlights are plain Markdown files you own.")
             .build();
         let folder_row = adw::ActionRow::builder()
-            .title("Notes folder")
+            .title(crate::i18n::t("Notes folder"))
             .subtitle(cfg.notes_dir.display().to_string())
             .build();
-        let choose = gtk::Button::with_label("Change");
+        let choose = gtk::Button::with_label(&crate::i18n::t("Change"));
         choose.set_valign(gtk::Align::Center);
         folder_row.add_suffix(&choose);
         g.add(&folder_row);
         g.add(&switch(
-            "Obsidian-compatible links",
-            "Save references as bible:// links",
+            &crate::i18n::t("Obsidian-compatible links"),
+            &crate::i18n::t("Save references as bible:// links"),
             cfg.obsidian_links,
             Box::new(|c, v| c.config.borrow_mut().obsidian_links = v),
         ));
         let pal = adw::ExpanderRow::builder()
-            .title("Highlight colours")
-            .subtitle("Name each colour so you can tell them apart")
+            .title(crate::i18n::t("Highlight colours"))
+            .subtitle(crate::i18n::t("Name each colour so you can tell them apart"))
             .build();
         for (i, col) in cfg.palette.iter().enumerate() {
             let e = adw::EntryRow::builder()
@@ -254,11 +281,11 @@ impl Prefs {
         // Wikipedia articles for the book introductions, one by one
         {
             let g = adw::PreferencesGroup::builder()
-                .title("Book introductions")
+                .title(crate::i18n::t("Book introductions"))
                 .description("Full Wikipedia articles with pictures, saved for offline reading: the 66 books and the 18 deuterocanonical books (Apocrypha). Download them one at a time here if downloading all at once is slowed down by Wikipedia.")
                 .build();
             let exp = adw::ExpanderRow::builder()
-                .title("Wikipedia articles")
+                .title(crate::i18n::t("Wikipedia articles"))
                 .subtitle(format!("{} of 84 saved", crate::wiki::count()))
                 .build();
             const APOCRYPHA: &[&str] = &["Tob", "Jdt", "AddEsth", "Wis", "Sir", "Bar", "EpJer", "PrAzar", "Sus", "Bel", "1Macc", "2Macc", "3Macc", "4Macc", "1Esd", "2Esd", "PrMan", "Ps151"];
@@ -331,10 +358,10 @@ impl Prefs {
             g.add(&exp);
             page.add(&g);
         }
-        let g = adw::PreferencesGroup::builder().title("Today").build();
+        let g = adw::PreferencesGroup::builder().title(crate::i18n::t("Today")).build();
         let daily = adw::ComboRow::builder()
-            .title("Daily card")
-            .subtitle("What Today shows each morning")
+            .title(crate::i18n::t("Daily card"))
+            .subtitle(crate::i18n::t("What Today shows each morning"))
             .model(&gtk::StringList::new(&["Devotional", "Nothing"]))
             .build();
         daily.set_selected(if cfg.daily_card == "off" { 1 } else { 0 });
@@ -350,14 +377,14 @@ impl Prefs {
         });
         g.add(&daily);
         g.add(&switch(
-            "Passage of the day",
-            "A passage from your Bible on Today, built in — nothing to download",
+            &crate::i18n::t("Passage of the day"),
+            &crate::i18n::t("A passage from your Bible on Today, built in — nothing to download"),
             cfg.daily_passage,
             Box::new(|c, v| c.config.borrow_mut().daily_passage = v),
         ));
         g.add(&switch(
-            "Fasting calendar",
-            "Fast and abstinence days for your tradition on Today, with a month view",
+            &crate::i18n::t("Fasting calendar"),
+            &crate::i18n::t("Fast and abstinence days for your tradition on Today, with a month view"),
             cfg.fasting,
             Box::new(|c, v| c.config.borrow_mut().fasting = v),
         ));
@@ -366,7 +393,7 @@ impl Prefs {
             let names: Vec<String> = devs.iter().map(|m| m.description()).collect();
             let nr: Vec<&str> = names.iter().map(|s| s.as_str()).collect();
             let which = adw::ComboRow::builder()
-                .title("Devotional")
+                .title(crate::i18n::t("Devotional"))
                 .model(&gtk::StringList::new(&nr))
                 .build();
             which.set_selected(
@@ -387,12 +414,12 @@ impl Prefs {
 
         // Church calendar
         let g = adw::PreferencesGroup::builder()
-            .title("Church calendar")
+            .title(crate::i18n::t("Church calendar"))
             .build();
         let names: Vec<&str> = Tradition::all().iter().map(|(_, n)| *n).collect();
         let trad = adw::ComboRow::builder()
-            .title("Tradition")
-            .subtitle("Sets the date of Easter and which feasts appear on Today")
+            .title(crate::i18n::t("Tradition"))
+            .subtitle(crate::i18n::t("Sets the date of Easter and which feasts appear on Today"))
             .model(&gtk::StringList::new(&names))
             .build();
         trad.set_selected(
@@ -412,29 +439,29 @@ impl Prefs {
 
         // Library sources
         let sources_group = adw::PreferencesGroup::builder()
-            .title("Library sources")
+            .title(crate::i18n::t("Library sources"))
             .description("SWORD repositories the Library downloads from. Add a third-party server by its address — the folder that contains mods.d.tar.gz.")
             .build();
         page.add(&sources_group);
         let g = adw::PreferencesGroup::new();
         g.add(&switch(
-            "Show the legal notice in the Library",
-            "A reminder that religious texts are restricted in some countries",
+            &crate::i18n::t("Show the legal notice in the Library"),
+            &crate::i18n::t("A reminder that religious texts are restricted in some countries"),
             cfg.legal_notice,
             Box::new(|c, v| c.config.borrow_mut().legal_notice = v),
         ));
         page.add(&g);
 
         // updates
-        let g = adw::PreferencesGroup::builder().title("Updates").build();
+        let g = adw::PreferencesGroup::builder().title(crate::i18n::t("Updates")).build();
         g.add(&switch(
-            "Check for updates",
-            "Once a day, ask GitHub whether a new version is out. Nothing else is sent",
+            &crate::i18n::t("Check for updates"),
+            &crate::i18n::t("Once a day, ask GitHub whether a new version is out. Nothing else is sent"),
             cfg.check_updates,
             Box::new(|c, v| c.config.borrow_mut().check_updates = v),
         ));
         let now = adw::ActionRow::builder()
-            .title("Check now")
+            .title(crate::i18n::t("Check now"))
             .subtitle(format!("You have version {}", crate::update::CURRENT))
             .activatable(true)
             .build();
@@ -464,15 +491,15 @@ impl Prefs {
         // About
         let g = adw::PreferencesGroup::new();
         let logs = adw::ActionRow::builder()
-            .title("Open log folder")
-            .subtitle("Crash reports and errors, for reporting problems")
+            .title(crate::i18n::t("Open log folder"))
+            .subtitle(crate::i18n::t("Crash reports and errors, for reporting problems"))
             .activatable(true)
             .build();
         logs.add_suffix(&gtk::Image::from_icon_name("folder-open-symbolic"));
         let c = ctx.clone();
         logs.connect_activated(move |_| c.launch(&crate::log::dir()));
         let about = adw::ActionRow::builder()
-            .title("About Bible")
+            .title(crate::i18n::t("About Bible"))
             .subtitle(concat!(
                 "Version ",
                 env!("CARGO_PKG_VERSION"),
@@ -499,7 +526,7 @@ impl Prefs {
         choose.connect_clicked(move |_| {
             let Some(p) = w.upgrade() else { return };
             let dlg = gtk::FileDialog::builder()
-                .title("Choose a notes folder")
+                .title(crate::i18n::t("Choose a notes folder"))
                 .build();
             let parent = p.ctx.window.get().cloned();
             let w2 = Rc::downgrade(&p);
@@ -560,7 +587,7 @@ impl Prefs {
             rows.push(row.upcast());
         }
         let add = adw::EntryRow::builder()
-            .title("Add a source: name, then its address (https://…)")
+            .title(crate::i18n::t("Add a source: name, then its address (https://…)"))
             .show_apply_button(true)
             .build();
         let w = Rc::downgrade(self);
@@ -598,7 +625,7 @@ impl Prefs {
         self.sources_group.add(&add);
         rows.push(add.upcast());
         let reset = adw::ActionRow::builder()
-            .title("Restore default sources")
+            .title(crate::i18n::t("Restore default sources"))
             .activatable(true)
             .build();
         let w = Rc::downgrade(self);

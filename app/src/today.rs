@@ -69,10 +69,10 @@ impl Today {
             .as_ref()
             .and_then(|s| plans::plan(&s.id).map(|p| (s.clone(), p)));
         let Some((st, plan)) = active else {
-            c.append(&label("Reading plan", &["caption-heading", "dim-label"]));
-            c.append(&label("Read through the Bible with a plan", &["title-3"]));
-            c.append(&label("A year through the whole Bible, chronological order, the New Testament in 90 days, and more.", &[]));
-            let b = gtk::Button::with_label("Choose a plan");
+            c.append(&label(&crate::i18n::t("Reading plan"), &["caption-heading", "dim-label"]));
+            c.append(&label(&crate::i18n::t("Read through the Bible with a plan"), &["title-3"]));
+            c.append(&label(&crate::i18n::t("A year through the whole Bible, chronological order, the New Testament in 90 days, and more."), &[]));
+            let b = gtk::Button::with_label(&crate::i18n::t("Choose a plan"));
             b.add_css_class("pill");
             b.set_halign(gtk::Align::Start);
             b.set_margin_top(6);
@@ -85,8 +85,8 @@ impl Today {
         let n = days.len();
         let Some(next) = st.next(n) else {
             c.append(&label(plan.title, &["caption-heading", "dim-label"]));
-            c.append(&label("You finished the plan!", &["title-3"]));
-            let b = gtk::Button::with_label("Choose another");
+            c.append(&label(&crate::i18n::t("You finished the plan!"), &["title-3"]));
+            let b = gtk::Button::with_label(&crate::i18n::t("Choose another"));
             b.add_css_class("pill");
             b.set_halign(gtk::Align::Start);
             let ctx = self.ctx.clone();
@@ -117,7 +117,7 @@ impl Today {
         let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
         row.set_margin_top(6);
         // one primary action per page ("Continue reading"); this one is quieter
-        let read = gtk::Button::with_label("Read");
+        let read = gtk::Button::with_label(&crate::i18n::t("Read"));
         read.add_css_class("pill");
         let first = days[next].first().cloned();
         let ctx = self.ctx.clone();
@@ -126,14 +126,14 @@ impl Today {
                 ctx.open_ref(&Ref::new(b, *ch, 0));
             }
         });
-        let done = gtk::Button::with_label("Mark as done");
+        let done = gtk::Button::with_label(&crate::i18n::t("Mark as done"));
         done.add_css_class("pill");
         let ctx = self.ctx.clone();
         done.connect_clicked(move |_| {
             crate::plans::set_done(&ctx, next, true);
             ctx.refresh_all();
         });
-        let all = gtk::Button::with_label("Whole plan");
+        let all = gtk::Button::with_label(&crate::i18n::t("Whole plan"));
         all.add_css_class("pill");
         all.add_css_class("flat");
         let ctx = self.ctx.clone();
@@ -150,8 +150,7 @@ impl Today {
     /// "What's happening": when, headings, timeline events and places of a chapter.
     fn story(&self, book: &str, chapter: u16) -> Option<gtk::Box> {
         let b = gtk::Box::new(gtk::Orientation::Vertical, 4);
-        b.append(&label(
-            "What’s happening",
+        b.append(&label(&crate::i18n::t("What’s happening"),
             &["caption-heading", "dim-label"],
         ));
         let mut lines = 0;
@@ -290,12 +289,12 @@ impl Today {
         c.append(&label(&m.abbreviation(), &["caption", "dim-label"]));
         let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
         row.set_margin_top(6);
-        let open = gtk::Button::with_label("Read in context");
+        let open = gtk::Button::with_label(&crate::i18n::t("Read in context"));
         open.add_css_class("pill");
         let ctx = self.ctx.clone();
         let rf = Ref::new(&book, chapter, v0);
         open.connect_clicked(move |_| ctx.open_ref(&rf));
-        let copy = gtk::Button::with_label("Copy");
+        let copy = gtk::Button::with_label(&crate::i18n::t("Copy"));
         copy.add_css_class("pill");
         copy.add_css_class("flat");
         let t = format!("{} — {r} ({})", text.trim(), m.abbreviation());
@@ -329,7 +328,7 @@ impl Today {
                 c.append(&label(&f.detail, &[]));
             }
             None => {
-                c.append(&label("No fast today", &["title-3"]));
+                c.append(&label(&crate::i18n::t("No fast today"), &["title-3"]));
             }
         }
         // the next fast day, for planning
@@ -347,7 +346,7 @@ impl Today {
                 &["dim-label"],
             ));
         }
-        let b = gtk::Button::with_label("This month");
+        let b = gtk::Button::with_label(&crate::i18n::t("This month"));
         b.add_css_class("pill");
         b.set_halign(gtk::Align::Start);
         b.set_margin_top(6);
@@ -361,12 +360,10 @@ impl Today {
         let c = card();
         let (exact, events) = bible_core::onthisday::for_date(now);
         if events.is_empty() {
-            c.append(&label(
-                "Today in church history",
+            c.append(&label(&crate::i18n::t("Today in church history"),
                 &["caption-heading", "dim-label"],
             ));
-            c.append(&label(
-                "Nothing recorded for this week yet.",
+            c.append(&label(&crate::i18n::t("Nothing recorded for this week yet."),
                 &["dim-label"],
             ));
             return c;
@@ -399,7 +396,7 @@ impl Today {
             row.append(&t);
             c.append(&row);
         }
-        let b = gtk::Button::with_label("Open the timeline");
+        let b = gtk::Button::with_label(&crate::i18n::t("Open the timeline"));
         b.add_css_class("pill");
         b.add_css_class("flat");
         b.set_halign(gtk::Align::Start);
@@ -478,10 +475,10 @@ impl Section for Today {
         let bibles = lib.of_kind(Kind::Bible);
         let c = card();
         if bibles.is_empty() {
-            c.append(&label("Get started", &["caption-heading", "dim-label"]));
-            c.append(&label("Download a Bible", &["title-3"]));
-            c.append(&label("The Library has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline.", &[]));
-            let b = gtk::Button::with_label("Open Library");
+            c.append(&label(&crate::i18n::t("Get started"), &["caption-heading", "dim-label"]));
+            c.append(&label(&crate::i18n::t("Download a Bible"), &["title-3"]));
+            c.append(&label(&crate::i18n::t("The Library has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline."), &[]));
+            let b = gtk::Button::with_label(&crate::i18n::t("Open Library"));
             b.add_css_class("suggested-action");
             b.add_css_class("pill");
             b.set_halign(gtk::Align::Start);
@@ -491,8 +488,7 @@ impl Section for Today {
             c.append(&b);
         } else {
             let r = Ref::new(&cfg.book, cfg.chapter.max(1), 0);
-            c.append(&label(
-                "Pick up where you left off",
+            c.append(&label(&crate::i18n::t("Pick up where you left off"),
                 &["caption-heading", "dim-label"],
             ));
             c.append(&label(&r.to_string(), &["title-3", "serif"]));
@@ -507,7 +503,7 @@ impl Section for Today {
                     &["dim-label"],
                 ));
             }
-            let b = gtk::Button::with_label("Continue reading");
+            let b = gtk::Button::with_label(&crate::i18n::t("Continue reading"));
             b.add_css_class("suggested-action");
             b.add_css_class("pill");
             b.set_halign(gtk::Align::Start);
@@ -595,7 +591,7 @@ impl Section for Today {
                             &["dim-label"],
                         ));
                     }
-                    let b = gtk::Button::with_label("Read today’s entry");
+                    let b = gtk::Button::with_label(&crate::i18n::t("Read today’s entry"));
                     b.add_css_class("pill");
                     b.set_halign(gtk::Align::Start);
                     b.set_margin_top(6);
@@ -605,13 +601,12 @@ impl Section for Today {
                     c.append(&b);
                 }
                 None => {
-                    c.append(&label(
-                        "Daily devotional",
+                    c.append(&label(&crate::i18n::t("Daily devotional"),
                         &["caption-heading", "dim-label"],
                     ));
-                    c.append(&label("Add a devotional", &["title-4"]));
-                    c.append(&label("Spurgeon’s Morning and Evening, Daily Light on the Daily Path and others are free in the Library. It opens to today’s entry each day. You can turn this card off in Preferences.", &["dim-label"]));
-                    let b = gtk::Button::with_label("Browse the Library");
+                    c.append(&label(&crate::i18n::t("Add a devotional"), &["title-4"]));
+                    c.append(&label(&crate::i18n::t("Spurgeon’s Morning and Evening, Daily Light on the Daily Path and others are free in the Library. It opens to today’s entry each day. You can turn this card off in Preferences."), &["dim-label"]));
+                    let b = gtk::Button::with_label(&crate::i18n::t("Browse the Library"));
                     b.add_css_class("pill");
                     b.set_halign(gtk::Align::Start);
                     b.set_margin_top(6);
@@ -634,7 +629,7 @@ impl Section for Today {
         tile(&self.history_card(now), 4);
 
         let c = card();
-        c.append(&label("Your library", &["caption-heading", "dim-label"]));
+        c.append(&label(&crate::i18n::t("Your library"), &["caption-heading", "dim-label"]));
         c.append(&label(
             &format!(
                 "{} {} · {} {} · {} other",

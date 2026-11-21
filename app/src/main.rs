@@ -12,6 +12,7 @@ mod export;
 mod fasting;
 mod initial;
 mod library;
+mod i18n;
 mod loader;
 mod log;
 mod map;
@@ -79,6 +80,7 @@ fn main() -> gtk::glib::ExitCode {
     app.connect_activate(|app| {
         let first = CTX.with(|c| c.borrow().is_none());
         let cfg = config::Config::load();
+        i18n::init(&i18n::pick(&cfg.language));
         loader::set_style(&cfg.loader);
         bible_sword::install::set_offline(cfg.offline);
         bible_step::set_offline(cfg.offline);

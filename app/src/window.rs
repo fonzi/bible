@@ -93,7 +93,7 @@ pub fn load_css(ctx: &Ctx) {
 fn sidebar_row(s: &dyn Section) -> gtk::ListBoxRow {
     let b = gtk::Box::new(gtk::Orientation::Horizontal, 12);
     b.append(&gtk::Image::from_icon_name(s.icon()));
-    let l = gtk::Label::new(Some(s.title()));
+    let l = gtk::Label::new(Some(&crate::i18n::t(s.title())));
     l.set_xalign(0.0);
     b.append(&l);
     let row = gtk::ListBoxRow::new();

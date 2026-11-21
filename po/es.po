@@ -1,0 +1,316 @@
+# Spanish translation of Bible.
+# Copyright (C) 2026 the Bible app authors
+# This file is distributed under the same license as the Bible app (GPL-3.0-or-later).
+msgid ""
+msgstr ""
+"Project-Id-Version: bible-app\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "A passage from your Bible on Today, built in — nothing to download"
+msgstr "Un pasaje de tu Biblia en Hoy, ya incluido: no hace falta descargar nada"
+
+msgid "A reminder that religious texts are restricted in some countries"
+msgstr "Un recordatorio de que los textos religiosos están restringidos en algunos países"
+
+msgid "A short animation while the Bible opens"
+msgstr "Una breve animación mientras se abre la Biblia"
+
+msgid "A two-second hymn opening when the app starts, synthesised from public-domain tunes"
+msgstr "Dos segundos de un himno al abrir la aplicación, creados a partir de melodías de dominio público"
+
+msgid "A year through the whole Bible, chronological order, the New Testament in 90 days, and more."
+msgstr "Un año por toda la Biblia, en orden cronológico, el Nuevo Testamento en 90 días y más."
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "About Bible"
+msgstr "Acerca de Biblia"
+
+msgid "Add a devotional"
+msgstr "Añadir un devocional"
+
+msgid "Add a source: name, then its address (https://…)"
+msgstr "Añadir una fuente: nombre y luego su dirección (https://…)"
+
+msgid "Bible"
+msgstr "Biblia"
+
+msgid "Bible {} is available. You have {}."
+msgstr "Biblia {} está disponible. Tienes la {}."
+
+msgid "Book introductions"
+msgstr "Introducciones a los libros"
+
+msgid "Bookmarks"
+msgstr "Marcadores"
+
+msgid "Books and devotionals"
+msgstr "Libros y devocionales"
+
+msgid "Browse the Library"
+msgstr "Explorar la Biblioteca"
+
+msgid "Change"
+msgstr "Cambiar"
+
+msgid "Check for updates"
+msgstr "Buscar actualizaciones"
+
+msgid "Check now"
+msgstr "Buscar ahora"
+
+msgid "Choose a notes folder"
+msgstr "Elegir una carpeta de notas"
+
+msgid "Choose a plan"
+msgstr "Elegir un plan"
+
+msgid "Choose another"
+msgstr "Elegir otro"
+
+msgid "Church calendar"
+msgstr "Calendario litúrgico"
+
+msgid "Classic typography"
+msgstr "Tipografía clásica"
+
+msgid "Continue reading"
+msgstr "Seguir leyendo"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Crash reports and errors, for reporting problems"
+msgstr "Informes de fallos y errores, para avisar de problemas"
+
+msgid "Cross-references"
+msgstr "Referencias cruzadas"
+
+msgid "Daily card"
+msgstr "Tarjeta diaria"
+
+msgid "Daily devotional"
+msgstr "Devocional diario"
+
+msgid "Devotional"
+msgstr "Devocional"
+
+msgid "Download"
+msgstr "Descargar"
+
+msgid "Download a Bible"
+msgstr "Descargar una Biblia"
+
+msgid "Fast and abstinence days for your tradition on Today, with a month view"
+msgstr "Días de ayuno y abstinencia de tu tradición en Hoy, con vista mensual"
+
+msgid "Fasting calendar"
+msgstr "Calendario de ayuno"
+
+msgid "Feature tips"
+msgstr "Consejos"
+
+msgid "Follow the system"
+msgstr "Seguir el sistema"
+
+msgid "Get started"
+msgstr "Para empezar"
+
+msgid "Highlight colours"
+msgstr "Colores de resaltado"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Library"
+msgstr "Biblioteca"
+
+msgid "Library sources"
+msgstr "Fuentes de la Biblioteca"
+
+msgid "Loading animation"
+msgstr "Animación de carga"
+
+msgid "Mark as done"
+msgstr "Marcar como leído"
+
+msgid "Name each colour so you can tell them apart"
+msgstr "Pon nombre a cada color para distinguirlos"
+
+msgid "Never connect to the internet: no downloads, update checks or Wikipedia. Everything you've downloaded keeps working"
+msgstr "No conectarse nunca a internet: sin descargas, ni búsqueda de actualizaciones, ni Wikipedia. Todo lo que ya descargaste sigue funcionando"
+
+msgid "No fast today"
+msgstr "Hoy no hay ayuno"
+
+msgid "Notes"
+msgstr "Notas"
+
+msgid "Notes and highlights"
+msgstr "Notas y resaltados"
+
+msgid "Notes folder"
+msgstr "Carpeta de notas"
+
+msgid "Nothing recorded for this week yet."
+msgstr "Todavía no hay nada registrado para esta semana."
+
+msgid "Obsidian-compatible links"
+msgstr "Enlaces compatibles con Obsidian"
+
+msgid "Old-style type like an early printed Bible, with a large initial letter opening each chapter"
+msgstr "Letra antigua como en las primeras Biblias impresas, con una gran letra capital al comienzo de cada capítulo"
+
+msgid "Once a day, ask GitHub whether a new version is out. Nothing else is sent"
+msgstr "Una vez al día, preguntar a GitHub si hay una versión nueva. No se envía nada más"
+
+msgid "Only for versions that include these books"
+msgstr "Solo en versiones que incluyen estos libros"
+
+msgid "Open Library"
+msgstr "Abrir la Biblioteca"
+
+msgid "Open log folder"
+msgstr "Abrir la carpeta de registros"
+
+msgid "Open the timeline"
+msgstr "Abrir la cronología"
+
+msgid "Passage of the day"
+msgstr "Pasaje del día"
+
+msgid "Pick up where you left off"
+msgstr "Sigue donde lo dejaste"
+
+msgid "Preferences"
+msgstr "Preferencias"
+
+msgid "Read"
+msgstr "Leer"
+
+msgid "Read in context"
+msgstr "Leer en contexto"
+
+msgid "Read through the Bible with a plan"
+msgstr "Lee la Biblia con un plan"
+
+msgid "Read today’s entry"
+msgstr "Leer la lectura de hoy"
+
+msgid "Reading"
+msgstr "Lectura"
+
+msgid "Reading plan"
+msgstr "Plan de lectura"
+
+msgid "Reading plans"
+msgstr "Planes de lectura"
+
+msgid "Restart"
+msgstr "Reiniciar"
+
+msgid "Restore default sources"
+msgstr "Restaurar las fuentes predeterminadas"
+
+msgid "Save references as bible:// links"
+msgstr "Guardar las referencias como enlaces bible://"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Sets the date of Easter and which feasts appear on Today"
+msgstr "Fija la fecha de la Pascua y las fiestas que aparecen en Hoy"
+
+msgid "Show the Apocrypha / Deuterocanon"
+msgstr "Mostrar los libros apócrifos / deuterocanónicos"
+
+msgid "Show the legal notice in the Library"
+msgstr "Mostrar el aviso legal en la Biblioteca"
+
+msgid "Shown while the app is busy, such as drawing or downloading"
+msgstr "Se muestra mientras la aplicación trabaja, por ejemplo al dibujar o descargar"
+
+msgid "Small hints about things you can do"
+msgstr "Pequeñas pistas sobre lo que puedes hacer"
+
+msgid "Splash screen"
+msgstr "Pantalla de bienvenida"
+
+msgid "Splash style"
+msgstr "Estilo de bienvenida"
+
+msgid "Spurgeon’s Morning and Evening, Daily Light on the Daily Path and others are free in the Library. It opens to today’s entry each day. You can turn this card off in Preferences."
+msgstr "«Mañana y tarde» de Spurgeon, «Luz diaria para el camino diario» y otros están gratis en la Biblioteca. Cada día se abre en la lectura de hoy. Puedes quitar esta tarjeta en Preferencias."
+
+msgid "Startup sound"
+msgstr "Sonido de inicio"
+
+msgid "Style"
+msgstr "Estilo"
+
+msgid "Takes effect the next time the app opens"
+msgstr "Se aplica la próxima vez que se abra la aplicación"
+
+msgid "The Library has hundreds of versions in many languages, plus commentaries and classic books. Download once, read offline."
+msgstr "La Biblioteca tiene cientos de versiones en muchos idiomas, además de comentarios y libros clásicos. Descarga una vez y lee sin conexión."
+
+msgid "This month"
+msgstr "Este mes"
+
+msgid "Timeline"
+msgstr "Cronología"
+
+msgid "Today"
+msgstr "Hoy"
+
+msgid "Today in church history"
+msgstr "Hoy en la historia de la Iglesia"
+
+msgid "Tradition"
+msgstr "Tradición"
+
+msgid "Try again"
+msgstr "Intentar de nuevo"
+
+msgid "Update"
+msgstr "Actualizar"
+
+msgid "Updated to {}. Restart to use it."
+msgstr "Actualizado a la {}. Reinicia para usarla."
+
+msgid "Updates"
+msgstr "Actualizaciones"
+
+msgid "What Today shows each morning"
+msgstr "Lo que muestra Hoy cada mañana"
+
+msgid "What’s happening"
+msgstr "Qué está pasando"
+
+msgid "When the version marks them"
+msgstr "Cuando la versión las marca"
+
+msgid "Whole plan"
+msgstr "Plan completo"
+
+msgid "Wikipedia articles"
+msgstr "Artículos de Wikipedia"
+
+msgid "Word study"
+msgstr "Estudio de palabras"
+
+msgid "Words of Christ in red"
+msgstr "Palabras de Cristo en rojo"
+
+msgid "Work offline"
+msgstr "Trabajar sin conexión"
+
+msgid "You finished the plan!"
+msgstr "¡Terminaste el plan!"
+
+msgid "Your library"
+msgstr "Tu biblioteca"
