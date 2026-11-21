@@ -40,10 +40,12 @@ with GTK 4 and libadwaita. Free software under the GPL-3.0-or-later.
   maps, word study, presentation mode, GNOME Shell search, classic
   printed-Bible typography, and an optional splash screen and startup sound.
 
-| | |
+| Light | Dark |
 |---|---|
-| ![Cross-references](website/screenshots/rainbow.png) | ![Book introduction](website/screenshots/intro.png) |
-| ![Timeline](website/screenshots/timeline.png) | |
+| ![Cross-references, light](website/screenshots/rainbow-light.png) | ![Cross-references, dark](website/screenshots/rainbow-dark.png) |
+| ![Book introduction, light](website/screenshots/intro-light.png) | ![Book introduction, dark](website/screenshots/intro-dark.png) |
+| ![Timeline, light](website/screenshots/timeline-light.png) | ![Timeline, dark](website/screenshots/timeline-dark.png) |
+| ![Library, light](website/screenshots/library-light.png) | ![Library, dark](website/screenshots/library-dark.png) |
 
 ## Install
 

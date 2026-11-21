@@ -270,6 +270,7 @@ impl Today {
             return None;
         }
         let c = card();
+        c.add_css_class("passage-card");
         let name = Ref::new(&book, chapter, 0).book_name();
         let r = if v1 > v0 {
             format!("{name} {chapter}:{v0}–{v1}")

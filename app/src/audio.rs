@@ -258,7 +258,8 @@ impl Player {
         tip_label.set_xalign(0.0);
         tip_label.set_hexpand(true);
         let tip_btn = gtk::Button::with_label("Listen");
-        tip_btn.add_css_class("suggested-action");
+        tip_btn.add_css_class("pill");
+        tip_btn.set_valign(gtk::Align::Center);
         let tip_close = gtk::Button::from_icon_name("window-close-symbolic");
         tip_close.add_css_class("flat");
         tip_close.add_css_class("circular");

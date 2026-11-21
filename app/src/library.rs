@@ -215,6 +215,7 @@ impl LibraryView {
         legal_label.set_xalign(0.0);
         legal_label.set_hexpand(true);
         let legal_ok = gtk::Button::with_label("Understood");
+        legal_ok.set_valign(gtk::Align::Center);
         let legal_row = gtk::Box::new(gtk::Orientation::Horizontal, 12);
         legal_row.add_css_class("warning-bar");
         legal_row.append(&legal_label);
