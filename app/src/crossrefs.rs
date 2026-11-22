@@ -125,12 +125,13 @@ const ORDER_HELP: [&str; 12] = [
 ];
 
 /// What each view means.
-const MODE_HELP: [&str; 5] = [
+const MODE_HELP: [&str; 6] = [
     "Rainbow: each arc joins two passages that refer to each other, the colour showing how far apart they are.",
     "Circle: the books run clockwise from the top, each chord a cross-reference; dense bundles show books that lean on each other.",
     "Matrix: a dot for every cross-reference, from across and to down. The diagonal is passages quoting their neighbours; squares and stripes are groups of books that echo each other, repeating at every zoom level like a fractal.",
     "Cube (3D): the matrix with depth. Across is where a reference starts, down is where it lands, and depth is how far back in time it reaches: references from late books to early ones sit at the back, ones to later writings at the front. Drag to turn it.",
-    "Globe (3D): the Old Testament runs round the northern half and the New Testament round the southern half. Links within a Testament stay near its ring; links between the Testaments cut through the middle. Drag to turn it.",
+    "Globe (3D): the Old Testament spirals over the northern half and the New Testament over the southern half, in the order you pick. Links within a Testament stay near the surface; links between the Testaments cut through the middle. Drag to turn it.",
+    "Möbius strip (3D): a cross-reference joins two places, and with the Bible closed into a loop (Revelation hands back to Genesis) every such pair is one point on a Möbius strip. Round the strip is where a link is centred; its single edge holds links between neighbouring passages, its centre line links half the Bible apart. Drag to turn it.",
 ];
 
 /// The literary form of a chapter, most specific first.
@@ -580,6 +581,7 @@ impl CrossRefs {
             "Matrix",
             "Cube (3D)",
             "Globe (3D)",
+            "Möbius strip (3D)",
         ]);
         modes.set_tooltip_text(Some("How to draw the cross-references"));
         let zin = gtk::Button::from_icon_name("zoom-in-symbolic");
@@ -696,6 +698,7 @@ impl CrossRefs {
             let shape = match d.selected() {
                 3 => Some(crate::xref3d::Shape::Cube),
                 4 => Some(crate::xref3d::Shape::Globe),
+                5 => Some(crate::xref3d::Shape::Mobius),
                 _ => None,
             };
             x.is_3d.set(shape.is_some());
@@ -985,6 +988,7 @@ impl CrossRefs {
             self.modes.set_selected(match p.first().copied() {
                 Some("cube") => 3,
                 Some("globe") => 4,
+                Some("mobius") => 5,
                 _ => self.mode.get() as u32,
             });
             let u = pick.map(|(i, v)| self.u(i, v)).unwrap_or(0.5);
@@ -1136,6 +1140,8 @@ impl CrossRefs {
         *self.slot_of.borrow_mut() = slot_of;
         *self.cache.borrow_mut() = None;
         self.view.set(View::HOME);
+        // the 3D views follow the chosen order too
+        self.feed_space();
         self.describe();
         self.area.queue_draw();
     }
@@ -1287,8 +1293,10 @@ impl CrossRefs {
     /// Give the cube and globe this Bible's chapters and links.
     fn feed_space(&self) {
         if self.is_3d.get() {
+            let n = self.chs.borrow().len();
+            let order: Vec<f64> = (0..n as u16).map(|c| self.u(c, None)).collect();
             self.space
-                .set_data(self.chs.borrow().clone(), self.links.borrow().as_ref().clone());
+                .set_data(self.chs.borrow().clone(), self.links.borrow().as_ref().clone(), order);
         }
     }
 

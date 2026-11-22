@@ -4,6 +4,9 @@
 //! (as in the flat matrix), and depth is how far back in time it reaches:
 //! the citing book's date of writing minus the cited book's.
 //!
+//! Möbius strip: each link is one point on the space of unordered pairs of
+//! places in the Bible closed into a loop, which is a Möbius strip.
+//!
 //! Globe: the Old Testament spirals over the northern half and the New
 //! Testament over the southern half. Links within a Testament stay near
 //! its ring; links between them cut through the middle.
@@ -16,6 +19,7 @@ use std::rc::Rc;
 pub enum Shape {
     Cube,
     Globe,
+    Mobius,
 }
 
 /// Bins per axis: fine enough to show structure, coarse enough to turn smoothly.
@@ -68,8 +72,9 @@ pub struct Space {
     zoom: Cell<f64>,
     drag_from: Cell<(f64, f64)>,
     model: RefCell<Model>,
-    /// chapters (book, chapter, verses) and links (chapter a, chapter b, count)
-    data: RefCell<(Vec<(String, u16, u16)>, Vec<(u16, u16, u16)>)>,
+    /// chapters (book, chapter, verses), links (chapter a, chapter b, count),
+    /// and each chapter's place 0..1 in the chosen order
+    data: RefCell<(Vec<(String, u16, u16)>, Vec<(u16, u16, u16)>, Vec<f64>)>,
 }
 
 const HOME: (f64, f64, f64) = (-0.85, 0.45, 0.8);
@@ -88,7 +93,7 @@ impl Space {
             zoom: Cell::new(HOME.2),
             drag_from: Cell::new((0.0, 0.0)),
             model: RefCell::new(Model::default()),
-            data: RefCell::new((vec![], vec![])),
+            data: RefCell::new((vec![], vec![], vec![])),
         });
         let w = Rc::downgrade(&s);
         area.set_draw_func(move |_, cr, wd, ht| {
@@ -133,7 +138,11 @@ impl Space {
         self.yaw.set(HOME.0);
         self.pitch.set(HOME.1);
         // the globe has no corners, so it can open larger than the cube
-        self.zoom.set(if self.shape.get() == Shape::Globe { 1.35 } else { HOME.2 });
+        self.zoom.set(match self.shape.get() {
+            Shape::Globe => 1.35,
+            Shape::Mobius => 1.5,
+            Shape::Cube => HOME.2,
+        });
         self.area.queue_draw();
     }
 
@@ -142,8 +151,16 @@ impl Space {
         self.area.queue_draw();
     }
 
-    pub fn set_data(&self, chs: Vec<(String, u16, u16)>, links: Vec<(u16, u16, u16)>) {
-        *self.data.borrow_mut() = (chs, links);
+    /// `order` gives each chapter's place 0..1 in the order picked in the
+    /// view (Bible order, chronological, by writer…); empty means Bible order.
+    pub fn set_data(&self, chs: Vec<(String, u16, u16)>, links: Vec<(u16, u16, u16)>, order: Vec<f64>) {
+        let order = if order.len() == chs.len() {
+            order
+        } else {
+            let n = chs.len().max(1) as f64;
+            (0..chs.len()).map(|i| i as f64 / n).collect()
+        };
+        *self.data.borrow_mut() = (chs, links, order);
         self.rebuild();
     }
 
@@ -158,8 +175,9 @@ impl Space {
     fn rebuild(&self) {
         let data = self.data.borrow();
         let m = match self.shape.get() {
-            Shape::Cube => cube(&data.0, &data.1),
-            Shape::Globe => globe(&data.0, &data.1),
+            Shape::Cube => cube(&data.0, &data.1, &data.2),
+            Shape::Globe => globe(&data.0, &data.1, &data.2),
+            Shape::Mobius => mobius(&data.0, &data.1, &data.2),
         };
         *self.model.borrow_mut() = m;
         self.area.queue_draw();
@@ -210,6 +228,21 @@ impl Space {
                 }
                 let _ = cr.stroke();
             }
+            Shape::Mobius => {
+                // the strip's one edge, and its centre line
+                for (a, b) in [(0.0, 0.0005), (0.0, 0.5)] {
+                    for i in 0..=400 {
+                        let s = i as f64 / 400.0;
+                        let (x, y, _) = self.project(mobius_point(s * 2.0 + a, s * 2.0 + b), w, h);
+                        if i == 0 {
+                            cr.move_to(x, y);
+                        } else {
+                            cr.line_to(x, y);
+                        }
+                    }
+                    let _ = cr.stroke();
+                }
+            }
             Shape::Globe => {
                 // a few lines of latitude and longitude, the equator firmer
                 for lat in [-1.0, -0.5, 0.0, 0.5, 1.0] {
@@ -246,12 +279,13 @@ impl Space {
         let mut order: Vec<(f64, usize)> = Vec::new();
         cr.set_operator(gtk::cairo::Operator::Over);
         match self.shape.get() {
-            Shape::Cube => {
+            Shape::Cube | Shape::Mobius => {
                 for (i, d) in m.dots.iter().enumerate() {
                     order.push((self.project(d.p, w, h).2, i));
                 }
                 order.sort_by(|a, b| b.0.total_cmp(&a.0));
-                let size = (w.min(h) / BINS as f64 * 0.32 * self.zoom.get()).max(1.0);
+                let base = if self.shape.get() == Shape::Mobius { 0.55 } else { 0.32 };
+                let size = (w.min(h) / BINS as f64 * base * self.zoom.get()).max(1.0);
                 for (_, i) in order {
                     let d = &m.dots[i];
                     let (x, y, _) = self.project(d.p, w, h);
@@ -326,9 +360,8 @@ fn nt_start(chs: &[(String, u16, u16)]) -> usize {
     chs.iter().position(|c| c.0 == "Matt").unwrap_or(chs.len())
 }
 
-fn cube(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
-    let n = chs.len().max(1);
-    let bin = |c: u16| (c as usize * BINS / n).min(BINS - 1);
+fn cube(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)], order: &[f64]) -> Model {
+    let bin = |c: u16| ((order.get(c as usize).copied().unwrap_or(0.0) * BINS as f64) as usize).min(BINS - 1);
     // (from bin, to bin, reach) -> count. Depth is how far back in time the
     // reference reaches: the citing book's date of writing minus the cited one's
     let mut cells: std::collections::HashMap<(usize, usize, i16), u32> = Default::default();
@@ -373,17 +406,26 @@ fn cube(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
     Model { dots, lines: vec![], labels }
 }
 
-fn globe(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
+fn globe(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)], order: &[f64]) -> Model {
     let nt = nt_start(chs);
     let n_ot = nt.max(1);
     let n_nt = (chs.len() - nt).max(1);
+    // within each Testament, chapters follow the chosen order
+    let mut rank = vec![0usize; chs.len()];
+    for (lo, hi) in [(0, nt), (nt, chs.len())] {
+        let mut idx: Vec<usize> = (lo..hi).collect();
+        idx.sort_by(|a, b| order[*a].total_cmp(&order[*b]));
+        for (r, i) in idx.into_iter().enumerate() {
+            rank[i] = r;
+        }
+    }
     // each chapter's place: (old?, bin round its ring)
     let place = |c: u16| -> (bool, usize) {
         let c = c as usize;
         if c < nt {
-            (true, c * RING_BINS / n_ot)
+            (true, rank[c] * RING_BINS / n_ot)
         } else {
-            (false, (c - nt) * RING_BINS / n_nt)
+            (false, rank[c] * RING_BINS / n_nt)
         }
     };
     // each Testament spirals over its half: Genesis by the North Pole down
@@ -444,6 +486,56 @@ fn globe(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)]) -> Model {
     Model { dots: vec![], lines, labels }
 }
 
+/// Where a link sits on the Möbius strip. A cross-reference is an unordered
+/// pair of places, and with the Bible closed into a loop (Revelation hands
+/// back to Genesis) the space of such pairs is exactly a Möbius strip:
+/// round the strip is where the link is centred, the edge holds links
+/// between neighbours, the centre line links half the Bible apart.
+pub fn mobius_point(ua: f64, ub: f64) -> [f64; 3] {
+    use std::f64::consts::{PI, TAU};
+    let (x, y) = (ua * TAU, ub * TAU);
+    // half the gap going forward from a to b, and the midpoint that way
+    let h = (y - x).rem_euclid(TAU) / 2.0;
+    let m = x + h;
+    let alpha = 2.0 * m;
+    let v = (h - PI / 2.0) / (PI / 2.0) * 0.42;
+    let r = 1.0 + v * (alpha / 2.0).cos();
+    [r * alpha.cos(), v * (alpha / 2.0).sin(), r * alpha.sin()]
+}
+
+fn mobius(chs: &[(String, u16, u16)], links: &[(u16, u16, u16)], order: &[f64]) -> Model {
+    let b = |c: u16| ((order.get(c as usize).copied().unwrap_or(0.0) * BINS as f64) as usize).min(BINS - 1);
+    let mut cells: std::collections::HashMap<(usize, usize), u32> = Default::default();
+    for &(a, c, k) in links {
+        let (x, y) = (b(a), b(c));
+        if x == y {
+            continue;
+        }
+        // one point per pair: the strip has no mirror half
+        let key = if x < y { (x, y) } else { (y, x) };
+        *cells.entry(key).or_default() += k as u32;
+    }
+    let max = cells.values().copied().max().unwrap_or(1) as f64;
+    let u = |i: usize| (i as f64 + 0.5) / BINS as f64;
+    let dots = cells
+        .into_iter()
+        .map(|((x, y), c)| Dot {
+            p: mobius_point(u(x), u(y)),
+            w: (c as f64).ln_1p() / max.ln_1p(),
+            t: (y - x) as f64 / BINS as f64,
+        })
+        .collect();
+    let mut labels = Vec::new();
+    for (book, name) in [("Gen", "Genesis"), ("Ps", "Psalms"), ("Isa", "Isaiah"), ("Matt", "Matthew"), ("Rom", "Romans"), ("Rev", "Revelation")] {
+        if let Some(i) = chs.iter().position(|c| c.0 == book) {
+            // a book's links with its own neighbours sit on the edge
+            let p = mobius_point(u(b(i as u16)), u(b(i as u16)) + 0.004);
+            labels.push(([p[0] * 1.08, p[1] * 1.08, p[2] * 1.08], name.to_string()));
+        }
+    }
+    Model { dots, lines: vec![], labels }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -460,6 +552,38 @@ mod tests {
         (chs, links)
     }
 
+    fn order(n: usize) -> Vec<f64> {
+        (0..n).map(|i| i as f64 / n as f64).collect()
+    }
+
+    #[test]
+    fn mobius_gives_one_point_per_pair() {
+        // swapping the two ends lands on the same point: that is the twist
+        for (a, b) in [(0.1, 0.7), (0.05, 0.95), (0.3, 0.31), (0.6, 0.2)] {
+            let p = mobius_point(a, b);
+            let q = mobius_point(b, a);
+            for k in 0..3 {
+                assert!((p[k] - q[k]).abs() < 1e-9, "{a},{b}: {p:?} vs {q:?}");
+            }
+        }
+        // neighbours sit on the edge, far-apart passages near the centre line
+        let near = mobius_point(0.2, 0.201);
+        let far = mobius_point(0.2, 0.7);
+        // distance from the centre line is |v|: 0.42 at the edge
+        assert!((near[0].hypot(near[2]) - 1.0).hypot(near[1]) > 0.4);
+        assert!(far[1].abs() < 0.01 && (far[0].hypot(far[2]) - 1.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn the_chosen_order_moves_the_points() {
+        let (chs, links) = sample();
+        let a = cube(&chs, &links, &order(chs.len()));
+        let rev: Vec<f64> = order(chs.len()).into_iter().rev().collect();
+        let b = cube(&chs, &links, &rev);
+        let xs = |m: &Model| { let mut v: Vec<i64> = m.dots.iter().map(|d| (d.p[0] * 1000.0) as i64).collect(); v.sort(); v };
+        assert_ne!(xs(&a), xs(&b));
+    }
+
     #[test]
     fn every_book_has_an_age() {
         assert_eq!(written_depth("Job"), 0.0);
@@ -473,7 +597,7 @@ mod tests {
     #[test]
     fn cube_points_stay_inside_the_cube() {
         let (chs, links) = sample();
-        let m = cube(&chs, &links);
+        let m = cube(&chs, &links, &order(chs.len()));
         assert!(!m.dots.is_empty());
         for d in &m.dots {
             assert!(d.p.iter().all(|v| (-1.0..=1.0).contains(v)), "{:?}", d.p);
@@ -487,7 +611,7 @@ mod tests {
     #[test]
     fn globe_puts_the_testaments_on_their_halves() {
         let (chs, links) = sample();
-        let m = globe(&chs, &links);
+        let m = globe(&chs, &links, &order(chs.len()));
         assert!(!m.lines.is_empty());
         for l in &m.lines {
             for p in [l.a, l.b] {

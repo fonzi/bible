@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+- **Möbius strip (3D).** A cross-reference joins two places in the Bible.
+  With the Bible closed into a loop (Revelation hands back to Genesis), every
+  such pair is exactly one point on a Möbius strip, so nothing is shown twice.
+  Neighbouring passages line the strip's single edge, passages half the Bible
+  apart run along its centre line, and Genesis meets Revelation at the seam.
+- The ordering menu (Bible order, chronological, by writer…) now rearranges
+  the cube, globe and Möbius strip too.
+
 ## 0.8.2
 
 - The Words panel has a "Show Greek and Hebrew" button, so the interlinear
