@@ -22,6 +22,16 @@ The background to each book (who wrote it, when, and for whom) shouldn’t sit b
 
 Start with the Bible, offline. Add the original languages, maps, history, the church year and the wider Christian tradition when you want them, and take it as far as you like.
 
+## Other traditions and the Quran
+
+Bible is a Christian study app. Downloads also lists texts from outside
+historic Christianity, always below the Bible's own: the New World
+Translation and the Book of Mormon (linked, since they can't be downloaded
+freely), and the Quran in Arabic with an English translation and the Arabic's
+pronunciation. They're there for study and comparison, for example for
+apologetics or for understanding what neighbours and friends believe, and
+they're described neutrally, without endorsing them.
+
 ## Features
 
 - **Read offline.** Download Bibles, commentaries, dictionaries, books and
