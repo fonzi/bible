@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.14
+
+- In the Reading room, the Quran has its own section at the bottom instead
+  of appearing under the church fathers.
+- The Quran's pronunciation shows long and emphatic letters underlined, as
+  Tanzil marks them, instead of showing raw tags.
+
 ## 0.9.13
 
 - **Contents as a panel.** In the Reading room, a book's contents (each surah

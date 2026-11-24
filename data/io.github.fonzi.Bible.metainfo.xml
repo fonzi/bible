@@ -39,6 +39,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.14" date="2026-11-24">
+      <description>
+        <ul>
+          <li>In the Reading room, the Quran has its own section at the bottom instead of appearing under the church fathers.</li>
+          <li>The Quran's pronunciation shows long and emphatic letters underlined, as Tanzil marks them, instead of showing raw tags.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.13" date="2026-11-24">
       <description>
         <ul>

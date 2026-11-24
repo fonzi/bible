@@ -530,7 +530,19 @@ impl FathersView {
             l.set_wrap(true);
             l.set_xalign(0.0);
             if let Some(t) = t.strip_prefix('\u{2063}') {
-                l.set_text(t);
+                // Tanzil underlines long and emphatic letters (<u>a</u>):
+                // keep those few tags as formatting, escape everything else
+                let mut m = glib::markup_escape_text(t).to_string();
+                for tag in ["u", "b", "i"] {
+                    m = m
+                        .replace(&format!("&lt;{tag}&gt;"), &format!("<{tag}>"))
+                        .replace(&format!("&lt;/{tag}&gt;"), &format!("</{tag}>"));
+                }
+                if gtk::pango::parse_markup(&m, '\0').is_ok() {
+                    l.set_markup(&m);
+                } else {
+                    l.set_text(&t.replace(['<', '>'], ""));
+                }
                 l.remove_css_class("scripture");
                 l.add_css_class("dim-label");
                 l.add_css_class("translit");

@@ -582,7 +582,10 @@ impl Section for Books {
             groups.push(g);
         }
         // the church fathers, downloaded volume by volume
-        let fathers = crate::fathers::installed();
+        let fathers: Vec<&str> = crate::fathers::installed()
+            .into_iter()
+            .filter(|id| *id != crate::fathers::QURAN)
+            .collect();
         if !fathers.is_empty() {
             let g = adw::PreferencesGroup::builder()
                 .title("Church fathers")
@@ -608,6 +611,27 @@ impl Section for Books {
                 row.connect_activated(move |_| crate::fathers::open(&c, id));
                 g.add(&row);
             }
+            self.list.add(&g);
+            groups.push(g);
+        }
+        // the Quran has its own place, last, apart from the church fathers
+        if crate::fathers::is_installed(crate::fathers::QURAN) {
+            let g = adw::PreferencesGroup::builder()
+                .title("The Quran")
+                .description("For study and comparison")
+                .build();
+            let row = adw::ActionRow::builder()
+                .title("The Quran")
+                .subtitle("Arabic, pronunciation and English")
+                .activatable(true)
+                .build();
+            let icon = gtk::Image::from_icon_name("accessories-dictionary-symbolic");
+            icon.add_css_class("dim-label");
+            row.add_prefix(&icon);
+            row.add_suffix(&gtk::Image::from_icon_name("go-next-symbolic"));
+            let c = self.ctx.clone();
+            row.connect_activated(move |_| crate::fathers::open(&c, crate::fathers::QURAN));
+            g.add(&row);
             self.list.add(&g);
             groups.push(g);
         }
