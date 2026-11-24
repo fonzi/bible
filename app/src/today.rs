@@ -394,6 +394,21 @@ impl Today {
             let t = label(e.text, &[]);
             t.set_hexpand(true);
             row.append(&t);
+            // the article about it on Wikipedia (online)
+            let wiki = gtk::Button::from_icon_name("help-about-symbolic");
+            wiki.add_css_class("flat");
+            wiki.set_valign(gtk::Align::Start);
+            wiki.set_tooltip_text(Some("Read about this on Wikipedia"));
+            let q = e.text.trim_end_matches('.').to_string();
+            wiki.connect_clicked(move |b| {
+                let url = format!(
+                    "https://en.wikipedia.org/w/index.php?search={}",
+                    urlencoding::encode(&q)
+                );
+                let win = b.root().and_downcast::<gtk::Window>();
+                gtk::UriLauncher::new(&url).launch(win.as_ref(), gtk::gio::Cancellable::NONE, |_| {});
+            });
+            row.append(&wiki);
             c.append(&row);
         }
         let b = gtk::Button::with_label(&crate::i18n::t("Open the timeline"));

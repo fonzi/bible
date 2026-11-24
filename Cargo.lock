@@ -62,7 +62,7 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "bible-app"
-version = "0.9.9"
+version = "0.9.10"
 dependencies = [
  "bible-core",
  "bible-step",
@@ -83,7 +83,7 @@ dependencies = [
 
 [[package]]
 name = "bible-core"
-version = "0.9.9"
+version = "0.9.10"
 dependencies = [
  "chrono",
  "flate2",
@@ -95,9 +95,10 @@ dependencies = [
 
 [[package]]
 name = "bible-step"
-version = "0.9.9"
+version = "0.9.10"
 dependencies = [
  "bible-core",
+ "bible-sword",
  "flate2",
  "once_cell",
  "ureq",
@@ -105,7 +106,7 @@ dependencies = [
 
 [[package]]
 name = "bible-sword"
-version = "0.9.9"
+version = "0.9.10"
 dependencies = [
  "bible-core",
  "flate2",

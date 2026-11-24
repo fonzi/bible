@@ -59,6 +59,10 @@ jobs:
       # release mode, so the package below reuses this build
       - name: Tests
         run: xvfb-run -a cargo test --workspace --release
+      # every file we offer to download is still there (Bible sources, STEP,
+      # church fathers, audio, Wikipedia)
+      - name: Download links still work
+        run: cargo test --workspace --release -- --ignored download_urls
       - name: Check the app's desktop and store metadata
         run: |
           desktop-file-validate data/io.github.fonzi.Bible.desktop

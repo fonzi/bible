@@ -677,7 +677,7 @@ impl Reader {
         let w_empty = adw::StatusPage::builder()
             .icon_name("bibleapp-words-symbolic")
             .title("Pick a word")
-            .description("Turn on the original languages and tap a Greek or Hebrew word to see its meaning, grammar and dictionary entries.")
+            .description("Tap a Greek or Hebrew word to see its meaning, grammar and lexicon entry. The lexicon comes with the Greek and Hebrew download (STEP Bible), so nothing else is needed.")
             .build();
         w_empty.add_css_class("compact");
         // turn it on from here, not only from the header
@@ -703,12 +703,26 @@ impl Reader {
         );
         w_stack.add_named(&w_empty, Some("empty"));
         w_stack.set_visible_child_name("empty");
-        panel_stack.add_titled_with_icon(
-            &w_stack,
-            Some("words"),
-            "Words",
-            "bibleapp-words-symbolic",
-        );
+        // word details live inside the Original pane, under the Greek and
+        // Hebrew, and appear once a word is tapped
+        w_stack.set_visible(false);
+        il_box.remove(&il_stack);
+        let il_paned = gtk::Paned::new(gtk::Orientation::Vertical);
+        il_paned.set_start_child(Some(&il_stack));
+        il_paned.set_end_child(Some(&w_stack));
+        il_paned.set_shrink_start_child(false);
+        il_paned.set_shrink_end_child(false);
+        il_paned.set_position(420);
+        il_paned.set_vexpand(true);
+        il_box.append(&il_paned);
+        {
+            let ws = w_stack.clone();
+            il_toggle.connect_active_notify(move |t| {
+                if !t.is_active() {
+                    ws.set_visible(false);
+                }
+            });
+        }
         let map = crate::map::MapView::new(ctx);
         panel_stack.add_titled_with_icon(&map.root, Some("map"), "Map", "mark-location-symbolic");
 
@@ -828,9 +842,9 @@ impl Reader {
         il_toggle.connect_toggled(move |t| {
             let Some(r) = w.upgrade() else { return };
             if t.is_active() {
+                // make room first, so the window never has to grow
+                r.side_was.set(r.ctx.set_sidebar(false));
                 r.il_revealer.set_visible(true);
-                let r2 = r.clone();
-                glib::idle_add_local_once(move || r2.side_was.set(r2.ctx.set_sidebar(false)));
                 r.il_revealer.set_reveal_child(true);
                 r.update_interlinear();
             } else {
@@ -3135,8 +3149,7 @@ impl Reader {
         let num = num.trim_start_matches('0');
         *self.w_query.borrow_mut() = format!("{lang}{num}");
         self.w_stack.set_visible_child_name("info");
-        self.split.set_show_sidebar(true);
-        self.panel_stack.set_visible_child_name("words");
+        self.w_stack.set_visible(true);
     }
 
     fn download_pack(self: &Rc<Self>) {

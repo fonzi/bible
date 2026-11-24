@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.10
+
+- **Word details live inside Original.** Tap a Greek or Hebrew word and its
+  meaning, grammar and lexicon entry open right under the interlinear, instead
+  of in a separate Words tab. The lexicon comes with the Greek and Hebrew
+  download, so nothing else is needed.
+- **Church history on Today** has a button on each event to read about it on
+  Wikipedia.
+- Every release now checks that the files Bible offers to download (Bible
+  sources, Greek and Hebrew data, church fathers, audio, Wikipedia) are still
+  reachable.
+
 ## 0.9.9
 
 - **Personal copies.** Many modern translations are still under copyright, so

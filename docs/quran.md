@@ -22,6 +22,14 @@ stories meet the Bible's, including in the rainbow view.
 - Stored like the church fathers: parsed once into JSON in the app's data
   folder, read in the Reading room, surah by surah, Arabic beside English.
 
+## Word by word, like Original
+
+The Quran gets the same treatment as the Greek and Hebrew: an Original pane
+with each Arabic word, its transliteration, a gloss and its root, and the word
+details underneath when a word is tapped. The Quranic Arabic Corpus
+(corpus.quran.com) has word-by-word morphology and glosses; check its licence
+(it has been GPL) before using it.
+
 ## Links: story parallels, not verse cross-references
 
 The Quran retells many Biblical stories in its own way, so verse-to-verse

@@ -739,3 +739,23 @@ mod balance {
         assert_eq!(m.matches("<i>").count(), m.matches("</i>").count());
     }
 }
+
+#[cfg(test)]
+mod url_checks {
+    use super::*;
+    #[test]
+    #[ignore = "needs the internet; run with --ignored download_urls"]
+    fn download_urls_step() {
+        let mut bad = vec![];
+        for p in [Pack::GreekNt, Pack::HebrewOt] {
+            for path in p.sources().into_iter().chain([p.lexicon()]) {
+                let u = format!("{BASE}{}", path.replace(' ', "%20").replace('+', "%2B"));
+                match bible_sword::install::url_status(&u) {
+                    Ok(200) => println!("ok   {u}"),
+                    other => bad.push(format!("{u}: {other:?}")),
+                }
+            }
+        }
+        assert!(bad.is_empty(), "unreachable downloads:\n{}", bad.join("\n"));
+    }
+}

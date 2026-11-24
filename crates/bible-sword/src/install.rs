@@ -538,3 +538,37 @@ mod import_tests {
         assert!(import_zip(&z.0, &root.0).is_err());
     }
 }
+
+/// Ask a server whether a download is still there, without downloading it:
+/// a HEAD request, falling back to GET for servers that refuse HEAD. Used by
+/// the download-URL checks (`cargo test -- --ignored download_urls`).
+pub fn url_status(url: &str) -> Result<u16, String> {
+    let a = agent(url);
+    match a.head(url).call() {
+        Ok(r) => Ok(r.status()),
+        Err(ureq::Error::Status(405 | 403 | 501, _)) => match a.get(url).call() {
+            Ok(r) => Ok(r.status()),
+            Err(ureq::Error::Status(c, _)) => Ok(c),
+            Err(e) => Err(e.to_string()),
+        },
+        Err(ureq::Error::Status(c, _)) => Ok(c),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+#[cfg(test)]
+mod url_checks {
+    #[test]
+    #[ignore = "needs the internet; run with --ignored download_urls"]
+    fn download_urls_sword_sources() {
+        let mut bad = vec![];
+        for s in super::default_sources() {
+            let u = format!("{}/mods.d.tar.gz", s.url.trim_end_matches('/'));
+            match super::url_status(&u) {
+                Ok(200) => println!("ok   {u}"),
+                other => bad.push(format!("{u}: {other:?}")),
+            }
+        }
+        assert!(bad.is_empty(), "unreachable downloads:\n{}", bad.join("\n"));
+    }
+}

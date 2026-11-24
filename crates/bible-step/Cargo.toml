@@ -10,3 +10,6 @@ bible-core = { path = "../bible-core" }
 flate2 = "1"
 ureq = { version = "2", features = ["native-certs"] }
 once_cell = "1"
+
+[dev-dependencies]
+bible-sword = { path = "../bible-sword" }

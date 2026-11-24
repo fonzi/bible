@@ -602,3 +602,26 @@ mod tests {
         assert!(url("anf01").ends_with("/schaff/anf01.xml"));
     }
 }
+
+#[cfg(test)]
+mod url_checks {
+    /// Every church-fathers volume, the audio Bible and Wikipedia still answer.
+    #[test]
+    #[ignore = "needs the internet; run with --ignored download_urls"]
+    fn download_urls_fathers_audio_wikipedia() {
+        let mut urls: Vec<String> = super::VOLUMES.iter().map(|v| super::url(v.0)).collect();
+        for src in bible_core::audio::SOURCES {
+            urls.extend(src.url("Gen", 1));
+            urls.extend(src.url("Rev", 22));
+        }
+        urls.push("https://en.wikipedia.org/w/api.php?action=query&format=json&titles=Bible".into());
+        let mut bad = vec![];
+        for u in urls {
+            match bible_sword::install::url_status(&u) {
+                Ok(200) => println!("ok   {u}"),
+                other => bad.push(format!("{u}: {other:?}")),
+            }
+        }
+        assert!(bad.is_empty(), "unreachable downloads:\n{}", bad.join("\n"));
+    }
+}
