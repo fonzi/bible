@@ -110,6 +110,21 @@ makepkg -si
 
 Modules install into `~/.sword`, so other SWORD apps share them.
 
+### Windows and macOS (untested, not officially supported)
+
+Bible is made for GNOME first. Each release also has Windows and macOS zips,
+named `_untested`: they're built and pass the tests automatically, but we have
+no Windows PC or Mac to try them on.
+
+- **Windows:** unzip and run `bin\bible-app.exe`. The app isn't code-signed
+  (a certificate costs money every year), so SmartScreen may say it
+  "protected your PC". Choose *More info*, then *Run anyway*.
+- **macOS:** install GTK first with
+  `brew install gtk4 libadwaita gstreamer adwaita-icon-theme`, then run
+  `./bible-app` from the zip.
+
+Reports are welcome in [issues](https://github.com/fonzi/bible/issues).
+
 ## Build from source
 
 ```sh

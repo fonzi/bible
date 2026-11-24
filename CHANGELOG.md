@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.6
+
+- **Windows build (untested):** now carries its own fonts (Literata for
+  scripture, Adwaita Sans and Mono for the interface), so text no longer falls
+  back to a plain sans font. The "win32 session" warning at startup is gone.
+  The zip's README explains the SmartScreen warning: the app isn't code-signed.
+- The README says plainly that Windows and macOS builds are untested and not
+  officially supported; Bible is made for GNOME first.
+
 ## 0.9.5
 
 - The version menu now shows each version's full name under its short one,

@@ -63,11 +63,60 @@ fn ensure_window(app: &adw::Application) -> Rc<ctx::Ctx> {
     c
 }
 
+/// Windows has none of GNOME's fonts, so the Windows zip carries them in
+/// share/fonts with a fontconfig setup in etc/fonts. Pango is pointed at it
+/// before GTK starts.
+#[cfg(windows)]
+fn use_bundled_fonts() {
+    let Some(root) = std::env::current_exe()
+        .ok()
+        .and_then(|e| Some(e.parent()?.parent()?.to_path_buf()))
+    else {
+        return;
+    };
+    let fonts = root.join("etc").join("fonts");
+    if fonts.join("fonts.conf").exists() {
+        if std::env::var_os("PANGOCAIRO_BACKEND").is_none() {
+            std::env::set_var("PANGOCAIRO_BACKEND", "fc");
+        }
+        std::env::set_var("FONTCONFIG_PATH", &fonts);
+    }
+}
+
+/// `--check-fonts`: exits with an error unless the fonts the app is designed
+/// around can be found. The Windows build runs it, since we can't look.
+fn check_fonts() -> gtk::glib::ExitCode {
+    use pangocairo::prelude::*;
+    let map = pangocairo::FontMap::default();
+    let have: Vec<String> = map.list_families().iter().map(|f| f.name().to_string()).collect();
+    let mut ok = true;
+    for want in ["Literata", "Adwaita Sans", "Adwaita Mono"] {
+        let found = have.iter().any(|h| h.eq_ignore_ascii_case(want));
+        println!("{} {want}", if found { "found  " } else { "MISSING" });
+        ok &= found;
+    }
+    println!("{} font families in all", have.len());
+    if ok { gtk::glib::ExitCode::SUCCESS } else { gtk::glib::ExitCode::FAILURE }
+}
+
 fn main() -> gtk::glib::ExitCode {
+    #[cfg(windows)]
+    use_bundled_fonts();
+    if std::env::args().any(|a| a == "--check-fonts") {
+        return check_fonts();
+    }
     log::init();
+    // Only Linux desktops have a D-Bus session for single-instance handling;
+    // elsewhere GLib warns "win32 session dbus binary not found" and the
+    // like, so each launch simply runs on its own.
+    let flags = if cfg!(target_os = "linux") {
+        gtk::gio::ApplicationFlags::HANDLES_OPEN
+    } else {
+        gtk::gio::ApplicationFlags::HANDLES_OPEN | gtk::gio::ApplicationFlags::NON_UNIQUE
+    };
     let app = adw::Application::builder()
         .application_id(about::APP_ID)
-        .flags(gtk::gio::ApplicationFlags::HANDLES_OPEN)
+        .flags(flags)
         .build();
     app.connect_startup(|app| {
         searchprovider::register(app);

@@ -59,7 +59,7 @@ jobs:
           update: true
           cache: true
           install: >-
-            zip
+            zip curl tar xz
           pacboy: >-
             gtk4:p libadwaita:p gstreamer:p gst-plugins-base:p gst-plugins-good:p
             rust:p pkgconf:p gcc:p
@@ -74,24 +74,12 @@ jobs:
         run: cargo build --release -p bible-app
       - name: Tests
         run: cargo test --workspace
-      - name: Bundle the app with its libraries
-        run: |
-          set -e
-          d=dist/Bible
-          mkdir -p $d/bin $d/share/glib-2.0/schemas $d/share/icons $d/lib
-          cp target/release/bible-app.exe $d/bin/
-          # every DLL the app loads from MSYS2
-          ldd target/release/bible-app.exe | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} $d/bin/
-          cp /ucrt64/share/glib-2.0/schemas/*.xml $d/share/glib-2.0/schemas/
-          glib-compile-schemas $d/share/glib-2.0/schemas
-          cp -r /ucrt64/share/icons/Adwaita /ucrt64/share/icons/hicolor $d/share/icons/
-          cp -r /ucrt64/lib/gdk-pixbuf-2.0 $d/lib/
-          cp -r /ucrt64/lib/gstreamer-1.0 $d/lib/
-          # libraries the GStreamer plugins load
-          for p in $d/lib/gstreamer-1.0/*.dll; do ldd "$p" | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} $d/bin/; done
-          (cd dist && zip -qr ../bible-app-windows.zip Bible)
+      - name: Bundle the app with its libraries and fonts
+        run: packaging/windows/bundle.sh bible-app-windows.zip
       - name: The bundled app starts on its own
         run: ./dist/Bible/bin/bible-app.exe --help
+      - name: The bundled fonts are found
+        run: ./dist/Bible/bin/bible-app.exe --check-fonts
       - uses: actions/upload-artifact@v4
         with:
           name: bible-app-windows
