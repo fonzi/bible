@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.1
+
+- Church fathers: paragraphs no longer break at footnotes; volumes you
+  already downloaded are read again with the fix.
+- The Contents list is easier to scan (one line per section, full title on
+  hover) and opens at the section you're reading.
+- Downloading or removing a volume no longer closes the list, so you can
+  start several downloads at once.
+- Splash style and loading animation are picked from live previews in
+  Preferences; click a splash to see it full size.
+- An Arch Linux PKGBUILD, and clear system requirements in the README.
+
 ## 0.9.0
 
 - **Möbius strip (3D).** A cross-reference joins two places in the Bible.

@@ -263,3 +263,27 @@ pub fn verse_of_the_day() -> (String, String) {
     let name = bible_core::Ref::new(&book, ch, v).to_string();
     (t, name)
 }
+
+/// A small, looping, live picture of a splash style, for choosing one.
+pub fn thumbnail(style: &str, w: i32, h: i32) -> gtk::DrawingArea {
+    let area = gtk::DrawingArea::new();
+    area.set_content_width(w);
+    area.set_content_height(h);
+    let style = style.to_string();
+    let start = std::time::Instant::now();
+    let verse = verse_of_the_day();
+    area.set_draw_func(move |a, cr, w, h| {
+        // play the opening, hold it, and start again
+        let t = (start.elapsed().as_secs_f64() % 3.0 / 1.8).min(1.0);
+        let k = (w as f64 / 520.0).min(h as f64 / 360.0);
+        cr.translate((w as f64 - 520.0 * k) / 2.0, (h as f64 - 360.0 * k) / 2.0);
+        cr.scale(k, k);
+        let pl = a.create_pango_layout(None);
+        draw(&style, cr, 520.0, 360.0, t, &verse, &pl);
+    });
+    area.add_tick_callback(|a, _| {
+        a.queue_draw();
+        glib::ControlFlow::Continue
+    });
+    area
+}

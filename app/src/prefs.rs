@@ -172,57 +172,42 @@ impl Prefs {
             cfg.splash,
             Box::new(|c, v| c.config.borrow_mut().splash = v),
         ));
-        let names: Vec<&str> = crate::splash::STYLES.iter().map(|s| s.1).collect();
-        let st = adw::ComboRow::builder().title(crate::i18n::t("Splash style")).model(&gtk::StringList::new(&names)).build();
-        st.set_selected(crate::splash::STYLES.iter().position(|s| s.0 == cfg.splash_style).unwrap_or(0) as u32);
-        let c = ctx.clone();
-        st.connect_selected_notify(move |r| {
-            c.config.borrow_mut().splash_style = crate::splash::STYLES[r.selected() as usize].0.to_string();
-            c.save_config();
-            // show the new style straight away
-            if let Some(app) = c.window.get().and_then(|w| w.application()).and_downcast::<adw::Application>() {
-                let style = c.config.borrow().splash_style.clone();
-                crate::splash::show(&app, &style, crate::splash::verse_of_the_day(), 1800, || {});
-            }
-        });
-        // play the chosen splash right here, no restart needed
-        let play = gtk::Button::from_icon_name("media-playback-start-symbolic");
-        play.set_tooltip_text(Some(&crate::i18n::t("Preview the splash screen")));
-        play.add_css_class("flat");
-        play.set_valign(gtk::Align::Center);
-        let c = ctx.clone();
-        play.connect_clicked(move |_| {
-            let Some(app) = c
-                .window
-                .get()
-                .and_then(|w| w.application())
-                .and_downcast::<adw::Application>()
-            else {
-                return;
-            };
-            let style = c.config.borrow().splash_style.clone();
-            crate::splash::show(&app, &style, crate::splash::verse_of_the_day(), 1800, || {});
-        });
-        st.add_suffix(&play);
-        look.add(&st);
-        let lnames: Vec<&str> = crate::loader::STYLES.iter().map(|s| s.1).collect();
-        let lrow = adw::ComboRow::builder()
-            .title(crate::i18n::t("Loading animation"))
-            .subtitle(crate::i18n::t("Shown while the app is busy, such as drawing or downloading"))
-            .model(&gtk::StringList::new(&lnames))
-            .build();
-        lrow.set_selected(crate::loader::STYLES.iter().position(|s| s.0 == cfg.loader).unwrap_or(0) as u32);
-        // a live preview of the choice
-        let lprev = crate::loader::new(36);
-        lrow.add_prefix(&lprev);
-        let c = ctx.clone();
-        lrow.connect_selected_notify(move |r| {
-            let id = crate::loader::STYLES[r.selected() as usize].0;
-            crate::loader::set_style(id);
-            c.config.borrow_mut().loader = id.to_string();
-            c.save_config();
-        });
-        look.add(&lrow);
+        // splash and loading animation: pick from live previews, no restart
+        look.add(&gallery(
+            &crate::i18n::t("Splash style"),
+            &crate::i18n::t("Click one to see it full size"),
+            crate::splash::STYLES.iter().map(|s| (s.0, s.1)).collect(),
+            &cfg.splash_style,
+            |id| crate::splash::thumbnail(id, 132, 92).upcast(),
+            {
+                let c = ctx.clone();
+                move |id: &str| {
+                    c.config.borrow_mut().splash_style = id.to_string();
+                    c.save_config();
+                    if let Some(app) = c.window.get().and_then(|w| w.application()).and_downcast::<adw::Application>() {
+                        crate::splash::show(&app, id, crate::splash::verse_of_the_day(), 1800, || {});
+                    }
+                }
+            },
+        ));
+        look.add(&gallery(
+            &crate::i18n::t("Loading animation"),
+            &crate::i18n::t("Shown while the app is busy, such as drawing or downloading"),
+            crate::loader::STYLES.iter().map(|s| (s.0, s.1)).collect(),
+            &cfg.loader,
+            |id| {
+                let i = crate::loader::STYLES.iter().position(|s| s.0 == id);
+                crate::loader::new_with(56, i).upcast()
+            },
+            {
+                let c = ctx.clone();
+                move |id: &str| {
+                    crate::loader::set_style(id);
+                    c.config.borrow_mut().loader = id.to_string();
+                    c.save_config();
+                }
+            },
+        ));
         let names: Vec<&str> = crate::sounds::SOUNDS.iter().map(|s| s.1).collect();
         let snd = adw::ComboRow::builder()
             .title(crate::i18n::t("Startup sound"))
@@ -749,4 +734,79 @@ impl Section for Prefs {
     fn in_sidebar(&self) -> bool {
         false
     }
+}
+
+/// A row of live previews to choose from: each choice animates in place and
+/// the chosen one is marked, so there's nothing to restart or imagine.
+fn gallery(
+    title: &str,
+    subtitle: &str,
+    items: Vec<(&'static str, &'static str)>,
+    current: &str,
+    preview: impl Fn(&str) -> gtk::Widget,
+    on_pick: impl Fn(&str) + 'static,
+) -> adw::PreferencesRow {
+    let row = adw::PreferencesRow::new();
+    row.set_activatable(false);
+    let v = gtk::Box::new(gtk::Orientation::Vertical, 10);
+    v.set_margin_top(12);
+    v.set_margin_bottom(12);
+    v.set_margin_start(12);
+    v.set_margin_end(12);
+    let t = gtk::Label::new(Some(title));
+    t.set_xalign(0.0);
+    v.append(&t);
+    let st = gtk::Label::new(Some(subtitle));
+    st.set_xalign(0.0);
+    st.set_wrap(true);
+    st.add_css_class("dim-label");
+    st.add_css_class("caption");
+    v.append(&st);
+    let h = gtk::Box::new(gtk::Orientation::Horizontal, 8);
+    h.set_homogeneous(true);
+    let on_pick = std::rc::Rc::new(on_pick);
+    let mut first: Option<gtk::ToggleButton> = None;
+    for (id, name) in items {
+        let b = gtk::ToggleButton::new();
+        b.add_css_class("flat");
+        b.add_css_class("gallery-choice");
+        b.set_tooltip_text(Some(name));
+        let inner = gtk::Box::new(gtk::Orientation::Vertical, 6);
+        let p = preview(id);
+        p.set_halign(gtk::Align::Center);
+        p.set_can_target(false);
+        inner.append(&p);
+        let l = gtk::Label::new(Some(name));
+        l.add_css_class("caption");
+        l.set_wrap(true);
+        l.set_justify(gtk::Justification::Center);
+        inner.append(&l);
+        b.set_child(Some(&inner));
+        match &first {
+            Some(f) => b.set_group(Some(f)),
+            None => first = Some(b.clone()),
+        }
+        b.set_active(id == current);
+        let pick = on_pick.clone();
+        b.connect_toggled(move |b| {
+            if b.is_active() {
+                pick(id);
+            }
+        });
+        // clicking the chosen one again still plays it
+        let pick = on_pick.clone();
+        let click = gtk::GestureClick::new();
+        click.connect_released(move |g, _, _, _| {
+            if let Some(b) = g.widget().and_downcast::<gtk::ToggleButton>() {
+                if b.is_active() {
+                    pick(id);
+                }
+            }
+        });
+        b.add_controller(click);
+        h.append(&b);
+    }
+    v.append(&h);
+    row.set_child(Some(&v));
+    row
 }

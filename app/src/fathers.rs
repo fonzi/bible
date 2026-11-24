@@ -69,8 +69,11 @@ pub fn dir() -> PathBuf {
 fn xml_path(id: &str) -> PathBuf {
     dir().join(format!("{id}.xml"))
 }
+/// Bump the number when parsing changes, so volumes are read again.
+const PARSE_VERSION: u32 = 2;
+
 fn cache_path(id: &str) -> PathBuf {
-    dir().join(format!("{id}.json"))
+    dir().join(format!("{id}.v{PARSE_VERSION}.json"))
 }
 
 pub fn is_installed(id: &str) -> bool {
@@ -83,7 +86,15 @@ pub fn installed() -> Vec<&'static str> {
 
 pub fn remove(id: &str) {
     let _ = std::fs::remove_file(xml_path(id));
-    let _ = std::fs::remove_file(cache_path(id));
+    // parsed copies of any version
+    if let Ok(rd) = std::fs::read_dir(dir()) {
+        for e in rd.flatten() {
+            let n = e.file_name().to_string_lossy().to_string();
+            if n.starts_with(&format!("{id}.")) && n.ends_with(".json") {
+                let _ = std::fs::remove_file(e.path());
+            }
+        }
+    }
 }
 
 /// Download one volume. Fails with a reason a person can act on.
@@ -143,13 +154,38 @@ fn clean(s: &str) -> String {
     s.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
+/// Take out footnotes before parsing: they hold paragraphs of their own, and
+/// an HTML parser ends the surrounding paragraph at the first one.
+fn strip_notes(xml: &str) -> String {
+    let mut out = String::with_capacity(xml.len());
+    let mut rest = xml;
+    while let Some(i) = rest.find("<note") {
+        // only the <note> element, not e.g. <notes>
+        let after = rest[i + 5..].chars().next();
+        if !matches!(after, Some(' ') | Some('>') | Some('\n') | Some('\t')) {
+            out.push_str(&rest[..i + 5]);
+            rest = &rest[i + 5..];
+            continue;
+        }
+        out.push_str(&rest[..i]);
+        match rest[i..].find("</note>") {
+            Some(j) => rest = &rest[i + j + "</note>".len()..],
+            None => {
+                rest = "";
+            }
+        }
+    }
+    out.push_str(rest);
+    out
+}
+
 /// Read a ThML volume into its parts, in order. Footnotes are left out.
 pub fn parse(xml: &str) -> Vec<Part> {
     let body = match xml.find("<ThML.body") {
         Some(i) => &xml[i..],
         None => xml,
     };
-    let doc = scraper::Html::parse_fragment(&strip_empty_tags(body));
+    let doc = scraper::Html::parse_fragment(&strip_empty_tags(&strip_notes(body)));
     let mut parts: Vec<Part> = Vec::new();
     fn text_of(n: ego_tree::NodeRef<scraper::Node>, out: &mut String) {
         for c in n.children() {
@@ -262,13 +298,14 @@ impl FathersView {
         toc.add_css_class("navigation-sidebar");
         let toc_scroll = gtk::ScrolledWindow::builder()
             .child(&toc)
-            .min_content_width(380)
-            .max_content_height(520)
+            .min_content_width(440)
+            .max_content_height(720)
             .propagate_natural_height(true)
             .hscrollbar_policy(gtk::PolicyType::Never)
             .build();
         let toc_pop = gtk::Popover::new();
         toc_pop.set_child(Some(&toc_scroll));
+        toc.set_selection_mode(gtk::SelectionMode::Single);
         let toc_btn = gtk::MenuButton::builder()
             .child(
                 &adw::ButtonContent::builder()
@@ -325,6 +362,19 @@ impl FathersView {
         });
         *v.me.borrow_mut() = Rc::downgrade(&v);
         VIEW.with(|w| *w.borrow_mut() = Rc::downgrade(&v));
+        // open the contents at the section being read
+        let w = Rc::downgrade(&v);
+        v.toc_pop.connect_show(move |_| {
+            if let Some(v) = w.upgrade() {
+                if let Some(row) = v.toc.row_at_index(v.at.get() as i32) {
+                    v.toc.select_row(Some(&row));
+                    let r = row.clone();
+                    glib::idle_add_local_once(move || {
+                        r.grab_focus();
+                    });
+                }
+            }
+        });
         let w = Rc::downgrade(&v);
         toc.connect_row_activated(move |_, row| {
             if let Some(v) = w.upgrade() {
@@ -366,7 +416,9 @@ impl FathersView {
             for p in &parts {
                 let l = gtk::Label::new(Some(&p.title));
                 l.set_xalign(0.0);
-                l.set_wrap(true);
+                l.set_ellipsize(gtk::pango::EllipsizeMode::End);
+                l.set_max_width_chars(48);
+                l.set_tooltip_text(Some(&p.title));
                 l.set_margin_start(((p.depth.max(1) - 1) as i32) * 14);
                 if p.depth <= 1 {
                     l.add_css_class("heading");
@@ -526,6 +578,13 @@ mod tests {
         assert!(!p[1].paras[0].contains("Or, beloved name"));
         assert!(p[1].paras[1].contains("blood of God"));
         assert_eq!(p[2].paras, vec!["As to my fellow-servant Burrhus."]);
+    }
+
+    #[test]
+    fn footnotes_with_paragraphs_do_not_split_text() {
+        let xml = r#"<ThML.body><div2 title="Ch"><p>Through envy, those women, the Danaids<note n="18"><p>Some suppose these to have been the names of two martyrs.</p></note> and Dircae, suffered.</p></div2></ThML.body>"#;
+        let p = parse(xml);
+        assert_eq!(p[0].paras, vec!["Through envy, those women, the Danaids and Dircae, suffered."]);
     }
 
     #[test]

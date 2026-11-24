@@ -140,3 +140,7 @@ window.splash > * {
 
 /* sidebar group headings */
 .sidebar-heading { font-size: 0.8em; font-weight: 700; opacity: 0.55; margin: 14px 18px 4px 18px; }
+
+/* live preview galleries in Preferences */
+.gallery-choice { padding: 8px; border-radius: 12px; }
+.gallery-choice:checked { background-color: alpha(@accent_bg_color, 0.16); box-shadow: inset 0 0 0 2px @accent_bg_color; }

@@ -1,0 +1,47 @@
+# Maintainer: fonzi <626330+fonzi@users.noreply.github.com>
+# Builds Bible from the tagged release source. To update, set pkgver to the
+# new version and run `updpkgsums`.
+pkgname=bible-app
+pkgver=0.9.1
+pkgrel=1
+pkgdesc="Offline Bible study app for GNOME: SWORD modules, interlinear Greek and Hebrew, cross-references, timeline and maps"
+arch=('x86_64' 'aarch64')
+url="https://fonzi.github.io/bible/"
+license=('GPL-3.0-or-later')
+depends=('gtk4>=4.14' 'libadwaita>=1.5' 'gst-plugins-good' 'gst-plugins-base-libs' 'glib2' 'cairo' 'pango')
+makedepends=('cargo' 'pkgconf')
+optdepends=('otf-eb-garamond: classic typography style')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/fonzi/bible/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "bible-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "bible-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release -p bible-app
+}
+
+check() {
+  cd "bible-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  # the app's own tests need a display; the data and parsing crates don't
+  cargo test --frozen --release -p bible-core -p bible-sword
+}
+
+package() {
+  cd "bible-$pkgver"
+  install -Dm755 target/release/bible-app "$pkgdir/usr/bin/bible-app"
+  install -Dm644 data/io.github.fonzi.Bible.desktop -t "$pkgdir/usr/share/applications/"
+  install -Dm644 data/io.github.fonzi.Bible.metainfo.xml -t "$pkgdir/usr/share/metainfo/"
+  install -Dm644 data/icons/hicolor/scalable/apps/io.github.fonzi.Bible.svg -t "$pkgdir/usr/share/icons/hicolor/scalable/apps/"
+  install -Dm644 data/icons/hicolor/symbolic/apps/*.svg -t "$pkgdir/usr/share/icons/hicolor/symbolic/apps/"
+  install -Dm644 data/io.github.fonzi.Bible.search-provider.ini -t "$pkgdir/usr/share/gnome-shell/search-providers/"
+  install -Dm644 data/io.github.fonzi.Bible.service -t "$pkgdir/usr/share/dbus-1/services/"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

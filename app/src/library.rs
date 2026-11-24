@@ -171,6 +171,7 @@ impl LibraryView {
                 btn.add_css_class("flat");
             }
             let ctx = self.ctx.clone();
+            let sub = row.clone();
             btn.connect_clicked(move |b| {
                 if crate::fathers::is_installed(id) {
                     if b.label().as_deref() == Some("Remove") {
@@ -181,7 +182,12 @@ impl LibraryView {
                     }
                     crate::fathers::remove(id);
                     ctx.toast("Removed the volume");
-                    ctx.refresh_all();
+                    // update this row in place, so the list stays open
+                    b.set_label("Download");
+                    b.remove_css_class("destructive-action");
+                    b.remove_css_class("flat");
+                    sub.set_subtitle("Not downloaded");
+                    ctx.refresh_one("books");
                     return;
                 }
                 b.set_sensitive(false);
@@ -190,6 +196,7 @@ impl LibraryView {
                 let ctx = ctx.clone();
                 let b = b.clone();
                 let spin = spin.clone();
+                let sub = sub.clone();
                 glib::spawn_future_local(async move {
                     let res = gio::spawn_blocking(move || {
                         crate::fathers::download(id, &mut |_, _| {}).map_err(|e| e.to_string())
@@ -199,7 +206,11 @@ impl LibraryView {
                     match res {
                         Ok(Ok(())) => {
                             ctx.toast("Downloaded. It’s in the Reading room");
-                            ctx.refresh_all();
+                            b.set_sensitive(true);
+                            b.set_label("Remove");
+                            b.add_css_class("flat");
+                            sub.set_subtitle("Downloaded · in the Reading room");
+                            ctx.refresh_one("books");
                         }
                         Ok(Err(e)) => {
                             b.set_sensitive(true);

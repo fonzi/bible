@@ -63,13 +63,36 @@ Start with the Bible, offline. Add the original languages, maps, history, the ch
 
 ## Install
 
+### Requirements
+
+GTK 4.14 or newer and libadwaita 1.5 or newer. That means:
+
+| Works | Too old |
+|---|---|
+| Ubuntu 24.04 and later, Pop!_OS 24.04, Linux Mint 22, Debian 13, Fedora 40+, Arch | Ubuntu 22.04, Pop!_OS 22.04, Debian 12 |
+
+On a system that's too old, apt refuses the package and changes nothing, so
+it can't break your system. (If you installed it with `dpkg -i` and it was
+left half-installed, `sudo apt --fix-broken install` removes it again.)
+
+### Ubuntu, Debian, Pop!_OS, Mint
+
 Download the `.deb` from the [latest release](https://github.com/fonzi/bible/releases/latest), then:
 
 ```sh
 sudo apt install ./bible-app_*_amd64.deb
 ```
 
-It needs GTK 4.14+ and libadwaita 1.5+ (Ubuntu 24.04+, Debian 13+).
+### Arch Linux
+
+A PKGBUILD that builds the latest release from source:
+
+```sh
+git clone https://github.com/fonzi/bible.git
+cd bible/packaging/arch
+makepkg -si
+```
+
 Modules install into `~/.sword`, so other SWORD apps share them.
 
 ## Build from source

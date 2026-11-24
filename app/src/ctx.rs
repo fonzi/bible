@@ -287,6 +287,15 @@ impl Ctx {
         }
     }
 
+    /// Refresh one page only, e.g. the Reading room after a download, so the
+    /// page you're on keeps its place.
+    pub fn refresh_one(&self, id: &str) {
+        let sections: Vec<_> = self.sections.borrow().clone();
+        for s in sections.iter().filter(|s| s.id() == id) {
+            s.refresh();
+        }
+    }
+
     pub fn refresh_all(&self) {
         let sections: Vec<_> = self.sections.borrow().clone();
         for s in sections {
