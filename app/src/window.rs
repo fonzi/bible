@@ -70,7 +70,7 @@ pub fn load_css(ctx: &Ctx) {
         // normal page (the background and colours stay as they are)
         let rule = "alpha(currentColor, 0.35)";
         let font =
-            "\"EB Garamond\", \"Cardo\", \"Linux Libertine O\", \"Goudy Bookletter 1911\", serif";
+            "\"EB Garamond\", \"Cardo\", \"Linux Libertine O\", \"Goudy Bookletter 1911\", \"Georgia\", serif";
         css.push_str(&format!(
             ".reader-page .scripture {{ font-family: {font}; font-size: {size}pt; }}\n\
              .reader-page .running-head {{ font-family: {font}; font-style: italic; font-size: {head}pt; border-top: 1px solid {rule}; border-bottom: 1px solid {rule}; padding: 4px 0; margin-bottom: 14px; }}\n\
@@ -81,6 +81,11 @@ pub fn load_css(ctx: &Ctx) {
             chap = (cfg.text_size * 1.5).round(),
             orn = (cfg.text_size * 1.2).round(),
         ));
+    }
+    if cfg!(windows) {
+        // Windows has no Adwaita Mono: its own monospace fonts instead
+        css.push_str(":root { --monospace-font-family: \"Cascadia Mono\", \"Consolas\", monospace; }\n\
+                      .monospace { font-family: \"Cascadia Mono\", \"Consolas\", monospace; }\n");
     }
     css.push_str(&format!(
         ".note-editor, .md-editor {{ font-size: {}pt; }}\n",

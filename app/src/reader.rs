@@ -277,7 +277,7 @@ impl Reader {
         par_dd.set_tooltip_text(Some("Second version"));
         let il_toggle = gtk::ToggleButton::new();
         let il_lab = gtk::Label::new(None);
-        il_lab.set_markup("<span font_family=\"Literata, Noto Serif, serif\" weight=\"bold\">Αα</span>  Original");
+        il_lab.set_markup("<span font_family=\"Literata, Noto Serif, Georgia, serif\" weight=\"bold\">Αα</span>  Original");
         il_toggle.set_child(Some(&il_lab));
         il_toggle.set_tooltip_text(Some("Interlinear: Greek and Hebrew word by word"));
         header.pack_end(&panel_toggle);

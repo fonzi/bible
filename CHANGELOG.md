@@ -6,11 +6,11 @@
   everything inside it, GTK included, so nothing else needs installing
   (Apple Silicon). Unzip, drag it to Applications, and allow it once in
   System Settings, Privacy & Security, since it isn't notarized by Apple.
-- **Windows build (untested):** now carries its own fonts (Literata for
-  scripture, Adwaita Sans and Mono for the interface) and the app's own icons,
-  so text no longer falls back to a plain sans font. The "win32 session"
-  warning at startup is gone. The zip's README explains the SmartScreen
-  warning: the app isn't code-signed.
+- **Windows build (untested):** text uses Windows' own fonts (Georgia or
+  Cambria for scripture, Cascadia Mono or Consolas for code) instead of falling
+  back to a plain sans font, and the app's own icons are included. No more
+  console window beside the app, and no "win32 session" warning. The zip's
+  README explains the SmartScreen warning: the app isn't code-signed.
 - Bible is made for GNOME first: Windows and macOS builds are offered as they
   are, without support. Bug reports now use a short form, and reports from
   Windows or macOS are closed automatically with a note.

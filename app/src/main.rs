@@ -1,4 +1,6 @@
 //! Bible — offline Bible study for GNOME.
+// no console window beside the app on Windows
+#![cfg_attr(windows, windows_subsystem = "windows")]
 #![allow(clippy::type_complexity)] // GTK callbacks are stored as boxed closures
 
 mod about;
@@ -63,9 +65,9 @@ fn ensure_window(app: &adw::Application) -> Rc<ctx::Ctx> {
     c
 }
 
-/// Hands Pango the fonts bundled next to the app (Windows and macOS have
-/// none of GNOME's), before GTK starts.
-#[cfg(not(target_os = "linux"))]
+/// Hands Pango the fonts bundled in Bible.app (macOS has none of GNOME's),
+/// before GTK starts.
+#[cfg(target_os = "macos")]
 fn add_bundled_fonts(dir: &std::path::Path) {
     use pango::prelude::*;
     let map = pangocairo::FontMap::default();
@@ -76,17 +78,6 @@ fn add_bundled_fonts(dir: &std::path::Path) {
                 eprintln!("couldn't add font {}: {e}", p.display());
             }
         }
-    }
-}
-
-/// The Windows zip keeps the fonts in share/fonts beside bin/.
-#[cfg(windows)]
-fn use_bundled_fonts() {
-    if let Some(root) = std::env::current_exe()
-        .ok()
-        .and_then(|e| Some(e.parent()?.parent()?.to_path_buf()))
-    {
-        add_bundled_fonts(&root.join("share").join("fonts"));
     }
 }
 
@@ -131,7 +122,13 @@ fn check_fonts() -> gtk::glib::ExitCode {
     let map = pangocairo::FontMap::default();
     let have: Vec<String> = map.list_families().iter().map(|f| f.name().to_string()).collect();
     let mut ok = true;
-    for want in ["Literata", "Adwaita Sans", "Adwaita Mono"] {
+    // Windows uses its own fonts; Bible.app carries GNOME's
+    let wants: &[&str] = if cfg!(windows) {
+        &["Segoe UI", "Georgia", "Consolas"]
+    } else {
+        &["Literata", "Adwaita Sans", "Adwaita Mono"]
+    };
+    for &want in wants {
         let found = have.iter().any(|h| h.eq_ignore_ascii_case(want));
         println!("{} {want}", if found { "found  " } else { "MISSING" });
         ok &= found;
@@ -141,8 +138,6 @@ fn check_fonts() -> gtk::glib::ExitCode {
 }
 
 fn main() -> gtk::glib::ExitCode {
-    #[cfg(windows)]
-    use_bundled_fonts();
     #[cfg(target_os = "macos")]
     use_app_bundle();
     if std::env::args().any(|a| a == "--check-fonts") {

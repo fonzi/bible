@@ -54,6 +54,11 @@ for f in $pb/loaders/*.so $R/lib/gstreamer-1.0/*; do [ -e "$f" ] && targets+=(-x
 dylibbundler -of -cd -b "${targets[@]}" -d $C/Frameworks \
   -p @executable_path/../Frameworks/ -s "$B/lib" </dev/null
 
+# plugins and loaders still carry Homebrew paths as their own names
+for f in $pb/loaders/*.so $R/lib/gstreamer-1.0/*; do
+  [ -e "$f" ] && install_name_tool -id "@executable_path/../Resources/${f#$R/}" "$f"
+done
+
 # the icon
 iconset=$(mktemp -d)/Bible.iconset
 mkdir -p "$iconset"
