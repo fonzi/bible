@@ -13,16 +13,22 @@ concurrency:
   # let a deploy that has started finish; a cancelled one fails mid-way
   cancel-in-progress: false
 jobs:
+  # upload and deploy as separate jobs, as GitHub's own example does: deploying
+  # in the same job sometimes finds no uploaded site yet
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: website
   deploy:
+    needs: build
     runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: website
       - id: deployment
         uses: actions/deploy-pages@v4
