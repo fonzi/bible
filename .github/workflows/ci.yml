@@ -2,7 +2,10 @@ name: CI
 on:
   push:
     branches: [main]
+    # docs and website changes don't need a build
+    paths-ignore: ["**.md", "website/**", "docs/**"]
   pull_request:
+    paths-ignore: ["**.md", "website/**", "docs/**"]
   # the release runs these same tests first and only builds if they pass
   workflow_call:
 # a newer push makes the older run pointless (a release's own test run is
