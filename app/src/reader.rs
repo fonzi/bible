@@ -39,6 +39,7 @@ pub struct Reader {
     picker_book_title: gtk::Label,
     version_dd: gtk::DropDown,
     versions: RefCell<Vec<String>>,
+    version_notes: Rc<RefCell<Vec<String>>>,
     par_toggle: gtk::ToggleButton,
     par_dd: gtk::DropDown,
     clamp: adw::Clamp,
@@ -134,6 +135,8 @@ impl Reader {
         let passage_popover = gtk::Popover::new();
         passage_btn.set_popover(Some(&passage_popover));
         let version_dd = gtk::DropDown::from_strings(&[]);
+        // full name and coverage shown under each short name in the menu
+        let version_notes: Rc<RefCell<Vec<String>>> = Rc::default();
         version_dd.set_tooltip_text(Some("Version"));
         version_dd.set_enable_search(true);
         let title_box = gtk::Box::new(gtk::Orientation::Horizontal, 6);
@@ -198,6 +201,7 @@ impl Reader {
             let lab = version_lab.clone();
             let btn = version_btn.clone();
             let list = version_list.clone();
+            let notes = version_notes.clone();
             let update = move |dd: &gtk::DropDown| {
                 let text = dd
                     .selected_item()
@@ -216,12 +220,26 @@ impl Reader {
                             .and_downcast::<gtk::StringObject>()
                             .map(|o| o.string().to_string())
                             .unwrap_or_default();
+                        let row = gtk::Box::new(gtk::Orientation::Vertical, 2);
+                        row.set_margin_top(3);
+                        row.set_margin_bottom(3);
                         let l = gtk::Label::new(Some(&s));
                         l.set_xalign(0.0);
                         if i == dd.selected() {
                             l.add_css_class("heading");
                         }
-                        list.append(&l);
+                        row.append(&l);
+                        let note = notes.borrow().get(i as usize).cloned().unwrap_or_default();
+                        if !note.is_empty() && note != s {
+                            let n = gtk::Label::new(Some(&note));
+                            n.set_xalign(0.0);
+                            n.set_wrap(true);
+                            n.set_max_width_chars(34);
+                            n.add_css_class("caption");
+                            n.add_css_class("dim-label");
+                            row.append(&n);
+                        }
+                        list.append(&row);
                     }
                 }
             };
@@ -752,6 +770,7 @@ impl Reader {
             picker_book_title,
             version_dd,
             versions: RefCell::new(vec![]),
+            version_notes,
             par_toggle,
             par_dd,
             clamp,
@@ -1169,6 +1188,7 @@ impl Reader {
         let names: Vec<String> = bibles.iter().map(|m| m.name.clone()).collect();
         let labels: Vec<String> = bibles.iter().map(|m| m.abbreviation()).collect();
         let lab: Vec<&str> = labels.iter().map(|s| s.as_str()).collect();
+        *self.version_notes.borrow_mut() = bibles.iter().map(|m| version_note(m)).collect();
         let model = gtk::StringList::new(&lab);
         self.version_dd.set_model(Some(&model));
         self.par_dd.set_model(Some(&gtk::StringList::new(&lab)));
@@ -3218,4 +3238,17 @@ mod roman_tests {
         assert_eq!(super::roman(14), "XIV");
         assert_eq!(super::roman(150), "CL");
     }
+}
+
+/// "King James Version" or "Septuagint in American English 2012 · Old
+/// Testament only": what a version is, under its short name in the menu.
+fn version_note(m: &Module) -> String {
+    let ot = m.raw_entry("Gen", 1, 1).is_some();
+    let nt = m.raw_entry("Matt", 1, 1).is_some();
+    let scope = match (ot, nt) {
+        (true, false) => " · Old Testament only",
+        (false, true) => " · New Testament only",
+        _ => "",
+    };
+    format!("{}{scope}", m.description())
 }

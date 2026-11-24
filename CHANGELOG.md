@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.5
+
+- The version menu now shows each version's full name under its short one,
+  and says when a version has only the Old or only the New Testament. LXX2012,
+  for example, is the Septuagint (the Greek Old Testament) in English, so it
+  shows "Old Testament only".
+
 ## 0.9.4
 
 - **Windows and macOS test builds.** Each release now includes a Windows zip
