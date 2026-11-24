@@ -40,6 +40,10 @@ jobs:
       # church fathers, audio, Wikipedia)
       - name: Download links still work
         run: cargo test --workspace -- --ignored download_urls
+      - name: The window opens with the splash screen on
+        run: |
+          cargo build
+          xvfb-run -a scripts/check-startup.sh target/debug/bible-app
       - name: Check the app's desktop and store metadata
         run: |
           desktop-file-validate data/io.github.fonzi.Bible.desktop

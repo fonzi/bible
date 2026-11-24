@@ -39,6 +39,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.15" date="2026-11-24">
+      <description>
+        <ul>
+          <li>Bibles with their own cross-references are marked in Downloads with an "Own cross-references" tag; the rainbow and the other views use those links.</li>
+          <li>Flatpak: your downloads stay when you update. Every release now checks this, along with the window opening with the splash screen on. (The re-downloads in the last few versions came from moving Flatpak downloads into the app's own folder in 0.9.11, and the Quran's new pronunciation in 0.9.13; neither repeats.)</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.14" date="2026-11-24">
       <description>
         <ul>

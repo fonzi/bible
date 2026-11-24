@@ -44,6 +44,12 @@ jobs:
           flatpak info --user io.github.fonzi.Bible
           # the binary runs inside the sandbox (no display needed for --help)
           flatpak run --user --command=bible-app io.github.fonzi.Bible --help
+      - name: Downloads survive an update
+        run: |
+          flatpak run --user --command=sh io.github.fonzi.Bible -c 'mkdir -p "$XDG_DATA_HOME/sword/mods.d" && echo kept > "$XDG_DATA_HOME/sword/mods.d/marker.conf"'
+          flatpak install --user -y --noninteractive --reinstall ./bible-app.flatpak
+          flatpak run --user --command=sh io.github.fonzi.Bible -c 'cat "$XDG_DATA_HOME/sword/mods.d/marker.conf"' | grep -q kept
+          echo "Data in the app's folder is kept across updates"
 
   windows:
     runs-on: windows-latest

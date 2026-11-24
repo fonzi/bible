@@ -146,3 +146,4 @@ window.splash > * {
 .gallery-choice:checked { background-color: alpha(@accent_bg_color, 0.16); box-shadow: inset 0 0 0 2px @accent_bg_color; }
 .arabic { font-family: "Amiri", "Noto Naskh Arabic", "Scheherazade New", "Noto Sans Arabic", "Arial", serif; font-size: 120%; }
 .translit { font-style: italic; }
+.xref-tag { padding: 2px 8px; border-radius: 99px; background: alpha(@accent_bg_color, 0.18); color: @accent_color; font-weight: 600; }

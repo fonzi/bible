@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.15
+
+- **Bibles with their own cross-references are marked** in Downloads with an
+  "Own cross-references" tag; the rainbow and the other views use those links.
+- Flatpak: your downloads stay when you update. Every release now checks
+  this, along with the window opening with the splash screen on. (The
+  re-downloads in the last few versions came from moving Flatpak downloads
+  into the app's own folder in 0.9.11, and the Quran's new pronunciation in
+  0.9.13; neither repeats.)
+
 ## 0.9.14
 
 - In the Reading room, the Quran has its own section at the bottom instead

@@ -104,6 +104,12 @@ jobs:
           flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           flatpak install --user -y --noninteractive ./bible-app-${{ needs.check.outputs.version }}.flatpak
           flatpak run --user --command=bible-app io.github.fonzi.Bible --help
+      - name: Downloads survive an update
+        run: |
+          flatpak run --user --command=sh io.github.fonzi.Bible -c 'mkdir -p "$XDG_DATA_HOME/sword/mods.d" && echo kept > "$XDG_DATA_HOME/sword/mods.d/marker.conf"'
+          flatpak install --user -y --noninteractive --reinstall ./bible-app-${{ needs.check.outputs.version }}.flatpak
+          flatpak run --user --command=sh io.github.fonzi.Bible -c 'cat "$XDG_DATA_HOME/sword/mods.d/marker.conf"' | grep -q kept
+          echo "Data in the app's folder is kept across updates"
       - uses: actions/upload-artifact@v4
         with:
           name: flatpak

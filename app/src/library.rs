@@ -816,6 +816,19 @@ impl LibraryView {
             .subtitle(glib::markup_escape_text(&sub).as_str())
             .subtitle_lines(3)
             .build();
+        // Bibles with their own cross-references, which the rainbow uses
+        if Kind::from_conf(&m.conf) == Kind::Bible
+            && m.conf.features().contains(&bible_sword::conf::Feature::CrossRefs)
+        {
+            let tag = gtk::Label::new(Some("Own cross-references"));
+            tag.add_css_class("xref-tag");
+            tag.add_css_class("caption");
+            tag.set_valign(gtk::Align::Center);
+            tag.set_tooltip_text(Some(
+                "Comes with its own cross-references: the rainbow and the other cross-reference views use them",
+            ));
+            row.add_suffix(&tag);
+        }
         let bar = gtk::ProgressBar::new();
         bar.set_visible(false);
         bar.set_valign(gtk::Align::Center);
