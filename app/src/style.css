@@ -3,13 +3,13 @@
 .verses > row { padding: 3px 10px; border-radius: 8px; }
 .verses > row.verse-row:hover { background-color: alpha(currentColor, 0.04); }
 .verses > row.verse-selected { background-color: alpha(@accent_bg_color, 0.12); }
-.scripture { font-family: "Literata", "Source Serif 4", "Noto Serif", "DejaVu Serif", "Cambria", "Georgia", serif; line-height: 1.45; }
-.chapter-heading { font-family: "Literata", "Noto Serif", "Cambria", "Georgia", serif; font-size: 26pt; font-weight: 600; margin: 4px 0 14px 0; }
+.scripture { font-family: "Literata", "Source Serif 4", "Noto Serif", "DejaVu Serif", "Cambria", "Iowan Old Style", "Georgia", serif; line-height: 1.45; }
+.chapter-heading { font-family: "Literata", "Noto Serif", "Cambria", "Iowan Old Style", "Georgia", serif; font-size: 26pt; font-weight: 600; margin: 4px 0 14px 0; }
 .verse-title { font-weight: 700; margin-top: 14px; opacity: 0.85; }
 .note-mark { color: @accent_color; margin-top: 6px; }
-.commentary { font-family: "Literata", "Noto Serif", "Cambria", "Georgia", serif; line-height: 1.5; }
+.commentary { font-family: "Literata", "Noto Serif", "Cambria", "Iowan Old Style", "Georgia", serif; line-height: 1.5; }
 .note-editor, .md-editor { font-size: 11pt; }
-.serif { font-family: "Literata", "Noto Serif", "Cambria", "Georgia", serif; }
+.serif { font-family: "Literata", "Noto Serif", "Cambria", "Iowan Old Style", "Georgia", serif; }
 button.swatch { min-width: 28px; min-height: 28px; padding: 0; margin: 0; border-radius: 999px; }
 .swatch-current { box-shadow: 0 0 0 2px @popover_bg_color, 0 0 0 4px @accent_bg_color; }
 .swatch-dot { min-width: 14px; min-height: 14px; border-radius: 999px; }
@@ -22,7 +22,7 @@ button.swatch { min-width: 28px; min-height: 28px; padding: 0; margin: 0; border
 .season-swatch { min-width: 5px; border-radius: 3px; }
 .app-version { padding: 3px 12px; border-radius: 999px; background-color: alpha(@accent_bg_color, 0.15); color: @accent_color; font-weight: 600; }
 .il-pane { background-color: @window_bg_color; border-left: 1px solid alpha(currentColor, 0.1); }
-.il-label { font-family: "Literata", "Noto Serif", "Cambria", "Georgia", serif; font-weight: 700; }
+.il-label { font-family: "Literata", "Noto Serif", "Cambria", "Iowan Old Style", "Georgia", serif; font-weight: 700; }
 button.word-card { padding: 6px 10px; border-radius: 10px; background-color: alpha(currentColor, 0.04); }
 button.word-card:hover { background-color: alpha(@accent_bg_color, 0.12); }
 button.word-card.variant { opacity: 0.55; }
@@ -78,7 +78,7 @@ row.plan-next {
   color: #f6f5f4;
 }
 .present-text {
-  font-family: "Noto Serif", "Source Serif Pro", "Cambria", "Georgia", serif;
+  font-family: "Noto Serif", "Source Serif Pro", "Cambria", "Iowan Old Style", "Georgia", serif;
   font-size: 42pt;
   line-height: 1.35;
 }

@@ -82,10 +82,12 @@ pub fn load_css(ctx: &Ctx) {
             orn = (cfg.text_size * 1.2).round(),
         ));
     }
-    if cfg!(windows) {
-        // Windows has no Adwaita Mono: its own monospace fonts instead
-        css.push_str(":root { --monospace-font-family: \"Cascadia Mono\", \"Consolas\", monospace; }\n\
-                      .monospace { font-family: \"Cascadia Mono\", \"Consolas\", monospace; }\n");
+    if cfg!(any(windows, target_os = "macos")) {
+        // no Adwaita Mono outside GNOME: the system's own monospace fonts
+        let mono = "\"Cascadia Mono\", \"Consolas\", \"Menlo\", monospace";
+        css.push_str(&format!(
+            ":root {{ --monospace-font-family: {mono}; }}\n.monospace {{ font-family: {mono}; }}\n"
+        ));
     }
     css.push_str(&format!(
         ".note-editor, .md-editor {{ font-size: {}pt; }}\n",

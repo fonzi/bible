@@ -24,11 +24,6 @@ scraper = "0.20"
 ego-tree = "0.6"
 urlencoding = "2"
 
-# Bible.app hands Pango its bundled fonts directly (Pango 1.56+); Linux
-# keeps working with the older Pango of Ubuntu 24.04 and Debian 12
-[target.'cfg(target_os = "macos")'.dependencies]
-pango = { version = "0.20", features = ["v1_56"] }
-
 [package.metadata.deb]
 name = "bible-app"
 maintainer = "fonzi <626330+fonzi@users.noreply.github.com>"

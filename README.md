@@ -110,13 +110,13 @@ makepkg -si
 
 Modules install into `~/.sword`, so other SWORD apps share them.
 
-### Windows and macOS (untested, not supported)
+### Windows and macOS (untested, at your own risk)
 
 Bible is made for GNOME first. Each release also has Windows and macOS zips,
 named `_untested`: they're built and pass the tests automatically, but we have
-no Windows PC or Mac to try them on, and they're offered as they are. Issues
-reported from Windows or macOS are closed automatically; pull requests that
-fix them are welcome.
+no Windows PC or Mac to try them on. There are no plans to support them:
+use them at your own risk. Issues reported from Windows or macOS are closed
+automatically; pull requests that fix them are welcome.
 
 - **Windows:** unzip and run `bin\bible-app.exe`. The app isn't code-signed
   (a certificate costs money every year), so SmartScreen may say it

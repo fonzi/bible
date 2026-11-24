@@ -65,23 +65,7 @@ fn ensure_window(app: &adw::Application) -> Rc<ctx::Ctx> {
     c
 }
 
-/// Hands Pango the fonts bundled in Bible.app (macOS has none of GNOME's),
-/// before GTK starts.
-#[cfg(target_os = "macos")]
-fn add_bundled_fonts(dir: &std::path::Path) {
-    use pango::prelude::*;
-    let map = pangocairo::FontMap::default();
-    let Ok(entries) = std::fs::read_dir(dir) else { return };
-    for p in entries.flatten().map(|e| e.path()) {
-        if matches!(p.extension().and_then(|x| x.to_str()), Some("ttf" | "otf")) {
-            if let Err(e) = map.add_font_file(&p) {
-                eprintln!("couldn't add font {}: {e}", p.display());
-            }
-        }
-    }
-}
-
-/// Inside Bible.app every library, GTK's data and the fonts are bundled in
+/// Inside Bible.app every library and GTK's data are bundled in
 /// Contents/Resources; GTK and GStreamer are told where.
 #[cfg(target_os = "macos")]
 fn use_app_bundle() {
@@ -112,7 +96,6 @@ fn use_app_bundle() {
             set_var("GDK_PIXBUF_MODULE_FILE", file);
         }
     }
-    add_bundled_fonts(&res.join("share/fonts"));
 }
 
 /// `--check-fonts`: exits with an error unless the fonts the app is designed
@@ -122,9 +105,11 @@ fn check_fonts() -> gtk::glib::ExitCode {
     let map = pangocairo::FontMap::default();
     let have: Vec<String> = map.list_families().iter().map(|f| f.name().to_string()).collect();
     let mut ok = true;
-    // Windows uses its own fonts; Bible.app carries GNOME's
+    // outside GNOME, the system's own fonts stand in for GNOME's
     let wants: &[&str] = if cfg!(windows) {
         &["Segoe UI", "Georgia", "Consolas"]
+    } else if cfg!(target_os = "macos") {
+        &["Georgia", "Menlo"]
     } else {
         &["Literata", "Adwaita Sans", "Adwaita Mono"]
     };

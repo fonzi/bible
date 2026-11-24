@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Builds a self-contained dist/Bible/Bible.app from target/release, using
 # Homebrew's GTK at build time only: every library, GTK's data, the GStreamer
-# plugins for audio and the fonts go inside the app, so nobody needs Homebrew.
+# plugins for audio go inside the app, so nobody needs Homebrew.
 # Usage: packaging/macos/bundle.sh <version> <zip name>
 set -euo pipefail
 version=${1:?version}
@@ -13,7 +13,7 @@ C=$app/Contents
 R=$C/Resources
 rm -rf dist
 mkdir -p $C/MacOS $C/Frameworks $R/share/glib-2.0/schemas $R/share/icons \
-  $R/share/fonts $R/lib/gstreamer-1.0
+  $R/lib/gstreamer-1.0
 
 cp target/release/bible-app $C/MacOS/
 scanner=$(find "$B/libexec/gstreamer-1.0" "$B/opt/gstreamer/libexec/gstreamer-1.0" \
@@ -43,9 +43,6 @@ for p in coreelements playback typefindfunctions audioconvert audioresample volu
          autodetect osxaudio audioparsers mpg123 isomp4 id3demux ogg vorbis opus app; do
   for f in "$B"/lib/gstreamer-1.0/libgst$p.*; do [ -e "$f" ] && cp -L "$f" $R/lib/gstreamer-1.0/; done
 done
-
-# the fonts (handed to Pango at startup, see main.rs)
-packaging/fetch-fonts.sh $R/share/fonts
 
 # copy every Homebrew library these load into Frameworks and point them there
 targets=(-x $C/MacOS/bible-app)
