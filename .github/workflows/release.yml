@@ -13,8 +13,12 @@ jobs:
   # nothing is released unless every test passes
   test:
     uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
   deb:
     needs: test
+    permissions:
+      contents: write
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     outputs:
@@ -74,6 +78,8 @@ jobs:
   # runs on older systems too (Ubuntu and Pop!_OS 22.04, Debian 12…).
   flatpak:
     needs: deb
+    permissions:
+      contents: write
     if: needs.deb.outputs.created == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
