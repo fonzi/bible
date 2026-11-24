@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.8
+
+- **Downloads, a category at a time.** Browse now has a list on the left:
+  Start here, Bibles, Commentaries, Books, Devotionals, and Dictionaries and
+  lexicons, each with a count. Search still looks through everything.
+- **Languages by name.** The language menu shows every language's name
+  instead of codes such as "ckb" or "tpi", in alphabetical order, with how
+  many works each has, and you can type to find one.
+- A little more space under the search bar.
+
 ## 0.9.7
 
 - **Mac app (untested):** the macOS download is now a real Bible.app with

@@ -22,6 +22,9 @@ pub struct LibraryView {
     search: gtk::SearchEntry,
     lang_dd: gtk::DropDown,
     langs: RefCell<Vec<String>>,
+    /// None: Start here; Some(kind_order): one kind of work
+    category: std::cell::Cell<Option<u8>>,
+    cat_list: gtk::ListBox,
     catalogue: RefCell<Vec<RemoteModule>>,
     legal: gtk::Revealer,
     legal_seen: std::cell::Cell<bool>,
@@ -112,28 +115,69 @@ fn kind_order(k: Kind) -> u8 {
     }
 }
 
+/// Every ISO 639 language and ISO 3166 region name, keyed by code (regions
+/// as "R" + code), so the catalogue never shows a bare code.
+fn iso_names() -> &'static std::collections::HashMap<&'static str, &'static str> {
+    static T: std::sync::OnceLock<std::collections::HashMap<&str, &str>> = std::sync::OnceLock::new();
+    T.get_or_init(|| {
+        include_str!("lang_names.tsv")
+            .lines()
+            .filter(|l| !l.starts_with('#'))
+            .filter_map(|l| l.split_once('\t'))
+            .collect()
+    })
+}
+
+/// "en" → "English", "zh-Hant" → "中文 (Traditional)", "pt-BR" →
+/// "Português (Brazil)". The big languages in their own words.
 fn lang_name(code: &str) -> String {
-    match code.split('-').next().unwrap_or(code) {
-        "en" => "English",
-        "de" => "Deutsch",
-        "es" => "Español",
-        "fr" => "Français",
-        "grc" => "Ancient Greek",
-        "el" => "Greek",
-        "he" | "hbo" => "Hebrew",
-        "la" => "Latin",
-        "nl" => "Nederlands",
-        "pt" => "Português",
-        "it" => "Italiano",
-        "ru" => "Русский",
-        "zh" => "中文",
-        "ko" => "한국어",
-        "ja" => "日本語",
-        "ar" => "العربية",
-        "sw" => "Kiswahili",
-        other => return other.to_string(),
+    let mut parts = code.split(['-', '_']);
+    let base = parts.next().unwrap_or(code).to_ascii_lowercase();
+    let own = match base.as_str() {
+        "en" => Some("English"),
+        "de" => Some("Deutsch"),
+        "es" => Some("Español"),
+        "fr" => Some("Français"),
+        "nl" => Some("Nederlands"),
+        "pt" => Some("Português"),
+        "it" => Some("Italiano"),
+        "ru" => Some("Русский"),
+        "zh" => Some("中文"),
+        "ko" => Some("한국어"),
+        "ja" => Some("日本語"),
+        "ar" => Some("العربية"),
+        "sw" => Some("Kiswahili"),
+        "he" => Some("Hebrew"),
+        "el" => Some("Greek"),
+        _ => None,
+    };
+    let names = iso_names();
+    let mut name = match own.or_else(|| names.get(base.as_str()).copied()) {
+        Some(n) => n.to_string(),
+        None => format!("Other ({code})"),
+    };
+    let extra: Vec<String> = parts
+        .filter_map(|t| match t {
+            "Hans" => Some("Simplified".to_string()),
+            "Hant" => Some("Traditional".to_string()),
+            "Latn" => Some("Latin script".to_string()),
+            "Cyrl" => Some("Cyrillic".to_string()),
+            "Arab" => Some("Arabic script".to_string()),
+            "Deva" => Some("Devanagari".to_string()),
+            "Grek" => Some("Greek script".to_string()),
+            "Hebr" => Some("Hebrew script".to_string()),
+            "Ethi" => Some("Ethiopic".to_string()),
+            "Syrc" => Some("Syriac script".to_string()),
+            t if t.len() == 2 => names
+                .get(format!("R{}", t.to_ascii_uppercase()).as_str())
+                .map(|r| r.to_string()),
+            _ => None,
+        })
+        .collect();
+    if !extra.is_empty() {
+        name = format!("{name} ({})", extra.join(", "));
     }
-    .to_string()
+    name
 }
 
 impl LibraryView {
@@ -259,6 +303,12 @@ impl LibraryView {
         search.set_placeholder_text(Some("Search Bibles, commentaries, books…"));
         search.set_hexpand(true);
         let lang_dd = gtk::DropDown::from_strings(&["All languages"]);
+        lang_dd.set_enable_search(true);
+        lang_dd.set_expression(Some(gtk::PropertyExpression::new(
+            gtk::StringObject::static_type(),
+            None::<&gtk::Expression>,
+            "string",
+        )));
         let refresh = gtk::Button::from_icon_name("view-refresh-symbolic");
         refresh.set_tooltip_text(Some("Refresh catalogue"));
         let bar = gtk::Box::new(gtk::Orientation::Horizontal, 8);
@@ -300,12 +350,27 @@ impl LibraryView {
         list_clamp.set_margin_start(12);
         list_clamp.set_margin_end(12);
         list_scroll.set_child(Some(&list_clamp));
-        browse_stack.add_named(&list_scroll, Some("list"));
+        // categories down the left, so the long catalogue comes a kind at a time
+        let cat_list = gtk::ListBox::new();
+        cat_list.add_css_class("navigation-sidebar");
+        cat_list.set_selection_mode(gtk::SelectionMode::Single);
+        let cat_scroll = gtk::ScrolledWindow::builder()
+            .child(&cat_list)
+            .hscrollbar_policy(gtk::PolicyType::Never)
+            .width_request(250)
+            .build();
+        let list_page = gtk::Box::new(gtk::Orientation::Horizontal, 0);
+        list_page.append(&cat_scroll);
+        list_page.append(&gtk::Separator::new(gtk::Orientation::Vertical));
+        list_scroll.set_hexpand(true);
+        list_page.append(&list_scroll);
+        browse_stack.add_named(&list_page, Some("list"));
         let browse_box = gtk::Box::new(gtk::Orientation::Vertical, 0);
         let bar_clamp = adw::Clamp::builder().maximum_size(860).child(&bar).build();
         bar_clamp.set_margin_top(12);
         bar_clamp.set_margin_start(12);
         bar_clamp.set_margin_end(12);
+        bar_clamp.set_margin_bottom(12);
         browse_box.append(&bar_clamp);
         browse_box.append(&browse_stack);
         stack.add_titled_with_icon(
@@ -358,6 +423,8 @@ impl LibraryView {
             search,
             lang_dd,
             langs: RefCell::new(vec![]),
+            category: std::cell::Cell::new(None),
+            cat_list: cat_list.clone(),
             catalogue: RefCell::new(vec![]),
             legal,
             legal_seen: std::cell::Cell::new(false),
@@ -386,6 +453,23 @@ impl LibraryView {
             if let Some(v) = w.upgrade() {
                 v.render_browse();
             }
+        });
+        let w = Rc::downgrade(&v);
+        v.cat_list.connect_row_activated(move |_, row| {
+            let Some(v) = w.upgrade() else { return };
+            let name = row.widget_name();
+            let cat = name.strip_prefix('k').and_then(|n| n.parse::<u8>().ok());
+            if v.category.get() == cat {
+                return;
+            }
+            v.category.set(cat);
+            // rebuilt after this click is handled, never inside it
+            let w = Rc::downgrade(&v);
+            glib::idle_add_local_once(move || {
+                if let Some(v) = w.upgrade() {
+                    v.render_browse();
+                }
+            });
         });
         let w = Rc::downgrade(&v);
         legal_ok.connect_clicked(move |_| {
@@ -735,11 +819,16 @@ impl LibraryView {
                 v.browse_stack.set_visible_child_name("status");
                 return;
             }
-            let mut langs: Vec<String> = all.iter().map(|m| m.lang()).collect();
-            langs.sort();
-            langs.dedup();
-            let mut labels = vec!["All languages".to_string()];
-            labels.extend(langs.iter().map(|l| lang_name(l)));
+            let mut count: BTreeMap<String, usize> = BTreeMap::new();
+            for m in all.iter() {
+                *count.entry(m.lang()).or_default() += 1;
+            }
+            let mut named: Vec<(String, String)> =
+                count.keys().map(|l| (lang_name(l), l.clone())).collect();
+            named.sort_by_key(|(n, _)| n.to_lowercase());
+            let mut labels = vec![format!("All languages ({})", all.len())];
+            labels.extend(named.iter().map(|(n, l)| format!("{n} ({})", count[l])));
+            let langs: Vec<String> = named.into_iter().map(|(_, l)| l).collect();
             let lr: Vec<&str> = labels.iter().map(|s| s.as_str()).collect();
             v.lang_dd.set_model(Some(&gtk::StringList::new(&lr)));
             // default to English if available
@@ -939,6 +1028,54 @@ impl LibraryView {
                 .or_default()
                 .push(m);
         }
+        // the category list, with counts for this language
+        if let Some(c) = self.category.get() {
+            if !groups.contains_key(&c) {
+                self.category.set(None);
+            }
+        }
+        while let Some(c) = self.cat_list.first_child() {
+            self.cat_list.remove(&c);
+        }
+        let cat_row = |id: &str, title: &str, icon: &str, n: Option<usize>| {
+            let b = gtk::Box::new(gtk::Orientation::Horizontal, 10);
+            b.append(&gtk::Image::from_icon_name(icon));
+            let l = gtk::Label::new(Some(title));
+            l.set_xalign(0.0);
+            l.set_hexpand(true);
+            l.set_ellipsize(gtk::pango::EllipsizeMode::End);
+            b.append(&l);
+            if let Some(n) = n {
+                let c = gtk::Label::new(Some(&n.to_string()));
+                c.add_css_class("dim-label");
+                c.add_css_class("numeric");
+                b.append(&c);
+            }
+            let row = gtk::ListBoxRow::new();
+            row.set_widget_name(id);
+            row.set_child(Some(&b));
+            self.cat_list.append(&row);
+            row
+        };
+        let start = cat_row("start", "Start here", "starred-symbolic", None);
+        let mut selected = start;
+        for (k, mods) in &groups {
+            let icon = match *k {
+                0 => "bibleapp-book-symbolic",
+                1 => "accessories-text-editor-symbolic",
+                2 => "bibleapp-books-symbolic",
+                3 => "x-office-calendar-symbolic",
+                4 => "bibleapp-words-symbolic",
+                _ => "view-more-horizontal-symbolic",
+            };
+            let r = cat_row(&format!("k{k}"), Kind::from_conf(&mods[0].conf).label(), icon, Some(mods.len()));
+            if self.category.get() == Some(*k) {
+                selected = r;
+            }
+        }
+        self.cat_list.select_row(Some(&selected));
+        let category = self.category.get();
+
         let errs = self.errors.borrow();
         if !errs.is_empty() {
             let l = gtk::Label::new(Some(&format!(
@@ -952,7 +1089,7 @@ impl LibraryView {
             self.browse_list.append(&l);
         }
         let mut shown = 0;
-        if q.is_empty() {
+        if q.is_empty() && category.is_none() {
             // in "All languages", suggest an English Bible
             let want = lang.clone().unwrap_or_else(|| "en".to_string());
             if let Some(best) = best_bible(
@@ -1010,7 +1147,11 @@ impl LibraryView {
                 self.browse_list.append(&g);
             }
         }
-        for (_, mods) in groups {
+        for (k, mods) in groups {
+            // a search looks through every kind; otherwise only the chosen one
+            if q.is_empty() && category != Some(k) {
+                continue;
+            }
             let g = adw::PreferencesGroup::new();
             g.set_title(Kind::from_conf(&mods[0].conf).label());
             for m in mods.into_iter().take(400) {
@@ -1019,11 +1160,16 @@ impl LibraryView {
             }
             self.browse_list.append(&g);
         }
-        if q.is_empty() && lang.as_deref().is_none_or(|l| l == "en") {
+        if q.is_empty() && category.is_none() && lang.as_deref().is_none_or(|l| l == "en") {
             self.browse_list.append(&self.other_traditions(&cat));
         }
         if shown == 0 {
-            let l = gtk::Label::new(Some("Nothing matches your search."));
+            let l = gtk::Label::new(Some(if q.is_empty() {
+                "Nothing picked out in this language yet. Choose a category on the left."
+            } else {
+                "Nothing matches your search."
+            }));
+            l.set_wrap(true);
             l.add_css_class("dim-label");
             l.set_margin_top(24);
             self.browse_list.append(&l);
