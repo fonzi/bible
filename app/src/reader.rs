@@ -276,10 +276,10 @@ impl Reader {
         par_dd.set_enable_search(true);
         par_dd.set_tooltip_text(Some("Second version"));
         let il_toggle = gtk::ToggleButton::new();
-        // "Αα" in the scripture serif; the font list lives in CSS, since
+        // "Αω" (Alpha and Omega) in the scripture serif; the font list lives in CSS, since
         // Pango markup can't fall back through a list on Windows
         let il_box = gtk::Box::new(gtk::Orientation::Horizontal, 6);
-        let il_aa = gtk::Label::new(Some("Αα"));
+        let il_aa = gtk::Label::new(Some("Αω"));
         il_aa.add_css_class("il-label");
         il_box.append(&il_aa);
         il_box.append(&gtk::Label::new(Some("Original")));
