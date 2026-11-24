@@ -186,6 +186,28 @@ impl Module {
         }
     }
 
+    /// The file a module's picture refers to (`<img src="/images/x.jpg">`),
+    /// looked up from the module's data folder upwards. Never outside the
+    /// module's root.
+    pub fn picture(&self, src: &str) -> Option<PathBuf> {
+        let rel = src.trim_start_matches("./").trim_start_matches('/');
+        if rel.split(['/', '\\']).any(|c| c == "..") {
+            return None;
+        }
+        let mut dir = Some(self.data_dir.as_path());
+        while let Some(d) = dir {
+            let f = d.join(rel);
+            if f.is_file() {
+                return Some(f);
+            }
+            if d == self.root {
+                break;
+            }
+            dir = d.parent().filter(|p| p.starts_with(&self.root));
+        }
+        None
+    }
+
     pub fn description(&self) -> String {
         self.conf
             .get("Description")

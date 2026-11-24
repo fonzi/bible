@@ -28,6 +28,7 @@ pub struct Books {
     toc: gtk::ListBox,
     toc_search: gtk::SearchEntry,
     text: gtk::Label,
+    pictures: gtk::Box,
     heading: gtk::Label,
     scroller: gtk::ScrolledWindow,
     info: gtk::Label,
@@ -68,6 +69,23 @@ fn date_label(key: &str) -> String {
 }
 
 impl Books {
+    /// Show the pictures an entry refers to (maps, illustrations), each
+    /// fitted to the page width; a missing file is skipped.
+    fn show_pictures(&self, m: &Module, spans: &[bible_sword::Span]) {
+        while let Some(c) = self.pictures.first_child() {
+            self.pictures.remove(&c);
+        }
+        for src in spans.iter().filter_map(|s| s.image.as_deref()) {
+            let Some(path) = m.picture(src) else { continue };
+            let pic = gtk::Picture::for_filename(&path);
+            pic.set_can_shrink(true);
+            pic.set_content_fit(gtk::ContentFit::Contain);
+            pic.set_height_request(360);
+            pic.set_tooltip_text(path.file_name().and_then(|n| n.to_str()));
+            self.pictures.append(&pic);
+        }
+    }
+
     pub fn new(ctx: &Rc<Ctx>) -> Rc<Books> {
         // list page
         let list = adw::PreferencesPage::new();
@@ -147,6 +165,9 @@ impl Books {
         let body = gtk::Box::new(gtk::Orientation::Vertical, 12);
         body.append(&heading);
         body.append(&text);
+        // pictures and maps from the module, under the text
+        let pictures = gtk::Box::new(gtk::Orientation::Vertical, 12);
+        body.append(&pictures);
         body.append(&info);
         let clamp = adw::Clamp::builder().maximum_size(720).child(&body).build();
         clamp.set_margin_top(24);
@@ -177,6 +198,7 @@ impl Books {
             toc,
             toc_search,
             text,
+            pictures,
             heading,
             scroller,
             info,
@@ -400,7 +422,11 @@ impl Books {
                 self.heading.set_text(&n.name);
                 let body = gb
                     .text(*i)
-                    .map(|raw| long_markup(&m.render(&raw), dark))
+                    .map(|raw| {
+                        let spans = m.render(&raw);
+                        self.show_pictures(&m, &spans);
+                        long_markup(&spans, dark)
+                    })
                     .unwrap_or_else(|| {
                         let kids: Vec<String> = n
                             .children
@@ -432,7 +458,11 @@ impl Books {
                 self.section_btn.set_label(&label);
                 self.heading.set_text(&label);
                 match ld.get(k) {
-                    Some((_, raw)) => self.text.set_markup(&long_markup(&m.render(&raw), dark)),
+                    Some((_, raw)) => {
+                        let spans = m.render(&raw);
+                        self.show_pictures(&m, &spans);
+                        self.text.set_markup(&long_markup(&spans, dark))
+                    }
                     None => self.text.set_markup("<i>No entry for this key.</i>"),
                 }
                 self.info.set_text(&m.license());

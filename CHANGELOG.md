@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.20
+
+- **Maps and pictures in books.** Books and dictionaries that include
+  pictures (maps, illustrations) now show them under the text in the Reading
+  room, fitted to the page. The pictures come from the module itself.
+
 ## 0.9.19
 
 - **How literally each Bible translates.** In Downloads, Bibles now show

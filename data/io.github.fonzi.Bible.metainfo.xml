@@ -39,6 +39,13 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.20" date="2026-11-24">
+      <description>
+        <ul>
+          <li>Maps and pictures in books. Books and dictionaries that include pictures (maps, illustrations) now show them under the text in the Reading room, fitted to the page. The pictures come from the module itself.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.19" date="2026-11-24">
       <description>
         <ul>
@@ -194,14 +201,6 @@
           <li>Downloading or removing a volume no longer closes the list, so you can start several downloads at once.</li>
           <li>Splash style and loading animation are picked from live previews in Preferences; click a splash to see it full size.</li>
           <li>An Arch Linux PKGBUILD, and clear system requirements in the README.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.9.0" date="2026-11-21">
-      <description>
-        <ul>
-          <li>Möbius strip (3D). A cross-reference joins two places in the Bible. With the Bible closed into a loop (Revelation hands back to Genesis), every such pair is exactly one point on a Möbius strip, so nothing is shown twice. Neighbouring passages line the strip's single edge, passages half the Bible apart run along its centre line, and Genesis meets Revelation at the seam.</li>
-          <li>The ordering menu (Bible order, chronological, by writer…) now rearranges the cube, globe and Möbius strip too.</li>
         </ul>
       </description>
     </release>

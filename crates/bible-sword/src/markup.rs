@@ -25,6 +25,8 @@ pub struct Span {
     pub link: Option<Ref>,
     /// paragraph / line break before this span
     pub br: bool,
+    /// a picture in the module (`<img src>`, `<figure src>`), path as written
+    pub image: Option<String>,
 }
 
 #[derive(Default, Clone)]
@@ -233,6 +235,7 @@ impl Builder {
             strong: self.st.strong.clone(),
             link: self.st.link.clone(),
             br: std::mem::take(&mut self.st.br),
+            image: None,
         };
         // merge with previous span when the styling is identical
         if let Some(last) = self.spans.last_mut() {
@@ -356,6 +359,13 @@ pub fn osis(src: &str) -> Vec<Span> {
         }
         let (name, closing, selfc) = tag_name(tok);
         match (name.as_str(), closing) {
+            ("img", _) | ("figure", _) if attr(tok, "src").is_some() => {
+                b.spans.push(Span {
+                    image: attr(tok, "src").map(|x| x.to_string()),
+                    br: true,
+                    ..Default::default()
+                });
+            }
             ("note", false) if !selfc => {
                 let t = attr(tok, "type").unwrap_or("");
                 b.begin_note(t == "crossReference" || t == "x-cross-ref");
@@ -502,6 +512,13 @@ pub fn thml(src: &str) -> Vec<Span> {
         }
         let (name, closing, selfc) = tag_name(tok);
         match (name.to_ascii_lowercase().as_str(), closing) {
+            ("img", _) | ("figure", _) if attr(tok, "src").is_some() => {
+                b.spans.push(Span {
+                    image: attr(tok, "src").map(|x| x.to_string()),
+                    br: true,
+                    ..Default::default()
+                });
+            }
             ("note", false) if !selfc => {
                 let t = attr(tok, "type").unwrap_or("");
                 b.begin_note(t == "crossReference" || t == "x-cross-ref");
@@ -737,5 +754,17 @@ mod thml_scripref_tests {
         for want in ["2Sam 7:14", "1Chr 22:10", "1Chr 28:6", "Ps 2:7", "Ps 89:26"] {
             assert!(got.contains(&want.to_string()), "{want} missing from {got:?}");
         }
+    }
+}
+
+#[cfg(test)]
+mod image_tests {
+    use super::*;
+    #[test]
+    fn pictures_become_image_spans() {
+        let t = thml(r#"A map<img src="/images/paul.jpg"/> of Paul's journeys"#);
+        assert!(t.iter().any(|s| s.image.as_deref() == Some("/images/paul.jpg")));
+        let o = osis(r#"<figure src="maps/jerusalem.png"/>Jerusalem"#);
+        assert!(o.iter().any(|s| s.image.as_deref() == Some("maps/jerusalem.png")));
     }
 }
