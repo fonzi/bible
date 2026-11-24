@@ -3,9 +3,12 @@ on:
   push:
     branches: [main]
   pull_request:
-# a newer push makes the older run pointless
+  # the release runs these same tests first and only builds if they pass
+  workflow_call:
+# a newer push makes the older run pointless (a release's own test run is
+# grouped under the release's name, so it isn't cancelled by CI)
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 env:
   CARGO_TERM_COLOR: always
