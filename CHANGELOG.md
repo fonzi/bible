@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.17
+
+- **The rainbow uses your Bible's own cross-references whenever it has any**,
+  even an incomplete set (ESV, for example, brings over 85,000). The built-in
+  OpenBible.info set is used only for Bibles with none of their own, and the
+  footer says which you're seeing.
+
 ## 0.9.16
 
 - **Tags on Bibles in Downloads.** Up to three short tags say what a Bible

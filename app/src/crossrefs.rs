@@ -35,7 +35,7 @@ fn cache_path(module: &str) -> PathBuf {
     dirs::cache_dir()
         .unwrap_or_else(std::env::temp_dir)
         .join("bible-app/crossrefs")
-        .join(format!("{module}-links-v3.tsv"))
+        .join(format!("{module}-links-v4.tsv"))
 }
 
 /// One verse-to-verse cross-reference: [from chapter index, from verse,
@@ -67,8 +67,8 @@ fn compute(m: &Module, progress: &dyn Fn(f64)) -> (Vec<VLink>, String) {
                 progress(i as f64 / chs.len().max(1) as f64);
             }
         }
-        // a handful means the notes are sparse: better the full built-in set
-        if own.len() >= 1000 {
+        // the Bible's own links come first, even when there are few of them
+        if !own.is_empty() {
             return (own, format!("Cross-references from {} itself", m.abbreviation()));
         }
     }
@@ -95,7 +95,7 @@ fn compute(m: &Module, progress: &dyn Fn(f64)) -> (Vec<VLink>, String) {
     (
         out,
         format!(
-            "{} doesn’t come with a full set of cross-references, so these are OpenBible.info’s (CC BY 4.0, from the Treasury of Scripture Knowledge), built into the app and placed on {}’s chapters",
+            "{} has no cross-references of its own, so these are OpenBible.info’s (CC BY 4.0, from the Treasury of Scripture Knowledge), built into the app and placed on {}’s chapters",
             m.abbreviation(),
             m.abbreviation()
         ),
@@ -1349,7 +1349,7 @@ impl CrossRefs {
                 format!("from {own}")
             } else if source.contains("OpenBible.info") {
                 let bible = source.split(' ').next().unwrap_or("");
-                format!("from OpenBible.info, built in ({bible} doesn’t come with a full set of its own)")
+                format!("from OpenBible.info, built in ({bible} has none of its own)")
             } else {
                 format!("from {}", source.split(" (").next().unwrap_or(&source))
             };

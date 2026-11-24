@@ -39,6 +39,13 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.17" date="2026-11-24">
+      <description>
+        <ul>
+          <li>The rainbow uses your Bible's own cross-references whenever it has any, even an incomplete set (ESV, for example, brings over 85,000). The built-in OpenBible.info set is used only for Bibles with none of their own, and the footer says which you're seeing.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.16" date="2026-11-24">
       <description>
         <ul>
@@ -195,21 +202,6 @@
           <li>The globe is round: each Testament spirals over its own half, Genesis by the North Pole and Revelation by the South Pole.</li>
           <li>The cube fills its space: depth is now how far back in time a reference reaches (late books citing early ones at the back).</li>
           <li>Splash style has a preview button, and changing it plays the new style straight away.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.8.0" date="2026-11-21">
-      <description>
-        <ul>
-          <li>Church fathers. The Ante-Nicene and Nicene and Post-Nicene Fathers, 37 volumes, download one at a time from the Christian Classics Ethereal Library and read offline in the Reading room, opening where you left off.</li>
-          <li>Cross-references in 3D. A cube and a globe you turn by hand, alongside the rainbow, circle and matrix.</li>
-          <li>Accent colour. Follows the church year by default (violet, gold, green, red), or your desktop's accent, or a colour you pick.</li>
-          <li>Preferences in four pages: General, Reading, Today, Downloads.</li>
-          <li>Clearer names: Reading room (was Books and devotionals) and Downloads (was Library). The sidebar is grouped.</li>
-          <li>Today leads with your reading; the legal notice shows once; the cross-reference view explains itself on your first visit.</li>
-          <li>A new install opens on a Bible in your language.</li>
-          <li>About, the README and the website say why the app exists.</li>
-          <li>Every icon-only button has a name for screen readers.</li>
         </ul>
       </description>
     </release>
