@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.9
+
+- **Personal copies.** Many modern translations are still under copyright, so
+  they can't be offered for download. If you already have one as a SWORD
+  module (.zip), add it from Downloads, Start here, Personal copies. It stays
+  on your computer.
+- Plans for reading the Quran and seeing its story parallels with the Bible
+  (in docs/quran.md); not in the app yet.
+
 ## 0.9.8
 
 - **Downloads, a category at a time.** Browse now has a list on the left:

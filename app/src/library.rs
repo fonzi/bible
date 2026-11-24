@@ -943,6 +943,56 @@ impl LibraryView {
 
     /// Scriptures of groups outside historic creedal Christianity, kept apart
     /// at the bottom of the list with a plain note.
+    /// "Personal copies": texts the person already owns, added from a file.
+    /// The app never hosts or shares them.
+    fn personal_copies(&self) -> adw::PreferencesGroup {
+        let g = adw::PreferencesGroup::new();
+        g.set_title("Personal copies");
+        g.set_description(Some(
+            "Many modern translations are still under copyright, so we can’t offer them for download. We believe Scripture should be free for everyone to read; until it is, you can add a copy you already have, as a SWORD module (.zip). It stays on this computer and is never shared. Please only add texts you have the right to use.",
+        ));
+        let row = adw::ActionRow::builder()
+            .title("Add a SWORD module from a file")
+            .subtitle("A .zip with mods.d and modules folders")
+            .activatable(true)
+            .build();
+        row.add_prefix(&gtk::Image::from_icon_name("document-open-symbolic"));
+        let btn = gtk::Button::with_label("Choose file…");
+        btn.set_valign(gtk::Align::Center);
+        row.add_suffix(&btn);
+        row.set_activatable_widget(Some(&btn));
+        let ctx = self.ctx.clone();
+        btn.connect_clicked(move |b| {
+            let filter = gtk::FileFilter::new();
+            filter.set_name(Some("SWORD module (.zip)"));
+            filter.add_pattern("*.zip");
+            filter.add_pattern("*.ZIP");
+            let filters = gio::ListStore::new::<gtk::FileFilter>();
+            filters.append(&filter);
+            let dialog = gtk::FileDialog::builder()
+                .title("Add a personal copy")
+                .accept_label("Add")
+                .filters(&filters)
+                .build();
+            let win = b.root().and_downcast::<gtk::Window>();
+            let ctx = ctx.clone();
+            dialog.open(win.as_ref(), gio::Cancellable::NONE, move |res| {
+                let Ok(file) = res else { return };
+                let Some(path) = file.path() else { return };
+                match install::import_zip(&path, &bible_sword::module::user_root()) {
+                    Ok(names) => {
+                        ctx.rescan();
+                        ctx.refresh_all();
+                        ctx.toast(&format!("Added {}", names.join(", ")));
+                    }
+                    Err(e) => ctx.toast(&format!("Couldn’t add it: {e}")),
+                }
+            });
+        });
+        g.add(&row);
+        g
+    }
+
     fn other_traditions(&self, cat: &[RemoteModule]) -> adw::PreferencesGroup {
         let g = adw::PreferencesGroup::new();
         g.set_title("Other traditions");
@@ -1159,6 +1209,10 @@ impl LibraryView {
                 g.add(&self.module_row(m));
             }
             self.browse_list.append(&g);
+        }
+        if q.is_empty() && category.is_none() {
+            self.browse_list.append(&self.personal_copies());
+            shown += 1;
         }
         if q.is_empty() && category.is_none() && lang.as_deref().is_none_or(|l| l == "en") {
             self.browse_list.append(&self.other_traditions(&cat));

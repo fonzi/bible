@@ -436,3 +436,105 @@ mod live {
         std::fs::remove_dir_all(root).unwrap();
     }
 }
+
+/// Install a SWORD module the person already has, from a .zip with the usual
+/// `mods.d/*.conf` and `modules/…` folders, into `root` (normally
+/// `~/.sword`). Only those two folders are unpacked, and no path may leave
+/// `root`. Returns the names of the modules it installed.
+pub fn import_zip(zip_path: &Path, root: &Path) -> io::Result<Vec<String>> {
+    let f = std::fs::File::open(zip_path)?;
+    let mut ar = zip::ZipArchive::new(f).map_err(io::Error::other)?;
+    let mut names = Vec::new();
+    for i in 0..ar.len() {
+        let e = ar.by_index(i).map_err(io::Error::other)?;
+        let Some(rel) = e.enclosed_name() else { continue };
+        let first = rel.components().next().map(|c| c.as_os_str().to_string_lossy().to_lowercase());
+        if !matches!(first.as_deref(), Some("mods.d")) {
+            continue;
+        }
+        if rel.extension().and_then(|x| x.to_str()) == Some("conf") {
+            names.push(rel.file_stem().unwrap_or_default().to_string_lossy().into_owned());
+        }
+    }
+    if names.is_empty() {
+        return Err(io::Error::other(
+            "This zip has no SWORD module in it (no mods.d folder with a .conf file).",
+        ));
+    }
+    for i in 0..ar.len() {
+        let mut e = ar.by_index(i).map_err(io::Error::other)?;
+        let Some(rel) = e.enclosed_name() else { continue };
+        let first = rel.components().next().map(|c| c.as_os_str().to_string_lossy().to_lowercase());
+        if !matches!(first.as_deref(), Some("mods.d") | Some("modules")) {
+            continue;
+        }
+        let out = root.join(&rel);
+        if e.is_dir() {
+            std::fs::create_dir_all(&out)?;
+            continue;
+        }
+        if let Some(p) = out.parent() {
+            std::fs::create_dir_all(p)?;
+        }
+        let mut w = std::fs::File::create(&out)?;
+        io::copy(&mut e, &mut w)?;
+    }
+    Ok(names)
+}
+
+#[cfg(test)]
+mod import_tests {
+    use super::*;
+    use std::io::Write;
+
+    fn make_zip(entries: &[(&str, &str)]) -> tempfile_path::P {
+        let p = tempfile_path::P::new("zip");
+        let mut z = zip::ZipWriter::new(std::fs::File::create(&p.0).unwrap());
+        for (name, body) in entries {
+            z.start_file(*name, zip::write::SimpleFileOptions::default()).unwrap();
+            z.write_all(body.as_bytes()).unwrap();
+        }
+        z.finish().unwrap();
+        p
+    }
+
+    mod tempfile_path {
+        pub struct P(pub std::path::PathBuf);
+        impl P {
+            pub fn new(ext: &str) -> P {
+                let n = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos();
+                P(std::env::temp_dir().join(format!("bible-import-{n}.{ext}")))
+            }
+        }
+        impl Drop for P {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+                let _ = std::fs::remove_dir_all(&self.0);
+            }
+        }
+    }
+
+    #[test]
+    fn imports_only_module_folders() {
+        let z = make_zip(&[
+            ("mods.d/mine.conf", "[Mine]\nDataPath=./modules/texts/ztext/mine/\n"),
+            ("modules/texts/ztext/mine/nt.bzz", "x"),
+            ("readme.txt", "ignored"),
+            ("../escape.txt", "never written"),
+        ]);
+        let root = tempfile_path::P::new("d");
+        let names = import_zip(&z.0, &root.0).unwrap();
+        assert_eq!(names, vec!["mine".to_string()]);
+        assert!(root.0.join("mods.d/mine.conf").exists());
+        assert!(root.0.join("modules/texts/ztext/mine/nt.bzz").exists());
+        assert!(!root.0.join("readme.txt").exists());
+        assert!(!root.0.parent().unwrap().join("escape.txt").exists());
+    }
+
+    #[test]
+    fn refuses_a_zip_without_a_module() {
+        let z = make_zip(&[("photo.jpg", "x")]);
+        let root = tempfile_path::P::new("d");
+        assert!(import_zip(&z.0, &root.0).is_err());
+    }
+}

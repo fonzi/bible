@@ -8,4 +8,5 @@ license.workspace = true
 bible-core = { path = "../bible-core" }
 flate2 = "1"
 tar = "0.4"
+zip = { version = "2", default-features = false, features = ["deflate"] }
 ureq = { version = "2", features = ["native-certs"] }
