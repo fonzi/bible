@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.3
+
+- **Flatpak.** Each release now also comes as a `.flatpak`, which brings its
+  own GNOME libraries and so runs on older systems such as Pop!_OS and
+  Ubuntu 22.04 and Debian 12, and on most other distributions.
+- Inside the Flatpak, the update banner opens the release page instead of
+  installing a .deb.
+
 ## 0.9.2
 
 - The loading animations follow the accent colour.

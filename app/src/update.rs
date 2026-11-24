@@ -115,7 +115,10 @@ pub fn check(ctx: &Rc<Ctx>, banner: &adw::Banner, force: bool, report: Option<Bo
 
 fn offer(_ctx: &Rc<Ctx>, banner: &adw::Banner, r: Release) {
     banner.set_title(&crate::i18n::t("Bible {} is available. You have {}.").replacen("{}", &r.version, 1).replacen("{}", CURRENT, 1));
-    let can_install = r.deb_url.is_some() && glib::find_program_in_path("pkexec").is_some();
+    // inside a Flatpak the .deb doesn't apply: send people to the release page
+    // (or their software centre, when installed from Flathub)
+    let flatpak = std::path::Path::new("/.flatpak-info").exists();
+    let can_install = !flatpak && r.deb_url.is_some() && glib::find_program_in_path("pkexec").is_some();
     banner.set_button_label(Some(&crate::i18n::t(if can_install { "Update" } else { "Download" })));
     banner.set_revealed(true);
     // 0: offering, 1: updating, 2: updated and ready to restart

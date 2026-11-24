@@ -183,10 +183,12 @@ footer{border-top:1px solid var(--rule);padding:32px 0 48px;color:var(--muted);f
 <h2>Install</h2>
 <p>Download the <code>.deb</code> from the <a href="https://github.com/fonzi/bible/releases/latest">latest release</a>, then run:</p>
 <pre>sudo apt install ./bible-app_*_amd64.deb</pre>
+<p>On older systems such as Pop!_OS or Ubuntu 22.04, or any other distribution, use the <code>.flatpak</code> from the same release:</p>
+<pre>flatpak install --user ./bible-app-*.flatpak</pre>
 <p>On Arch, build it with the PKGBUILD in the repository:</p>
 <pre>git clone https://github.com/fonzi/bible.git
 cd bible/packaging/arch &amp;&amp; makepkg -si</pre>
-<p class="note">Needs GTK 4.14+ and libadwaita 1.5+: Ubuntu 24.04+, Pop!_OS 24.04, Linux Mint 22, Debian 13, Fedora 40+ or Arch. Ubuntu and Pop!_OS 22.04 are too old; apt will refuse the package without changing anything. Windows and macOS builds are planned.</p>
+<p class="note">Needs GTK 4.14+ and libadwaita 1.5+: Ubuntu 24.04+, Pop!_OS 24.04, Linux Mint 22, Debian 13, Fedora 40+ or Arch. For Ubuntu and Pop!_OS 22.04, use the Flatpak; apt refuses the .deb there without changing anything. Windows and macOS builds are planned.</p>
 </section>
 </div>
 

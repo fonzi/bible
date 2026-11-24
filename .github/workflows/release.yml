@@ -12,6 +12,9 @@ permissions:
 jobs:
   deb:
     runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      created: ${{ steps.v.outputs.exists != 'true' }}
     steps:
       - uses: actions/checkout@v5
       - name: Read the version
@@ -56,3 +59,30 @@ jobs:
           files: target/debian/*.deb
           body_path: notes.md
           generate_release_notes: true
+
+  # The same release as a Flatpak, which brings its own GNOME libraries and so
+  # runs on older systems too (Ubuntu and Pop!_OS 22.04, Debian 12…).
+  flatpak:
+    needs: deb
+    if: needs.deb.outputs.created == 'true'
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-47
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v5
+      - name: List the crates for an offline build
+        run: |
+          pip install --break-system-packages aiohttp tomlkit 2>/dev/null || pip install aiohttp tomlkit
+          curl -sSLo /tmp/gen.py https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/cargo/flatpak-cargo-generator.py
+          python3 /tmp/gen.py Cargo.lock -o packaging/flatpak/cargo-sources.json
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: bible-app-${{ needs.deb.outputs.version }}.flatpak
+          manifest-path: packaging/flatpak/io.github.fonzi.Bible.json
+          cache-key: flatpak-${{ github.sha }}
+      - name: Attach to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.deb.outputs.version }}
+          files: bible-app-${{ needs.deb.outputs.version }}.flatpak

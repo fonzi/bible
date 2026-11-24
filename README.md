@@ -69,7 +69,7 @@ GTK 4.14 or newer and libadwaita 1.5 or newer. That means:
 
 | Works | Too old |
 |---|---|
-| Ubuntu 24.04 and later, Pop!_OS 24.04, Linux Mint 22, Debian 13, Fedora 40+, Arch | Ubuntu 22.04, Pop!_OS 22.04, Debian 12 |
+| Ubuntu 24.04 and later, Pop!_OS 24.04, Linux Mint 22, Debian 13, Fedora 40+, Arch | Ubuntu 22.04, Pop!_OS 22.04, Debian 12: use the Flatpak below |
 
 On a system that's too old, apt refuses the package and changes nothing, so
 it can't break your system. (If you installed it with `dpkg -i` and it was
@@ -82,6 +82,21 @@ Download the `.deb` from the [latest release](https://github.com/fonzi/bible/rel
 ```sh
 sudo apt install ./bible-app_*_amd64.deb
 ```
+
+### Any distribution, including older ones (Flatpak)
+
+The Flatpak brings its own GNOME libraries, so it runs on Pop!_OS and
+Ubuntu 22.04, Debian 12 and most other distributions. Download the
+`.flatpak` from the [latest release](https://github.com/fonzi/bible/releases/latest), then:
+
+```sh
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install --user ./bible-app-*.flatpak
+```
+
+The first install also fetches the GNOME runtime (a few hundred MB, shared
+with other GNOME Flatpaks). Pop!_OS has Flathub set up already, so the first
+line can be skipped there.
 
 ### Arch Linux
 
