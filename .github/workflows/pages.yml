@@ -10,7 +10,8 @@ permissions:
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # let a deploy that has started finish; a cancelled one fails mid-way
+  cancel-in-progress: false
 jobs:
   deploy:
     runs-on: ubuntu-24.04
