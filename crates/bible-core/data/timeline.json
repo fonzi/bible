@@ -1,2605 +1,2784 @@
 {
-"eras": [
-{
-"title": "Patriarchs",
-"start": -2166,
-"end": -1876
-},
-{
-"title": "Israel in Egypt",
-"start": -1876,
-"end": -1446
-},
-{
-"title": "Wilderness and conquest",
-"start": -1446,
-"end": -1375
-},
-{
-"title": "Judges",
-"start": -1375,
-"end": -1050
-},
-{
-"title": "United kingdom",
-"start": -1050,
-"end": -931
-},
-{
-"title": "Divided kingdom",
-"start": -931,
-"end": -586
-},
-{
-"title": "Exile",
-"start": -586,
-"end": -538
-},
-{
-"title": "Persian period",
-"start": -538,
-"end": -332
-},
-{
-"title": "Greek period",
-"start": -332,
-"end": -167
-},
-{
-"title": "Maccabees and Hasmoneans",
-"start": -167,
-"end": -63
-},
-{
-"title": "Roman Judea",
-"start": -63,
-"end": 30
-},
-{
-"title": "Apostolic age",
-"start": 30,
-"end": 100
-},
-{
-"title": "Early church",
-"start": 100,
-"end": 313
-},
-{
-"title": "Imperial church",
-"start": 313,
-"end": 590
-},
-{
-"title": "Middle Ages",
-"start": 590,
-"end": 1500
-},
-{
-"title": "Reformation",
-"start": 1500,
-"end": 1650
-},
-{
-"title": "Modern era",
-"start": 1650,
-"end": 2025
-}
-],
-"lanes": [
-{
-"id": "bible",
-"title": "Biblical history",
-"source": "Traditional chronology (early Exodus, from 1 Kings 6:1). Many scholars prefer later dates for the patriarchs and the Exodus."
-},
-{
-"id": "united",
-"title": "United kingdom",
-"source": "Approximate; Saul's reign length is uncertain (Acts 13:21)."
-},
-{
-"id": "israel",
-"title": "Kings of Israel",
-"source": "Reign dates after Edwin R. Thiele, The Mysterious Numbers of the Hebrew Kings. Other systems differ by a few years; overlaps are co-regencies."
-},
-{
-"id": "judah",
-"title": "Kings of Judah",
-"source": "Reign dates after Edwin R. Thiele. Overlaps are co-regencies."
-},
-{
-"id": "prophets",
-"title": "Prophets",
-"source": "Approximate periods of ministry from the books' headings."
-},
-{
-"id": "powers",
-"title": "Who was in power",
-"source": "Standard ancient Near Eastern chronology (middle chronology for Mesopotamia)."
-},
-{
-"id": "rulers",
-"title": "Rulers",
-"source": "Reign dates as usually given in histories of the ancient world."
-},
-{
-"id": "world",
-"title": "World and culture",
-"source": "Approximate where marked."
-},
-{
-"id": "church",
-"title": "Church history",
-"source": "Dates as commonly given in histories of the church."
-}
-],
-"events": [
-{
-"lane": "bible",
-"title": "Call of Abraham",
-"start": -2091,
-"summary": "Abram leaves Harran for Canaan at God's call, with the promise of land, offspring and blessing for all nations.",
-"refs": [
-"Gen.12.1-Gen.12.9"
-],
-"approx": true,
-"note": "Traditional chronology; many scholars place the patriarchs a few centuries later."
-},
-{
-"lane": "bible",
-"title": "Jacob's family settles in Egypt",
-"start": -1876,
-"summary": "Joseph, now a ruler in Egypt, brings Jacob and his sons to Goshen during the famine.",
-"refs": [
-"Gen.46.1-Gen.47.12"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "The Exodus",
-"start": -1446,
-"summary": "Moses leads Israel out of Egypt; Passover, the crossing of the sea and the covenant at Sinai.",
-"refs": [
-"Exod.12.1-Exod.15.21",
-"Exod.19.1-Exod.20.21"
-],
-"approx": true,
-"note": "Early date from 1 Kings 6:1. Many scholars prefer a 13th-century date (c. 1260 BC)."
-},
-{
-"lane": "bible",
-"title": "Entry into Canaan",
-"start": -1406,
-"summary": "After forty years in the wilderness, Israel crosses the Jordan under Joshua.",
-"refs": [
-"Josh.3.1-Josh.4.24"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Period of the judges",
-"start": -1375,
-"summary": "Cycles of unfaithfulness, oppression and deliverance under leaders such as Deborah, Gideon and Samson.",
-"refs": [
-"Judg.2.6-Judg.2.23"
-],
-"approx": true,
-"end": -1050
-},
-{
-"lane": "bible",
-"title": "Solomon's temple dedicated",
-"start": -959,
-"summary": "Built over seven years and dedicated with Solomon's prayer.",
-"refs": [
-"1Kgs.6.1",
-"1Kgs.8.1-1Kgs.8.66"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "The kingdom divides",
-"start": -931,
-"summary": "The northern tribes reject Rehoboam and follow Jeroboam: Israel in the north, Judah in the south.",
-"refs": [
-"1Kgs.12.1-1Kgs.12.33"
-],
-"approx": false
-},
-{
-"lane": "bible",
-"title": "Fall of Samaria",
-"start": -722,
-"summary": "Assyria takes Samaria and deports the northern kingdom.",
-"refs": [
-"2Kgs.17.1-2Kgs.17.41"
-],
-"approx": false
-},
-{
-"lane": "bible",
-"title": "Sennacherib besieges Jerusalem",
-"start": -701,
-"summary": "Assyria ravages Judah's towns, but Jerusalem is spared in Hezekiah's reign. Sennacherib's own annals also record the campaign.",
-"refs": [
-"2Kgs.18.13-2Kgs.19.37",
-"Isa.36.1-Isa.37.38"
-],
-"approx": false
-},
-{
-"lane": "bible",
-"title": "Josiah's reform",
-"start": -622,
-"summary": "The Book of the Law is found in the temple; Josiah renews the covenant and removes idols.",
-"refs": [
-"2Kgs.22.1-2Kgs.23.30"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "First deportation to Babylon",
-"start": -605,
-"summary": "Nebuchadnezzar takes Daniel and other young nobles to Babylon.",
-"refs": [
-"Dan.1.1-Dan.1.7"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Jehoiachin taken to Babylon",
-"start": -597,
-"summary": "Nebuchadnezzar takes the king, the court and Ezekiel into exile and sets up Zedekiah.",
-"refs": [
-"2Kgs.24.10-2Kgs.24.17"
-],
-"approx": false
-},
-{
-"lane": "bible",
-"title": "Jerusalem and the temple destroyed",
-"start": -586,
-"summary": "After a long siege Babylon burns the temple and deports much of Judah.",
-"refs": [
-"2Kgs.25.1-2Kgs.25.21",
-"Jer.52.1-Jer.52.30"
-],
-"approx": true,
-"note": "Some date it to 587 BC."
-},
-{
-"lane": "bible",
-"title": "Cyrus's decree and first return",
-"start": -538,
-"summary": "Cyrus allows the exiles to go home and rebuild the temple; Zerubbabel leads the first return.",
-"refs": [
-"Ezra.1.1-Ezra.2.70"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Second temple completed",
-"start": -516,
-"summary": "Finished in the sixth year of Darius after encouragement from Haggai and Zechariah.",
-"refs": [
-"Ezra.6.13-Ezra.6.22"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Esther in Susa",
-"start": -479,
-"summary": "A Jewish queen of Persia saves her people from Haman's plot; the origin of Purim.",
-"refs": [
-"Esth.2.16-Esth.2.18",
-"Esth.9.20-Esth.9.32"
-],
-"approx": true,
-"end": -473
-},
-{
-"lane": "bible",
-"title": "Ezra returns to Jerusalem",
-"start": -458,
-"summary": "Ezra the scribe brings a second group and teaches the Law.",
-"refs": [
-"Ezra.7.1-Ezra.7.10"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Nehemiah rebuilds the walls",
-"start": -445,
-"summary": "Jerusalem's walls are rebuilt in fifty-two days despite opposition.",
-"refs": [
-"Neh.2.1-Neh.2.20",
-"Neh.6.15-Neh.6.16"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Maccabean revolt",
-"start": -167,
-"summary": "Judas Maccabeus leads the revolt against Antiochus IV; the temple is cleansed and rededicated, remembered at Hanukkah.",
-"refs": [
-"1Macc.4.36-1Macc.4.59",
-"John.10.22"
-],
-"approx": true,
-"end": -164
-},
-{
-"lane": "bible",
-"title": "Herod begins rebuilding the temple",
-"start": -20,
-"summary": "A vast expansion of the second temple that was still under way in Jesus' day.",
-"refs": [
-"John.2.20"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Birth of Jesus",
-"start": -5,
-"summary": "Born in Bethlehem in the days of Herod the Great, who died in 4 BC.",
-"refs": [
-"Matt.2.1-Matt.2.12",
-"Luke.2.1-Luke.2.20"
-],
-"approx": true,
-"note": "Usually dated 6–4 BC."
-},
-{
-"lane": "bible",
-"title": "Ministry of Jesus",
-"start": 27,
-"summary": "Baptism by John, teaching and healing in Galilee and Judea, and the journey to Jerusalem.",
-"refs": [
-"Luke.3.1-Luke.3.23",
-"Mark.1.9-Mark.1.15"
-],
-"approx": true,
-"end": 30,
-"note": "Often dated AD 27–30 or 29–33."
-},
-{
-"lane": "bible",
-"title": "Crucifixion and resurrection",
-"start": 30,
-"summary": "Jesus is crucified under Pontius Pilate at Passover and rises on the third day.",
-"refs": [
-"Luke.23.1-Luke.24.53",
-"1Cor.15.3-1Cor.15.8"
-],
-"approx": true,
-"note": "AD 30 or 33."
-},
-{
-"lane": "bible",
-"title": "Pentecost",
-"start": 30,
-"summary": "The Holy Spirit is poured out; Peter preaches and about three thousand are baptised.",
-"refs": [
-"Acts.2.1-Acts.2.41"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Paul's conversion",
-"start": 34,
-"summary": "On the road to Damascus, the persecutor Saul meets the risen Jesus.",
-"refs": [
-"Acts.9.1-Acts.9.19",
-"Gal.1.13-Gal.1.17"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Council of Jerusalem",
-"start": 49,
-"summary": "The apostles and elders agree that Gentile believers need not be circumcised.",
-"refs": [
-"Acts.15.1-Acts.15.35"
-],
-"approx": true
-},
-{
-"lane": "bible",
-"title": "Paul's missionary journeys",
-"start": 46,
-"summary": "Churches founded across Galatia, Macedonia, Greece and Asia.",
-"refs": [
-"Acts.13.1-Acts.14.28",
-"Acts.15.36-Acts.18.22",
-"Acts.18.23-Acts.21.16"
-],
-"approx": true,
-"end": 57
-},
-{
-"lane": "bible",
-"title": "Paul in Rome",
-"start": 60,
-"summary": "Under house arrest, Paul preaches freely for two years.",
-"refs": [
-"Acts.28.16-Acts.28.31"
-],
-"approx": true,
-"end": 62
-},
-{
-"lane": "bible",
-"title": "Revelation written",
-"start": 95,
-"summary": "John's visions on Patmos, traditionally dated to the end of Domitian's reign.",
-"refs": [
-"Rev.1.9-Rev.1.11"
-],
-"approx": true,
-"note": "Some date it to the late 60s."
-},
-{
-"lane": "united",
-"title": "Saul",
-"start": -1050,
-"summary": "King over all Israel.",
-"refs": [
-"1Sam.10.1"
-],
-"approx": true,
-"end": -1010
-},
-{
-"lane": "united",
-"title": "David",
-"start": -1010,
-"summary": "King over all Israel.",
-"refs": [
-"2Sam.5.1-2Sam.5.5"
-],
-"approx": true,
-"end": -970
-},
-{
-"lane": "united",
-"title": "Solomon",
-"start": -970,
-"summary": "King over all Israel.",
-"refs": [
-"1Kgs.2.12"
-],
-"approx": true,
-"end": -931
-},
-{
-"lane": "israel",
-"title": "Jeroboam I",
-"start": -931,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.12.20"
-],
-"approx": false,
-"end": -910
-},
-{
-"lane": "israel",
-"title": "Nadab",
-"start": -910,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.15.25"
-],
-"approx": false,
-"end": -909
-},
-{
-"lane": "israel",
-"title": "Baasha",
-"start": -909,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.15.33"
-],
-"approx": false,
-"end": -886
-},
-{
-"lane": "israel",
-"title": "Elah",
-"start": -886,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.16.8"
-],
-"approx": false,
-"end": -885
-},
-{
-"lane": "israel",
-"title": "Zimri",
-"start": -885,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.16.15"
-],
-"approx": false,
-"end": -885
-},
-{
-"lane": "israel",
-"title": "Omri",
-"start": -885,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.16.23"
-],
-"approx": false,
-"end": -874
-},
-{
-"lane": "israel",
-"title": "Ahab",
-"start": -874,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.16.29"
-],
-"approx": false,
-"end": -853
-},
-{
-"lane": "israel",
-"title": "Ahaziah",
-"start": -853,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"1Kgs.22.51"
-],
-"approx": false,
-"end": -852
-},
-{
-"lane": "israel",
-"title": "Joram",
-"start": -852,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.3.1"
-],
-"approx": false,
-"end": -841
-},
-{
-"lane": "israel",
-"title": "Jehu",
-"start": -841,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.9.1-2Kgs.10.36"
-],
-"approx": false,
-"end": -814
-},
-{
-"lane": "israel",
-"title": "Jehoahaz",
-"start": -814,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.13.1"
-],
-"approx": false,
-"end": -798
-},
-{
-"lane": "israel",
-"title": "Jehoash",
-"start": -798,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.13.10"
-],
-"approx": false,
-"end": -782
-},
-{
-"lane": "israel",
-"title": "Jeroboam II",
-"start": -793,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.14.23"
-],
-"approx": false,
-"end": -753
-},
-{
-"lane": "israel",
-"title": "Zechariah",
-"start": -753,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.15.8"
-],
-"approx": false,
-"end": -753
-},
-{
-"lane": "israel",
-"title": "Shallum",
-"start": -752,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.15.13"
-],
-"approx": false,
-"end": -752
-},
-{
-"lane": "israel",
-"title": "Menahem",
-"start": -752,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.15.17"
-],
-"approx": false,
-"end": -742
-},
-{
-"lane": "israel",
-"title": "Pekahiah",
-"start": -742,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.15.23"
-],
-"approx": false,
-"end": -740
-},
-{
-"lane": "israel",
-"title": "Pekah",
-"start": -740,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.15.27"
-],
-"approx": false,
-"end": -732
-},
-{
-"lane": "israel",
-"title": "Hoshea",
-"start": -732,
-"summary": "King of Israel (the northern kingdom).",
-"refs": [
-"2Kgs.17.1"
-],
-"approx": false,
-"end": -722
-},
-{
-"lane": "judah",
-"title": "Rehoboam",
-"start": -931,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"1Kgs.14.21"
-],
-"approx": false,
-"end": -913
-},
-{
-"lane": "judah",
-"title": "Abijah",
-"start": -913,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"1Kgs.15.1"
-],
-"approx": false,
-"end": -911
-},
-{
-"lane": "judah",
-"title": "Asa",
-"start": -911,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"1Kgs.15.9"
-],
-"approx": false,
-"end": -870
-},
-{
-"lane": "judah",
-"title": "Jehoshaphat",
-"start": -872,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"1Kgs.22.41"
-],
-"approx": false,
-"end": -848
-},
-{
-"lane": "judah",
-"title": "Jehoram",
-"start": -848,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.8.16"
-],
-"approx": false,
-"end": -841
-},
-{
-"lane": "judah",
-"title": "Ahaziah",
-"start": -841,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.8.25"
-],
-"approx": false,
-"end": -841
-},
-{
-"lane": "judah",
-"title": "Athaliah",
-"start": -841,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.11.1-2Kgs.11.3"
-],
-"approx": false,
-"end": -835
-},
-{
-"lane": "judah",
-"title": "Joash",
-"start": -835,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.12.1"
-],
-"approx": false,
-"end": -796
-},
-{
-"lane": "judah",
-"title": "Amaziah",
-"start": -796,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.14.1"
-],
-"approx": false,
-"end": -767
-},
-{
-"lane": "judah",
-"title": "Uzziah",
-"start": -767,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.15.1"
-],
-"approx": false,
-"end": -740
-},
-{
-"lane": "judah",
-"title": "Jotham",
-"start": -750,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.15.32"
-],
-"approx": false,
-"end": -735
-},
-{
-"lane": "judah",
-"title": "Ahaz",
-"start": -735,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.16.1"
-],
-"approx": false,
-"end": -715
-},
-{
-"lane": "judah",
-"title": "Hezekiah",
-"start": -715,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.18.1"
-],
-"approx": false,
-"end": -686
-},
-{
-"lane": "judah",
-"title": "Manasseh",
-"start": -686,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.21.1"
-],
-"approx": false,
-"end": -642
-},
-{
-"lane": "judah",
-"title": "Amon",
-"start": -642,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.21.19"
-],
-"approx": false,
-"end": -640
-},
-{
-"lane": "judah",
-"title": "Josiah",
-"start": -640,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.22.1"
-],
-"approx": false,
-"end": -609
-},
-{
-"lane": "judah",
-"title": "Jehoahaz",
-"start": -609,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.23.31"
-],
-"approx": false,
-"end": -609
-},
-{
-"lane": "judah",
-"title": "Jehoiakim",
-"start": -609,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.23.36"
-],
-"approx": false,
-"end": -598
-},
-{
-"lane": "judah",
-"title": "Jehoiachin",
-"start": -598,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.24.8"
-],
-"approx": false,
-"end": -597
-},
-{
-"lane": "judah",
-"title": "Zedekiah",
-"start": -597,
-"summary": "King of Judah (the southern kingdom).",
-"refs": [
-"2Kgs.24.18"
-],
-"approx": false,
-"end": -586
-},
-{
-"lane": "prophets",
-"title": "Samuel",
-"start": -1100,
-"summary": "Last of the judges; anoints Saul and David.",
-"refs": [
-"1Sam.3.1-1Sam.3.21"
-],
-"approx": true,
-"end": -1015
-},
-{
-"lane": "prophets",
-"title": "Nathan",
-"start": -1000,
-"summary": "Confronts David after Bathsheba.",
-"refs": [
-"2Sam.12.1-2Sam.12.15"
-],
-"approx": true,
-"end": -970
-},
-{
-"lane": "prophets",
-"title": "Elijah",
-"start": -875,
-"summary": "Challenges Ahab and the prophets of Baal on Carmel.",
-"refs": [
-"1Kgs.17.1"
-],
-"approx": true,
-"end": -848
-},
-{
-"lane": "prophets",
-"title": "Elisha",
-"start": -848,
-"summary": "Succeeds Elijah; many miracles in Israel.",
-"refs": [
-"2Kgs.2.1-2Kgs.2.15"
-],
-"approx": true,
-"end": -797
-},
-{
-"lane": "prophets",
-"title": "Jonah",
-"start": -785,
-"summary": "Sent to preach to Nineveh.",
-"refs": [
-"Jonah.1.1-Jonah.1.3"
-],
-"approx": true,
-"end": -775
-},
-{
-"lane": "prophets",
-"title": "Amos",
-"start": -760,
-"summary": "A shepherd from Tekoa denounces injustice in Israel.",
-"refs": [
-"Amos.1.1"
-],
-"approx": true,
-"end": -750
-},
-{
-"lane": "prophets",
-"title": "Hosea",
-"start": -755,
-"summary": "Pictures God's faithful love through his own marriage.",
-"refs": [
-"Hos.1.1"
-],
-"approx": true,
-"end": -715
-},
-{
-"lane": "prophets",
-"title": "Isaiah",
-"start": -740,
-"summary": "Prophet in Jerusalem under Uzziah, Jotham, Ahaz and Hezekiah.",
-"refs": [
-"Isa.6.1-Isa.6.13"
-],
-"approx": true,
-"end": -681
-},
-{
-"lane": "prophets",
-"title": "Micah",
-"start": -735,
-"summary": "Foretells a ruler from Bethlehem.",
-"refs": [
-"Mic.1.1"
-],
-"approx": true,
-"end": -700
-},
-{
-"lane": "prophets",
-"title": "Nahum",
-"start": -660,
-"summary": "Announces Nineveh's fall.",
-"refs": [
-"Nah.1.1"
-],
-"approx": true,
-"end": -630
-},
-{
-"lane": "prophets",
-"title": "Zephaniah",
-"start": -640,
-"summary": "Prophesies in Josiah's day.",
-"refs": [
-"Zeph.1.1"
-],
-"approx": true,
-"end": -621
-},
-{
-"lane": "prophets",
-"title": "Jeremiah",
-"start": -627,
-"summary": "Warns Judah for forty years and promises a new covenant.",
-"refs": [
-"Jer.1.1-Jer.1.10"
-],
-"approx": true,
-"end": -586
-},
-{
-"lane": "prophets",
-"title": "Habakkuk",
-"start": -609,
-"summary": "Asks how God can use Babylon; 'the righteous shall live by faith'.",
-"refs": [
-"Hab.1.1-Hab.1.6"
-],
-"approx": true,
-"end": -598
-},
-{
-"lane": "prophets",
-"title": "Daniel",
-"start": -605,
-"summary": "Serves in the Babylonian and Persian courts.",
-"refs": [
-"Dan.1.1-Dan.1.21"
-],
-"approx": true,
-"end": -536
-},
-{
-"lane": "prophets",
-"title": "Ezekiel",
-"start": -593,
-"summary": "Visions among the exiles by the Chebar canal.",
-"refs": [
-"Ezek.1.1-Ezek.1.3"
-],
-"approx": true,
-"end": -571
-},
-{
-"lane": "prophets",
-"title": "Haggai",
-"start": -520,
-"summary": "Urges the returned exiles to rebuild the temple.",
-"refs": [
-"Hag.1.1"
-],
-"approx": true,
-"end": -520
-},
-{
-"lane": "prophets",
-"title": "Zechariah",
-"start": -520,
-"summary": "Visions of restoration and a coming king.",
-"refs": [
-"Zech.1.1"
-],
-"approx": true,
-"end": -518
-},
-{
-"lane": "prophets",
-"title": "Malachi",
-"start": -440,
-"summary": "The last Old Testament prophet.",
-"refs": [
-"Mal.1.1"
-],
-"approx": true,
-"end": -420
-},
-{
-"lane": "prophets",
-"title": "John the Baptist",
-"start": 28,
-"summary": "Preaches repentance and baptises Jesus.",
-"refs": [
-"Luke.3.1-Luke.3.20"
-],
-"approx": true,
-"end": 29
-},
-{
-"lane": "powers",
-"title": "Egypt: Middle Kingdom",
-"start": -2055,
-"summary": "A reunited Egypt; trade and building at home and abroad.",
-"refs": [],
-"approx": true,
-"end": -1650
-},
-{
-"lane": "powers",
-"title": "Old Babylonian kingdom",
-"start": -1894,
-"summary": "Amorite dynasty of Babylon; Hammurabi unifies Mesopotamia.",
-"refs": [],
-"approx": true,
-"end": -1595
-},
-{
-"lane": "powers",
-"title": "Hittite empire",
-"start": -1650,
-"summary": "Anatolian power that rivalled Egypt; fought at Kadesh in 1274 BC.",
-"refs": [
-"Josh.1.4"
-],
-"approx": true,
-"end": -1180
-},
-{
-"lane": "powers",
-"title": "Egypt: New Kingdom",
-"start": -1550,
-"summary": "Egypt's imperial age: Thutmose III, Akhenaten, Ramesses II.",
-"refs": [],
-"approx": true,
-"end": -1070
-},
-{
-"lane": "powers",
-"title": "Philistine city-states",
-"start": -1175,
-"summary": "Sea Peoples settled on the coast: Gaza, Ashkelon, Ashdod, Ekron, Gath.",
-"refs": [
-"1Sam.4.1-1Sam.4.11"
-],
-"approx": true,
-"end": -604
-},
-{
-"lane": "powers",
-"title": "Aramean kingdom of Damascus",
-"start": -1000,
-"summary": "Israel's frequent northern rival until Assyria took Damascus.",
-"refs": [
-"1Kgs.20.1"
-],
-"approx": true,
-"end": -732
-},
-{
-"lane": "powers",
-"title": "Neo-Assyrian empire",
-"start": -911,
-"summary": "Dominates the Near East; destroys Samaria and besieges Jerusalem.",
-"refs": [
-"2Kgs.15.19-2Kgs.15.20"
-],
-"approx": true,
-"end": -609
-},
-{
-"lane": "powers",
-"title": "Neo-Babylonian empire",
-"start": -626,
-"summary": "Nebuchadnezzar's Babylon conquers Judah.",
-"refs": [
-"2Kgs.24.1"
-],
-"approx": true,
-"end": -539
-},
-{
-"lane": "powers",
-"title": "Persian (Achaemenid) empire",
-"start": -550,
-"summary": "From Cyrus to Darius III; allows the exiles to return.",
-"refs": [
-"Ezra.1.1"
-],
-"approx": true,
-"end": -330
-},
-{
-"lane": "powers",
-"title": "Alexander the Great",
-"start": -336,
-"summary": "Conquers Persia, Egypt and the east; Greek language and culture spread.",
-"refs": [
-"Dan.8.5-Dan.8.8"
-],
-"approx": true,
-"end": -323
-},
-{
-"lane": "powers",
-"title": "Ptolemaic rule over Judea",
-"start": -301,
-"summary": "Judea governed from Alexandria; the Septuagint is translated there.",
-"refs": [],
-"approx": true,
-"end": -198
-},
-{
-"lane": "powers",
-"title": "Seleucid rule over Judea",
-"start": -198,
-"summary": "Ruled from Antioch; Antiochus IV bans Jewish practice.",
-"refs": [
-"Dan.11.21-Dan.11.35"
-],
-"approx": true,
-"end": -140
-},
-{
-"lane": "powers",
-"title": "Hasmonean kingdom",
-"start": -140,
-"summary": "Independent Jewish state under the Maccabees' heirs.",
-"refs": [],
-"approx": true,
-"end": -37
-},
-{
-"lane": "powers",
-"title": "Roman Republic in the east",
-"start": -63,
-"summary": "Pompey takes Jerusalem in 63 BC.",
-"refs": [],
-"approx": true,
-"end": -27
-},
-{
-"lane": "powers",
-"title": "Herod the Great",
-"start": -37,
-"summary": "Rome's client king of Judea; massive building projects.",
-"refs": [
-"Matt.2.1-Matt.2.18"
-],
-"approx": true,
-"end": -4
-},
-{
-"lane": "powers",
-"title": "Roman Empire",
-"start": -27,
-"summary": "From Augustus to the fall of the West.",
-"refs": [
-"Luke.2.1"
-],
-"approx": true,
-"end": 476
-},
-{
-"lane": "powers",
-"title": "Byzantine (Eastern Roman) empire",
-"start": 330,
-"summary": "Rome's eastern half, ruled from Constantinople.",
-"refs": [],
-"approx": true,
-"end": 1453
-},
-{
-"lane": "powers",
-"title": "Islamic caliphates",
-"start": 632,
-"summary": "Rapid expansion across the Near East, North Africa and Spain.",
-"refs": [],
-"approx": true,
-"end": 1258
-},
-{
-"lane": "powers",
-"title": "Ottoman empire",
-"start": 1299,
-"summary": "Rules the Holy Land from 1517 to 1917.",
-"refs": [],
-"approx": true,
-"end": 1922
-},
-{
-"lane": "rulers",
-"title": "Hammurabi",
-"start": -1792,
-"summary": "King of Babylon, known for his law code.",
-"refs": [],
-"approx": true,
-"end": -1750
-},
-{
-"lane": "rulers",
-"title": "Thutmose III",
-"start": -1479,
-"summary": "Egypt's great warrior pharaoh; some link him with the oppression in Exodus.",
-"refs": [],
-"approx": true,
-"end": -1425
-},
-{
-"lane": "rulers",
-"title": "Ramesses II",
-"start": -1279,
-"summary": "Long-reigning pharaoh; often linked with the Exodus by those who hold a late date.",
-"refs": [],
-"approx": true,
-"end": -1213
-},
-{
-"lane": "rulers",
-"title": "Shishak (Shoshenq I)",
-"start": -943,
-"summary": "Pharaoh who raided Judah after Solomon.",
-"refs": [
-"1Kgs.14.25-1Kgs.14.26"
-],
-"approx": true,
-"end": -922
-},
-{
-"lane": "rulers",
-"title": "Tiglath-pileser III",
-"start": -745,
-"summary": "Assyrian king who made Israel and Judah pay tribute.",
-"refs": [
-"2Kgs.15.29",
-"2Kgs.16.7-2Kgs.16.10"
-],
-"approx": true,
-"end": -727
-},
-{
-"lane": "rulers",
-"title": "Sargon II",
-"start": -722,
-"summary": "Completed the deportation of Israel.",
-"refs": [
-"Isa.20.1"
-],
-"approx": true,
-"end": -705
-},
-{
-"lane": "rulers",
-"title": "Sennacherib",
-"start": -705,
-"summary": "Besieged Jerusalem under Hezekiah.",
-"refs": [
-"2Kgs.18.13"
-],
-"approx": true,
-"end": -681
-},
-{
-"lane": "rulers",
-"title": "Nebuchadnezzar II",
-"start": -605,
-"summary": "Captured Jerusalem and destroyed the temple.",
-"refs": [
-"Dan.1.1",
-"2Kgs.25.1"
-],
-"approx": true,
-"end": -562
-},
-{
-"lane": "rulers",
-"title": "Cyrus the Great",
-"start": -559,
-"summary": "Founder of the Persian empire; freed the exiles.",
-"refs": [
-"Isa.45.1",
-"Ezra.1.1-Ezra.1.4"
-],
-"approx": true,
-"end": -530
-},
-{
-"lane": "rulers",
-"title": "Darius I",
-"start": -522,
-"summary": "Confirmed the temple decree.",
-"refs": [
-"Ezra.6.1-Ezra.6.15"
-],
-"approx": true,
-"end": -486
-},
-{
-"lane": "rulers",
-"title": "Xerxes I (Ahasuerus)",
-"start": -486,
-"summary": "The king of Esther.",
-"refs": [
-"Esth.1.1"
-],
-"approx": true,
-"end": -465
-},
-{
-"lane": "rulers",
-"title": "Artaxerxes I",
-"start": -465,
-"summary": "Sent Ezra and Nehemiah.",
-"refs": [
-"Ezra.7.11-Ezra.7.26",
-"Neh.2.1-Neh.2.8"
-],
-"approx": true,
-"end": -424
-},
-{
-"lane": "rulers",
-"title": "Antiochus IV Epiphanes",
-"start": -175,
-"summary": "Desecrated the temple in 167 BC.",
-"refs": [
-"1Macc.1.20-1Macc.1.64"
-],
-"approx": true,
-"end": -164
-},
-{
-"lane": "rulers",
-"title": "Augustus",
-"start": -27,
-"summary": "First Roman emperor; ordered the census of Luke 2.",
-"refs": [
-"Luke.2.1"
-],
-"approx": true,
-"end": 14
-},
-{
-"lane": "rulers",
-"title": "Tiberius",
-"start": 14,
-"summary": "Emperor during Jesus' ministry.",
-"refs": [
-"Luke.3.1"
-],
-"approx": true,
-"end": 37
-},
-{
-"lane": "rulers",
-"title": "Pontius Pilate",
-"start": 26,
-"summary": "Prefect of Judea who sentenced Jesus.",
-"refs": [
-"Matt.27.1-Matt.27.26"
-],
-"approx": true,
-"end": 36
-},
-{
-"lane": "rulers",
-"title": "Claudius",
-"start": 41,
-"summary": "Expelled Jews from Rome.",
-"refs": [
-"Acts.18.2"
-],
-"approx": true,
-"end": 54
-},
-{
-"lane": "rulers",
-"title": "Nero",
-"start": 54,
-"summary": "Persecuted Christians after the fire of AD 64; Paul and Peter martyred by tradition.",
-"refs": [],
-"approx": true,
-"end": 68
-},
-{
-"lane": "rulers",
-"title": "Vespasian and Titus",
-"start": 69,
-"summary": "Crushed the Jewish revolt and destroyed Jerusalem.",
-"refs": [],
-"approx": true,
-"end": 81
-},
-{
-"lane": "rulers",
-"title": "Domitian",
-"start": 81,
-"summary": "Emperor at the traditional date of Revelation.",
-"refs": [],
-"approx": true,
-"end": 96
-},
-{
-"lane": "rulers",
-"title": "Trajan",
-"start": 98,
-"summary": "Corresponded with Pliny about Christians.",
-"refs": [],
-"approx": true,
-"end": 117
-},
-{
-"lane": "rulers",
-"title": "Diocletian",
-"start": 284,
-"summary": "Launched the Great Persecution.",
-"refs": [],
-"approx": true,
-"end": 305
-},
-{
-"lane": "rulers",
-"title": "Constantine",
-"start": 306,
-"summary": "First Christian emperor; called the Council of Nicaea.",
-"refs": [],
-"approx": true,
-"end": 337
-},
-{
-"lane": "rulers",
-"title": "Theodosius I",
-"start": 379,
-"summary": "Made Nicene Christianity the state religion.",
-"refs": [],
-"approx": true,
-"end": 395
-},
-{
-"lane": "rulers",
-"title": "Justinian I",
-"start": 527,
-"summary": "Built Hagia Sophia; codified Roman law.",
-"refs": [],
-"approx": true,
-"end": 565
-},
-{
-"lane": "rulers",
-"title": "Charlemagne",
-"start": 768,
-"summary": "Crowned emperor in Rome in AD 800.",
-"refs": [],
-"approx": true,
-"end": 814
-},
-{
-"lane": "rulers",
-"title": "Henry VIII",
-"start": 1509,
-"summary": "Broke with Rome; head of the Church of England.",
-"refs": [],
-"approx": true,
-"end": 1547
-},
-{
-"lane": "rulers",
-"title": "Charles V",
-"start": 1519,
-"summary": "Holy Roman Emperor at the Diet of Worms.",
-"refs": [],
-"approx": true,
-"end": 1556
-},
-{
-"lane": "world",
-"title": "Code of Hammurabi",
-"start": -1754,
-"summary": "One of the oldest written law codes, carved on a basalt stele.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "Late Bronze Age collapse",
-"start": -1177,
-"summary": "Empires fall across the eastern Mediterranean; the Sea Peoples appear.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "Phoenician alphabet",
-"start": -1050,
-"summary": "Ancestor of the Hebrew, Greek and Latin alphabets.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "First Olympic Games",
-"start": -776,
-"summary": "Held at Olympia in Greece.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Founding of Rome",
-"start": -753,
-"summary": "The traditional date.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Homer's epics",
-"start": -750,
-"summary": "The Iliad and the Odyssey take written form.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "Library of Ashurbanipal",
-"start": -668,
-"summary": "Thousands of clay tablets at Nineveh, including the Gilgamesh epic.",
-"refs": [],
-"approx": true,
-"end": -627
-},
-{
-"lane": "world",
-"title": "Siddhartha Gautama (the Buddha)",
-"start": -563,
-"summary": "Traditional dates; many scholars place him about a century later.",
-"refs": [],
-"approx": true,
-"end": -483
-},
-{
-"lane": "world",
-"title": "Confucius",
-"start": -551,
-"summary": "Chinese teacher whose sayings shaped East Asian thought.",
-"refs": [],
-"approx": true,
-"end": -479
-},
-{
-"lane": "world",
-"title": "Roman Republic founded",
-"start": -509,
-"summary": "Rome expels its last king.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "Parthenon built",
-"start": -447,
-"summary": "The temple of Athena on the Athenian Acropolis.",
-"refs": [],
-"approx": false,
-"end": -432
-},
-{
-"lane": "world",
-"title": "Death of Socrates",
-"start": -399,
-"summary": "The Athenian philosopher is executed.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Septuagint begun",
-"start": -250,
-"summary": "The Hebrew Scriptures translated into Greek at Alexandria.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "Qin unifies China",
-"start": -221,
-"summary": "Qin Shi Huang becomes the first emperor of China.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Dead Sea Scrolls copied",
-"start": -250,
-"summary": "The Qumran scrolls, the oldest surviving Hebrew Bible manuscripts.",
-"refs": [],
-"approx": true,
-"end": 68
-},
-{
-"lane": "world",
-"title": "Julius Caesar assassinated",
-"start": -44,
-"summary": "The end of the Roman Republic draws near.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Great Fire of Rome",
-"start": 64,
-"summary": "Nero blames the Christians.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Destruction of the Second Temple",
-"start": 70,
-"summary": "Roman legions under Titus destroy Jerusalem.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Pompeii destroyed",
-"start": 79,
-"summary": "Vesuvius buries Pompeii and Herculaneum.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Fall of the Western Roman Empire",
-"start": 476,
-"summary": "The last Western emperor is deposed.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Muhammad's Hijra",
-"start": 622,
-"summary": "Beginning of the Islamic calendar.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Gutenberg's printed Bible",
-"start": 1455,
-"summary": "Movable-type printing transforms the spread of books.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "world",
-"title": "Fall of Constantinople",
-"start": 1453,
-"summary": "The Ottomans take the Byzantine capital.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "world",
-"title": "Columbus reaches the Americas",
-"start": 1492,
-"summary": "The first of four voyages.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Clement of Rome writes to Corinth",
-"start": 96,
-"summary": "One of the earliest Christian writings outside the New Testament.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "Ignatius of Antioch martyred",
-"start": 108,
-"summary": "Writes seven letters on his way to death in Rome.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "Polycarp martyred",
-"start": 155,
-"summary": "Bishop of Smyrna and a disciple of John.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "Justin Martyr's First Apology",
-"start": 155,
-"summary": "Describes Christian worship and defends the faith to the emperor.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "Irenaeus, Against Heresies",
-"start": 180,
-"summary": "A refutation of Gnosticism that appeals to the apostolic tradition.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "Tertullian",
-"start": 197,
-"summary": "First major Latin theologian; coins the term 'Trinity' (trinitas).",
-"refs": [],
-"approx": true,
-"end": 220
-},
-{
-"lane": "church",
-"title": "Origen",
-"start": 185,
-"summary": "Alexandrian scholar; the Hexapla and On First Principles.",
-"refs": [],
-"approx": true,
-"end": 253
-},
-{
-"lane": "church",
-"title": "Decian persecution",
-"start": 250,
-"summary": "The first empire-wide persecution.",
-"refs": [],
-"approx": false,
-"end": 251
-},
-{
-"lane": "church",
-"title": "Great Persecution",
-"start": 303,
-"summary": "Diocletian orders churches and Scriptures destroyed.",
-"refs": [],
-"approx": false,
-"end": 311
-},
-{
-"lane": "church",
-"title": "Edict of Milan",
-"start": 313,
-"summary": "Constantine and Licinius grant religious toleration.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Council of Nicaea",
-"start": 325,
-"summary": "Rejects Arianism; the first form of the Nicene Creed.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Athanasius lists the 27 New Testament books",
-"start": 367,
-"summary": "His Easter letter is the earliest list matching today's New Testament.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Council of Constantinople",
-"start": 381,
-"summary": "Affirms the deity of the Holy Spirit; the Nicene Creed takes its familiar form.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Jerome's Vulgate",
-"start": 382,
-"summary": "The Latin Bible used in the West for a thousand years.",
-"refs": [],
-"approx": true,
-"end": 405
-},
-{
-"lane": "church",
-"title": "Augustine of Hippo",
-"start": 354,
-"summary": "Confessions, City of God; deeply shapes Western theology.",
-"refs": [],
-"approx": false,
-"end": 430
-},
-{
-"lane": "church",
-"title": "Council of Chalcedon",
-"start": 451,
-"summary": "Christ confessed as one person in two natures.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Rule of St Benedict",
-"start": 530,
-"summary": "Foundation of Western monasticism.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "East–West Schism",
-"start": 1054,
-"summary": "Mutual excommunications divide Rome and Constantinople.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "The Crusades",
-"start": 1095,
-"summary": "Military campaigns to the Holy Land.",
-"refs": [],
-"approx": false,
-"end": 1291
-},
-{
-"lane": "church",
-"title": "Thomas Aquinas, Summa Theologiae",
-"start": 1265,
-"summary": "Synthesis of Aristotle and Christian theology.",
-"refs": [],
-"approx": false,
-"end": 1274
-},
-{
-"lane": "church",
-"title": "Wycliffe Bible",
-"start": 1382,
-"summary": "First complete English Bible, translated from the Vulgate.",
-"refs": [],
-"approx": true
-},
-{
-"lane": "church",
-"title": "Jan Hus burned",
-"start": 1415,
-"summary": "Czech reformer condemned at the Council of Constance.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Luther's Ninety-five Theses",
-"start": 1517,
-"summary": "The start of the Protestant Reformation.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Schleitheim Confession",
-"start": 1527,
-"summary": "Early Anabaptist statement of faith.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Augsburg Confession",
-"start": 1530,
-"summary": "The chief Lutheran confession.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Act of Supremacy",
-"start": 1534,
-"summary": "Henry VIII becomes head of the Church of England.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Calvin's Institutes",
-"start": 1536,
-"summary": "First edition of the Reformed classic.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Council of Trent",
-"start": 1545,
-"summary": "The Catholic response to the Reformation.",
-"refs": [],
-"approx": false,
-"end": 1563
-},
-{
-"lane": "church",
-"title": "Heidelberg Catechism",
-"start": 1563,
-"summary": "A widely used Reformed catechism.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "First Baptist congregation",
-"start": 1609,
-"summary": "John Smyth's English exiles in Amsterdam.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "King James Version",
-"start": 1611,
-"summary": "The Authorized Version of the English Bible.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Synod of Dort",
-"start": 1618,
-"summary": "Reformed response to the Remonstrants.",
-"refs": [],
-"approx": false,
-"end": 1619
-},
-{
-"lane": "church",
-"title": "Westminster Confession",
-"start": 1646,
-"summary": "Confession of English and Scottish Presbyterianism.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "First Great Awakening",
-"start": 1730,
-"summary": "Revivals under Edwards, Whitefield and the Wesleys.",
-"refs": [],
-"approx": true,
-"end": 1745
-},
-{
-"lane": "church",
-"title": "Wesley's Aldersgate experience",
-"start": 1738,
-"summary": "A turning point in the beginnings of Methodism.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Azusa Street revival",
-"start": 1906,
-"summary": "Los Angeles revival at the start of modern Pentecostalism.",
-"refs": [],
-"approx": false
-},
-{
-"lane": "church",
-"title": "Second Vatican Council",
-"start": 1962,
-"summary": "Reforms in Catholic worship and relations with other churches.",
-"refs": [],
-"approx": false,
-"end": 1965
-}
-],
-"books": {
-"Gen": [
-[
-12,
--2091,
--1805
-]
-],
-"Exod": [
-[
-1,
--1526,
--1445
-]
-],
-"Lev": [
-[
-1,
--1445,
--1445
-]
-],
-"Num": [
-[
-1,
--1445,
--1406
-]
-],
-"Deut": [
-[
-1,
--1406,
--1406
-]
-],
-"Josh": [
-[
-1,
--1406,
--1375
-]
-],
-"Judg": [
-[
-1,
--1375,
--1050
-]
-],
-"Ruth": [
-[
-1,
--1150,
--1100
-]
-],
-"1Sam": [
-[
-1,
--1105,
--1010
-]
-],
-"2Sam": [
-[
-1,
--1010,
--970
-]
-],
-"1Kgs": [
-[
-1,
--970,
--931
-],
-[
-12,
--931,
--853
-]
-],
-"2Kgs": [
-[
-1,
--853,
--722
-],
-[
-18,
--715,
--586
-],
-[
-25,
--586,
--561
-]
-],
-"1Chr": [
-[
-10,
--1010,
--970
-]
-],
-"2Chr": [
-[
-1,
--970,
--931
-],
-[
-10,
--931,
--586
-],
-[
-36,
--586,
--538
-]
-],
-"Ezra": [
-[
-1,
--538,
--516
-],
-[
-7,
--458,
--458
-]
-],
-"Neh": [
-[
-1,
--445,
--432
-]
-],
-"Esth": [
-[
-1,
--483,
--473
-]
-],
-"Prov": [
-[
-1,
--950,
--700
-]
-],
-"Eccl": [
-[
-1,
--935,
--935
-]
-],
-"Song": [
-[
-1,
--960,
--960
-]
-],
-"Isa": [
-[
-1,
--740,
--681
-]
-],
-"Jer": [
-[
-1,
--627,
--586
-]
-],
-"Lam": [
-[
-1,
--586,
--586
-]
-],
-"Ezek": [
-[
-1,
--593,
--571
-]
-],
-"Dan": [
-[
-1,
--605,
--536
-]
-],
-"Hos": [
-[
-1,
--755,
--715
-]
-],
-"Amos": [
-[
-1,
--760,
--750
-]
-],
-"Jonah": [
-[
-1,
--785,
--775
-]
-],
-"Mic": [
-[
-1,
--735,
--700
-]
-],
-"Nah": [
-[
-1,
--660,
--630
-]
-],
-"Hab": [
-[
-1,
--609,
--598
-]
-],
-"Zeph": [
-[
-1,
--640,
--621
-]
-],
-"Hag": [
-[
-1,
--520,
--520
-]
-],
-"Zech": [
-[
-1,
--520,
--518
-]
-],
-"Mal": [
-[
-1,
--440,
--420
-]
-],
-"1Macc": [
-[
-1,
--175,
--134
-]
-],
-"2Macc": [
-[
-1,
--180,
--161
-]
-],
-"Matt": [
-[
-1,
--5,
--4
-],
-[
-3,
-27,
-30
-]
-],
-"Mark": [
-[
-1,
-27,
-30
-]
-],
-"Luke": [
-[
-1,
--6,
--4
-],
-[
-3,
-27,
-30
-]
-],
-"John": [
-[
-1,
-27,
-30
-]
-],
-"Acts": [
-[
-1,
-30,
-35
-],
-[
-13,
-46,
-57
-],
-[
-21,
-57,
-62
-]
-],
-"Rom": [
-[
-1,
-57,
-57
-]
-],
-"1Cor": [
-[
-1,
-55,
-55
-]
-],
-"2Cor": [
-[
-1,
-56,
-56
-]
-],
-"Gal": [
-[
-1,
-49,
-49
-]
-],
-"Eph": [
-[
-1,
-60,
-62
-]
-],
-"Phil": [
-[
-1,
-60,
-62
-]
-],
-"Col": [
-[
-1,
-60,
-62
-]
-],
-"1Thess": [
-[
-1,
-51,
-51
-]
-],
-"2Thess": [
-[
-1,
-51,
-52
-]
-],
-"1Tim": [
-[
-1,
-62,
-64
-]
-],
-"2Tim": [
-[
-1,
-67,
-67
-]
-],
-"Titus": [
-[
-1,
-62,
-64
-]
-],
-"Phlm": [
-[
-1,
-60,
-62
-]
-],
-"Heb": [
-[
-1,
-65,
-69
-]
-],
-"Jas": [
-[
-1,
-45,
-49
-]
-],
-"1Pet": [
-[
-1,
-62,
-64
-]
-],
-"2Pet": [
-[
-1,
-65,
-67
-]
-],
-"1John": [
-[
-1,
-85,
-95
-]
-],
-"2John": [
-[
-1,
-85,
-95
-]
-],
-"3John": [
-[
-1,
-85,
-95
-]
-],
-"Jude": [
-[
-1,
-65,
-80
-]
-],
-"Rev": [
-[
-1,
-95,
-95
-]
-]
-}
+ "eras": [
+  {
+   "title": "Patriarchs",
+   "start": -2166,
+   "end": -1876
+  },
+  {
+   "title": "Israel in Egypt",
+   "start": -1876,
+   "end": -1446
+  },
+  {
+   "title": "Wilderness and conquest",
+   "start": -1446,
+   "end": -1375
+  },
+  {
+   "title": "Judges",
+   "start": -1375,
+   "end": -1050
+  },
+  {
+   "title": "United kingdom",
+   "start": -1050,
+   "end": -931
+  },
+  {
+   "title": "Divided kingdom",
+   "start": -931,
+   "end": -586
+  },
+  {
+   "title": "Exile",
+   "start": -586,
+   "end": -538
+  },
+  {
+   "title": "Persian period",
+   "start": -538,
+   "end": -332
+  },
+  {
+   "title": "Greek period",
+   "start": -332,
+   "end": -167
+  },
+  {
+   "title": "Maccabees and Hasmoneans",
+   "start": -167,
+   "end": -63
+  },
+  {
+   "title": "Roman Judea",
+   "start": -63,
+   "end": 30
+  },
+  {
+   "title": "Apostolic age",
+   "start": 30,
+   "end": 100
+  },
+  {
+   "title": "Early church",
+   "start": 100,
+   "end": 313
+  },
+  {
+   "title": "Imperial church",
+   "start": 313,
+   "end": 590
+  },
+  {
+   "title": "Middle Ages",
+   "start": 590,
+   "end": 1500
+  },
+  {
+   "title": "Reformation",
+   "start": 1500,
+   "end": 1650
+  },
+  {
+   "title": "Modern era",
+   "start": 1650,
+   "end": 2025
+  }
+ ],
+ "lanes": [
+  {
+   "id": "bible",
+   "title": "Biblical history",
+   "source": "Traditional chronology (early Exodus, from 1 Kings 6:1). Many scholars prefer later dates for the patriarchs and the Exodus."
+  },
+  {
+   "id": "united",
+   "title": "United kingdom",
+   "source": "Approximate; Saul's reign length is uncertain (Acts 13:21)."
+  },
+  {
+   "id": "israel",
+   "title": "Kings of Israel",
+   "source": "Reign dates after Edwin R. Thiele, The Mysterious Numbers of the Hebrew Kings. Other systems differ by a few years; overlaps are co-regencies."
+  },
+  {
+   "id": "judah",
+   "title": "Kings of Judah",
+   "source": "Reign dates after Edwin R. Thiele. Overlaps are co-regencies."
+  },
+  {
+   "id": "prophets",
+   "title": "Prophets",
+   "source": "Approximate periods of ministry from the books' headings."
+  },
+  {
+   "id": "powers",
+   "title": "Who was in power",
+   "source": "Standard ancient Near Eastern chronology (middle chronology for Mesopotamia)."
+  },
+  {
+   "id": "rulers",
+   "title": "Rulers",
+   "source": "Reign dates as usually given in histories of the ancient world."
+  },
+  {
+   "id": "world",
+   "title": "World and culture",
+   "source": "Approximate where marked."
+  },
+  {
+   "id": "church",
+   "title": "Church history",
+   "source": "Dates as commonly given in histories of the church."
+  },
+  {
+   "id": "islam",
+   "title": "Islamic history",
+   "source": "Dates as commonly given in histories of Islam (Common Era); the Prophet’s birth and first revelation by Muslim tradition."
+  }
+ ],
+ "events": [
+  {
+   "lane": "bible",
+   "title": "Call of Abraham",
+   "start": -2091,
+   "summary": "Abram leaves Harran for Canaan at God's call, with the promise of land, offspring and blessing for all nations.",
+   "refs": [
+    "Gen.12.1-Gen.12.9"
+   ],
+   "approx": true,
+   "note": "Traditional chronology; many scholars place the patriarchs a few centuries later."
+  },
+  {
+   "lane": "bible",
+   "title": "Jacob's family settles in Egypt",
+   "start": -1876,
+   "summary": "Joseph, now a ruler in Egypt, brings Jacob and his sons to Goshen during the famine.",
+   "refs": [
+    "Gen.46.1-Gen.47.12"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "The Exodus",
+   "start": -1446,
+   "summary": "Moses leads Israel out of Egypt; Passover, the crossing of the sea and the covenant at Sinai.",
+   "refs": [
+    "Exod.12.1-Exod.15.21",
+    "Exod.19.1-Exod.20.21"
+   ],
+   "approx": true,
+   "note": "Early date from 1 Kings 6:1. Many scholars prefer a 13th-century date (c. 1260 BC)."
+  },
+  {
+   "lane": "bible",
+   "title": "Entry into Canaan",
+   "start": -1406,
+   "summary": "After forty years in the wilderness, Israel crosses the Jordan under Joshua.",
+   "refs": [
+    "Josh.3.1-Josh.4.24"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Period of the judges",
+   "start": -1375,
+   "summary": "Cycles of unfaithfulness, oppression and deliverance under leaders such as Deborah, Gideon and Samson.",
+   "refs": [
+    "Judg.2.6-Judg.2.23"
+   ],
+   "approx": true,
+   "end": -1050
+  },
+  {
+   "lane": "bible",
+   "title": "Solomon's temple dedicated",
+   "start": -959,
+   "summary": "Built over seven years and dedicated with Solomon's prayer.",
+   "refs": [
+    "1Kgs.6.1",
+    "1Kgs.8.1-1Kgs.8.66"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "The kingdom divides",
+   "start": -931,
+   "summary": "The northern tribes reject Rehoboam and follow Jeroboam: Israel in the north, Judah in the south.",
+   "refs": [
+    "1Kgs.12.1-1Kgs.12.33"
+   ],
+   "approx": false
+  },
+  {
+   "lane": "bible",
+   "title": "Fall of Samaria",
+   "start": -722,
+   "summary": "Assyria takes Samaria and deports the northern kingdom.",
+   "refs": [
+    "2Kgs.17.1-2Kgs.17.41"
+   ],
+   "approx": false
+  },
+  {
+   "lane": "bible",
+   "title": "Sennacherib besieges Jerusalem",
+   "start": -701,
+   "summary": "Assyria ravages Judah's towns, but Jerusalem is spared in Hezekiah's reign. Sennacherib's own annals also record the campaign.",
+   "refs": [
+    "2Kgs.18.13-2Kgs.19.37",
+    "Isa.36.1-Isa.37.38"
+   ],
+   "approx": false
+  },
+  {
+   "lane": "bible",
+   "title": "Josiah's reform",
+   "start": -622,
+   "summary": "The Book of the Law is found in the temple; Josiah renews the covenant and removes idols.",
+   "refs": [
+    "2Kgs.22.1-2Kgs.23.30"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "First deportation to Babylon",
+   "start": -605,
+   "summary": "Nebuchadnezzar takes Daniel and other young nobles to Babylon.",
+   "refs": [
+    "Dan.1.1-Dan.1.7"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Jehoiachin taken to Babylon",
+   "start": -597,
+   "summary": "Nebuchadnezzar takes the king, the court and Ezekiel into exile and sets up Zedekiah.",
+   "refs": [
+    "2Kgs.24.10-2Kgs.24.17"
+   ],
+   "approx": false
+  },
+  {
+   "lane": "bible",
+   "title": "Jerusalem and the temple destroyed",
+   "start": -586,
+   "summary": "After a long siege Babylon burns the temple and deports much of Judah.",
+   "refs": [
+    "2Kgs.25.1-2Kgs.25.21",
+    "Jer.52.1-Jer.52.30"
+   ],
+   "approx": true,
+   "note": "Some date it to 587 BC."
+  },
+  {
+   "lane": "bible",
+   "title": "Cyrus's decree and first return",
+   "start": -538,
+   "summary": "Cyrus allows the exiles to go home and rebuild the temple; Zerubbabel leads the first return.",
+   "refs": [
+    "Ezra.1.1-Ezra.2.70"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Second temple completed",
+   "start": -516,
+   "summary": "Finished in the sixth year of Darius after encouragement from Haggai and Zechariah.",
+   "refs": [
+    "Ezra.6.13-Ezra.6.22"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Esther in Susa",
+   "start": -479,
+   "summary": "A Jewish queen of Persia saves her people from Haman's plot; the origin of Purim.",
+   "refs": [
+    "Esth.2.16-Esth.2.18",
+    "Esth.9.20-Esth.9.32"
+   ],
+   "approx": true,
+   "end": -473
+  },
+  {
+   "lane": "bible",
+   "title": "Ezra returns to Jerusalem",
+   "start": -458,
+   "summary": "Ezra the scribe brings a second group and teaches the Law.",
+   "refs": [
+    "Ezra.7.1-Ezra.7.10"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Nehemiah rebuilds the walls",
+   "start": -445,
+   "summary": "Jerusalem's walls are rebuilt in fifty-two days despite opposition.",
+   "refs": [
+    "Neh.2.1-Neh.2.20",
+    "Neh.6.15-Neh.6.16"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Maccabean revolt",
+   "start": -167,
+   "summary": "Judas Maccabeus leads the revolt against Antiochus IV; the temple is cleansed and rededicated, remembered at Hanukkah.",
+   "refs": [
+    "1Macc.4.36-1Macc.4.59",
+    "John.10.22"
+   ],
+   "approx": true,
+   "end": -164
+  },
+  {
+   "lane": "bible",
+   "title": "Herod begins rebuilding the temple",
+   "start": -20,
+   "summary": "A vast expansion of the second temple that was still under way in Jesus' day.",
+   "refs": [
+    "John.2.20"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Birth of Jesus",
+   "start": -5,
+   "summary": "Born in Bethlehem in the days of Herod the Great, who died in 4 BC.",
+   "refs": [
+    "Matt.2.1-Matt.2.12",
+    "Luke.2.1-Luke.2.20"
+   ],
+   "approx": true,
+   "note": "Usually dated 6–4 BC."
+  },
+  {
+   "lane": "bible",
+   "title": "Ministry of Jesus",
+   "start": 27,
+   "summary": "Baptism by John, teaching and healing in Galilee and Judea, and the journey to Jerusalem.",
+   "refs": [
+    "Luke.3.1-Luke.3.23",
+    "Mark.1.9-Mark.1.15"
+   ],
+   "approx": true,
+   "end": 30,
+   "note": "Often dated AD 27–30 or 29–33."
+  },
+  {
+   "lane": "bible",
+   "title": "Crucifixion and resurrection",
+   "start": 30,
+   "summary": "Jesus is crucified under Pontius Pilate at Passover and rises on the third day.",
+   "refs": [
+    "Luke.23.1-Luke.24.53",
+    "1Cor.15.3-1Cor.15.8"
+   ],
+   "approx": true,
+   "note": "AD 30 or 33."
+  },
+  {
+   "lane": "bible",
+   "title": "Pentecost",
+   "start": 30,
+   "summary": "The Holy Spirit is poured out; Peter preaches and about three thousand are baptised.",
+   "refs": [
+    "Acts.2.1-Acts.2.41"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Paul's conversion",
+   "start": 34,
+   "summary": "On the road to Damascus, the persecutor Saul meets the risen Jesus.",
+   "refs": [
+    "Acts.9.1-Acts.9.19",
+    "Gal.1.13-Gal.1.17"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Council of Jerusalem",
+   "start": 49,
+   "summary": "The apostles and elders agree that Gentile believers need not be circumcised.",
+   "refs": [
+    "Acts.15.1-Acts.15.35"
+   ],
+   "approx": true
+  },
+  {
+   "lane": "bible",
+   "title": "Paul's missionary journeys",
+   "start": 46,
+   "summary": "Churches founded across Galatia, Macedonia, Greece and Asia.",
+   "refs": [
+    "Acts.13.1-Acts.14.28",
+    "Acts.15.36-Acts.18.22",
+    "Acts.18.23-Acts.21.16"
+   ],
+   "approx": true,
+   "end": 57
+  },
+  {
+   "lane": "bible",
+   "title": "Paul in Rome",
+   "start": 60,
+   "summary": "Under house arrest, Paul preaches freely for two years.",
+   "refs": [
+    "Acts.28.16-Acts.28.31"
+   ],
+   "approx": true,
+   "end": 62
+  },
+  {
+   "lane": "bible",
+   "title": "Revelation written",
+   "start": 95,
+   "summary": "John's visions on Patmos, traditionally dated to the end of Domitian's reign.",
+   "refs": [
+    "Rev.1.9-Rev.1.11"
+   ],
+   "approx": true,
+   "note": "Some date it to the late 60s."
+  },
+  {
+   "lane": "united",
+   "title": "Saul",
+   "start": -1050,
+   "summary": "King over all Israel.",
+   "refs": [
+    "1Sam.10.1"
+   ],
+   "approx": true,
+   "end": -1010
+  },
+  {
+   "lane": "united",
+   "title": "David",
+   "start": -1010,
+   "summary": "King over all Israel.",
+   "refs": [
+    "2Sam.5.1-2Sam.5.5"
+   ],
+   "approx": true,
+   "end": -970
+  },
+  {
+   "lane": "united",
+   "title": "Solomon",
+   "start": -970,
+   "summary": "King over all Israel.",
+   "refs": [
+    "1Kgs.2.12"
+   ],
+   "approx": true,
+   "end": -931
+  },
+  {
+   "lane": "israel",
+   "title": "Jeroboam I",
+   "start": -931,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.12.20"
+   ],
+   "approx": false,
+   "end": -910
+  },
+  {
+   "lane": "israel",
+   "title": "Nadab",
+   "start": -910,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.15.25"
+   ],
+   "approx": false,
+   "end": -909
+  },
+  {
+   "lane": "israel",
+   "title": "Baasha",
+   "start": -909,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.15.33"
+   ],
+   "approx": false,
+   "end": -886
+  },
+  {
+   "lane": "israel",
+   "title": "Elah",
+   "start": -886,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.16.8"
+   ],
+   "approx": false,
+   "end": -885
+  },
+  {
+   "lane": "israel",
+   "title": "Zimri",
+   "start": -885,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.16.15"
+   ],
+   "approx": false,
+   "end": -885
+  },
+  {
+   "lane": "israel",
+   "title": "Omri",
+   "start": -885,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.16.23"
+   ],
+   "approx": false,
+   "end": -874
+  },
+  {
+   "lane": "israel",
+   "title": "Ahab",
+   "start": -874,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.16.29"
+   ],
+   "approx": false,
+   "end": -853
+  },
+  {
+   "lane": "israel",
+   "title": "Ahaziah",
+   "start": -853,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "1Kgs.22.51"
+   ],
+   "approx": false,
+   "end": -852
+  },
+  {
+   "lane": "israel",
+   "title": "Joram",
+   "start": -852,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.3.1"
+   ],
+   "approx": false,
+   "end": -841
+  },
+  {
+   "lane": "israel",
+   "title": "Jehu",
+   "start": -841,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.9.1-2Kgs.10.36"
+   ],
+   "approx": false,
+   "end": -814
+  },
+  {
+   "lane": "israel",
+   "title": "Jehoahaz",
+   "start": -814,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.13.1"
+   ],
+   "approx": false,
+   "end": -798
+  },
+  {
+   "lane": "israel",
+   "title": "Jehoash",
+   "start": -798,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.13.10"
+   ],
+   "approx": false,
+   "end": -782
+  },
+  {
+   "lane": "israel",
+   "title": "Jeroboam II",
+   "start": -793,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.14.23"
+   ],
+   "approx": false,
+   "end": -753
+  },
+  {
+   "lane": "israel",
+   "title": "Zechariah",
+   "start": -753,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.15.8"
+   ],
+   "approx": false,
+   "end": -753
+  },
+  {
+   "lane": "israel",
+   "title": "Shallum",
+   "start": -752,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.15.13"
+   ],
+   "approx": false,
+   "end": -752
+  },
+  {
+   "lane": "israel",
+   "title": "Menahem",
+   "start": -752,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.15.17"
+   ],
+   "approx": false,
+   "end": -742
+  },
+  {
+   "lane": "israel",
+   "title": "Pekahiah",
+   "start": -742,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.15.23"
+   ],
+   "approx": false,
+   "end": -740
+  },
+  {
+   "lane": "israel",
+   "title": "Pekah",
+   "start": -740,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.15.27"
+   ],
+   "approx": false,
+   "end": -732
+  },
+  {
+   "lane": "israel",
+   "title": "Hoshea",
+   "start": -732,
+   "summary": "King of Israel (the northern kingdom).",
+   "refs": [
+    "2Kgs.17.1"
+   ],
+   "approx": false,
+   "end": -722
+  },
+  {
+   "lane": "judah",
+   "title": "Rehoboam",
+   "start": -931,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "1Kgs.14.21"
+   ],
+   "approx": false,
+   "end": -913
+  },
+  {
+   "lane": "judah",
+   "title": "Abijah",
+   "start": -913,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "1Kgs.15.1"
+   ],
+   "approx": false,
+   "end": -911
+  },
+  {
+   "lane": "judah",
+   "title": "Asa",
+   "start": -911,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "1Kgs.15.9"
+   ],
+   "approx": false,
+   "end": -870
+  },
+  {
+   "lane": "judah",
+   "title": "Jehoshaphat",
+   "start": -872,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "1Kgs.22.41"
+   ],
+   "approx": false,
+   "end": -848
+  },
+  {
+   "lane": "judah",
+   "title": "Jehoram",
+   "start": -848,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.8.16"
+   ],
+   "approx": false,
+   "end": -841
+  },
+  {
+   "lane": "judah",
+   "title": "Ahaziah",
+   "start": -841,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.8.25"
+   ],
+   "approx": false,
+   "end": -841
+  },
+  {
+   "lane": "judah",
+   "title": "Athaliah",
+   "start": -841,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.11.1-2Kgs.11.3"
+   ],
+   "approx": false,
+   "end": -835
+  },
+  {
+   "lane": "judah",
+   "title": "Joash",
+   "start": -835,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.12.1"
+   ],
+   "approx": false,
+   "end": -796
+  },
+  {
+   "lane": "judah",
+   "title": "Amaziah",
+   "start": -796,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.14.1"
+   ],
+   "approx": false,
+   "end": -767
+  },
+  {
+   "lane": "judah",
+   "title": "Uzziah",
+   "start": -767,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.15.1"
+   ],
+   "approx": false,
+   "end": -740
+  },
+  {
+   "lane": "judah",
+   "title": "Jotham",
+   "start": -750,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.15.32"
+   ],
+   "approx": false,
+   "end": -735
+  },
+  {
+   "lane": "judah",
+   "title": "Ahaz",
+   "start": -735,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.16.1"
+   ],
+   "approx": false,
+   "end": -715
+  },
+  {
+   "lane": "judah",
+   "title": "Hezekiah",
+   "start": -715,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.18.1"
+   ],
+   "approx": false,
+   "end": -686
+  },
+  {
+   "lane": "judah",
+   "title": "Manasseh",
+   "start": -686,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.21.1"
+   ],
+   "approx": false,
+   "end": -642
+  },
+  {
+   "lane": "judah",
+   "title": "Amon",
+   "start": -642,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.21.19"
+   ],
+   "approx": false,
+   "end": -640
+  },
+  {
+   "lane": "judah",
+   "title": "Josiah",
+   "start": -640,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.22.1"
+   ],
+   "approx": false,
+   "end": -609
+  },
+  {
+   "lane": "judah",
+   "title": "Jehoahaz",
+   "start": -609,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.23.31"
+   ],
+   "approx": false,
+   "end": -609
+  },
+  {
+   "lane": "judah",
+   "title": "Jehoiakim",
+   "start": -609,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.23.36"
+   ],
+   "approx": false,
+   "end": -598
+  },
+  {
+   "lane": "judah",
+   "title": "Jehoiachin",
+   "start": -598,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.24.8"
+   ],
+   "approx": false,
+   "end": -597
+  },
+  {
+   "lane": "judah",
+   "title": "Zedekiah",
+   "start": -597,
+   "summary": "King of Judah (the southern kingdom).",
+   "refs": [
+    "2Kgs.24.18"
+   ],
+   "approx": false,
+   "end": -586
+  },
+  {
+   "lane": "prophets",
+   "title": "Samuel",
+   "start": -1100,
+   "summary": "Last of the judges; anoints Saul and David.",
+   "refs": [
+    "1Sam.3.1-1Sam.3.21"
+   ],
+   "approx": true,
+   "end": -1015
+  },
+  {
+   "lane": "prophets",
+   "title": "Nathan",
+   "start": -1000,
+   "summary": "Confronts David after Bathsheba.",
+   "refs": [
+    "2Sam.12.1-2Sam.12.15"
+   ],
+   "approx": true,
+   "end": -970
+  },
+  {
+   "lane": "prophets",
+   "title": "Elijah",
+   "start": -875,
+   "summary": "Challenges Ahab and the prophets of Baal on Carmel.",
+   "refs": [
+    "1Kgs.17.1"
+   ],
+   "approx": true,
+   "end": -848
+  },
+  {
+   "lane": "prophets",
+   "title": "Elisha",
+   "start": -848,
+   "summary": "Succeeds Elijah; many miracles in Israel.",
+   "refs": [
+    "2Kgs.2.1-2Kgs.2.15"
+   ],
+   "approx": true,
+   "end": -797
+  },
+  {
+   "lane": "prophets",
+   "title": "Jonah",
+   "start": -785,
+   "summary": "Sent to preach to Nineveh.",
+   "refs": [
+    "Jonah.1.1-Jonah.1.3"
+   ],
+   "approx": true,
+   "end": -775
+  },
+  {
+   "lane": "prophets",
+   "title": "Amos",
+   "start": -760,
+   "summary": "A shepherd from Tekoa denounces injustice in Israel.",
+   "refs": [
+    "Amos.1.1"
+   ],
+   "approx": true,
+   "end": -750
+  },
+  {
+   "lane": "prophets",
+   "title": "Hosea",
+   "start": -755,
+   "summary": "Pictures God's faithful love through his own marriage.",
+   "refs": [
+    "Hos.1.1"
+   ],
+   "approx": true,
+   "end": -715
+  },
+  {
+   "lane": "prophets",
+   "title": "Isaiah",
+   "start": -740,
+   "summary": "Prophet in Jerusalem under Uzziah, Jotham, Ahaz and Hezekiah.",
+   "refs": [
+    "Isa.6.1-Isa.6.13"
+   ],
+   "approx": true,
+   "end": -681
+  },
+  {
+   "lane": "prophets",
+   "title": "Micah",
+   "start": -735,
+   "summary": "Foretells a ruler from Bethlehem.",
+   "refs": [
+    "Mic.1.1"
+   ],
+   "approx": true,
+   "end": -700
+  },
+  {
+   "lane": "prophets",
+   "title": "Nahum",
+   "start": -660,
+   "summary": "Announces Nineveh's fall.",
+   "refs": [
+    "Nah.1.1"
+   ],
+   "approx": true,
+   "end": -630
+  },
+  {
+   "lane": "prophets",
+   "title": "Zephaniah",
+   "start": -640,
+   "summary": "Prophesies in Josiah's day.",
+   "refs": [
+    "Zeph.1.1"
+   ],
+   "approx": true,
+   "end": -621
+  },
+  {
+   "lane": "prophets",
+   "title": "Jeremiah",
+   "start": -627,
+   "summary": "Warns Judah for forty years and promises a new covenant.",
+   "refs": [
+    "Jer.1.1-Jer.1.10"
+   ],
+   "approx": true,
+   "end": -586
+  },
+  {
+   "lane": "prophets",
+   "title": "Habakkuk",
+   "start": -609,
+   "summary": "Asks how God can use Babylon; 'the righteous shall live by faith'.",
+   "refs": [
+    "Hab.1.1-Hab.1.6"
+   ],
+   "approx": true,
+   "end": -598
+  },
+  {
+   "lane": "prophets",
+   "title": "Daniel",
+   "start": -605,
+   "summary": "Serves in the Babylonian and Persian courts.",
+   "refs": [
+    "Dan.1.1-Dan.1.21"
+   ],
+   "approx": true,
+   "end": -536
+  },
+  {
+   "lane": "prophets",
+   "title": "Ezekiel",
+   "start": -593,
+   "summary": "Visions among the exiles by the Chebar canal.",
+   "refs": [
+    "Ezek.1.1-Ezek.1.3"
+   ],
+   "approx": true,
+   "end": -571
+  },
+  {
+   "lane": "prophets",
+   "title": "Haggai",
+   "start": -520,
+   "summary": "Urges the returned exiles to rebuild the temple.",
+   "refs": [
+    "Hag.1.1"
+   ],
+   "approx": true,
+   "end": -520
+  },
+  {
+   "lane": "prophets",
+   "title": "Zechariah",
+   "start": -520,
+   "summary": "Visions of restoration and a coming king.",
+   "refs": [
+    "Zech.1.1"
+   ],
+   "approx": true,
+   "end": -518
+  },
+  {
+   "lane": "prophets",
+   "title": "Malachi",
+   "start": -440,
+   "summary": "The last Old Testament prophet.",
+   "refs": [
+    "Mal.1.1"
+   ],
+   "approx": true,
+   "end": -420
+  },
+  {
+   "lane": "prophets",
+   "title": "John the Baptist",
+   "start": 28,
+   "summary": "Preaches repentance and baptises Jesus.",
+   "refs": [
+    "Luke.3.1-Luke.3.20"
+   ],
+   "approx": true,
+   "end": 29
+  },
+  {
+   "lane": "powers",
+   "title": "Egypt: Middle Kingdom",
+   "start": -2055,
+   "summary": "A reunited Egypt; trade and building at home and abroad.",
+   "refs": [],
+   "approx": true,
+   "end": -1650
+  },
+  {
+   "lane": "powers",
+   "title": "Old Babylonian kingdom",
+   "start": -1894,
+   "summary": "Amorite dynasty of Babylon; Hammurabi unifies Mesopotamia.",
+   "refs": [],
+   "approx": true,
+   "end": -1595
+  },
+  {
+   "lane": "powers",
+   "title": "Hittite empire",
+   "start": -1650,
+   "summary": "Anatolian power that rivalled Egypt; fought at Kadesh in 1274 BC.",
+   "refs": [
+    "Josh.1.4"
+   ],
+   "approx": true,
+   "end": -1180
+  },
+  {
+   "lane": "powers",
+   "title": "Egypt: New Kingdom",
+   "start": -1550,
+   "summary": "Egypt's imperial age: Thutmose III, Akhenaten, Ramesses II.",
+   "refs": [],
+   "approx": true,
+   "end": -1070
+  },
+  {
+   "lane": "powers",
+   "title": "Philistine city-states",
+   "start": -1175,
+   "summary": "Sea Peoples settled on the coast: Gaza, Ashkelon, Ashdod, Ekron, Gath.",
+   "refs": [
+    "1Sam.4.1-1Sam.4.11"
+   ],
+   "approx": true,
+   "end": -604
+  },
+  {
+   "lane": "powers",
+   "title": "Aramean kingdom of Damascus",
+   "start": -1000,
+   "summary": "Israel's frequent northern rival until Assyria took Damascus.",
+   "refs": [
+    "1Kgs.20.1"
+   ],
+   "approx": true,
+   "end": -732
+  },
+  {
+   "lane": "powers",
+   "title": "Neo-Assyrian empire",
+   "start": -911,
+   "summary": "Dominates the Near East; destroys Samaria and besieges Jerusalem.",
+   "refs": [
+    "2Kgs.15.19-2Kgs.15.20"
+   ],
+   "approx": true,
+   "end": -609
+  },
+  {
+   "lane": "powers",
+   "title": "Neo-Babylonian empire",
+   "start": -626,
+   "summary": "Nebuchadnezzar's Babylon conquers Judah.",
+   "refs": [
+    "2Kgs.24.1"
+   ],
+   "approx": true,
+   "end": -539
+  },
+  {
+   "lane": "powers",
+   "title": "Persian (Achaemenid) empire",
+   "start": -550,
+   "summary": "From Cyrus to Darius III; allows the exiles to return.",
+   "refs": [
+    "Ezra.1.1"
+   ],
+   "approx": true,
+   "end": -330
+  },
+  {
+   "lane": "powers",
+   "title": "Alexander the Great",
+   "start": -336,
+   "summary": "Conquers Persia, Egypt and the east; Greek language and culture spread.",
+   "refs": [
+    "Dan.8.5-Dan.8.8"
+   ],
+   "approx": true,
+   "end": -323
+  },
+  {
+   "lane": "powers",
+   "title": "Ptolemaic rule over Judea",
+   "start": -301,
+   "summary": "Judea governed from Alexandria; the Septuagint is translated there.",
+   "refs": [],
+   "approx": true,
+   "end": -198
+  },
+  {
+   "lane": "powers",
+   "title": "Seleucid rule over Judea",
+   "start": -198,
+   "summary": "Ruled from Antioch; Antiochus IV bans Jewish practice.",
+   "refs": [
+    "Dan.11.21-Dan.11.35"
+   ],
+   "approx": true,
+   "end": -140
+  },
+  {
+   "lane": "powers",
+   "title": "Hasmonean kingdom",
+   "start": -140,
+   "summary": "Independent Jewish state under the Maccabees' heirs.",
+   "refs": [],
+   "approx": true,
+   "end": -37
+  },
+  {
+   "lane": "powers",
+   "title": "Roman Republic in the east",
+   "start": -63,
+   "summary": "Pompey takes Jerusalem in 63 BC.",
+   "refs": [],
+   "approx": true,
+   "end": -27
+  },
+  {
+   "lane": "powers",
+   "title": "Herod the Great",
+   "start": -37,
+   "summary": "Rome's client king of Judea; massive building projects.",
+   "refs": [
+    "Matt.2.1-Matt.2.18"
+   ],
+   "approx": true,
+   "end": -4
+  },
+  {
+   "lane": "powers",
+   "title": "Roman Empire",
+   "start": -27,
+   "summary": "From Augustus to the fall of the West.",
+   "refs": [
+    "Luke.2.1"
+   ],
+   "approx": true,
+   "end": 476
+  },
+  {
+   "lane": "powers",
+   "title": "Byzantine (Eastern Roman) empire",
+   "start": 330,
+   "summary": "Rome's eastern half, ruled from Constantinople.",
+   "refs": [],
+   "approx": true,
+   "end": 1453
+  },
+  {
+   "lane": "powers",
+   "title": "Islamic caliphates",
+   "start": 632,
+   "summary": "Rapid expansion across the Near East, North Africa and Spain.",
+   "refs": [],
+   "approx": true,
+   "end": 1258
+  },
+  {
+   "lane": "powers",
+   "title": "Ottoman empire",
+   "start": 1299,
+   "summary": "Rules the Holy Land from 1517 to 1917.",
+   "refs": [],
+   "approx": true,
+   "end": 1922
+  },
+  {
+   "lane": "rulers",
+   "title": "Hammurabi",
+   "start": -1792,
+   "summary": "King of Babylon, known for his law code.",
+   "refs": [],
+   "approx": true,
+   "end": -1750
+  },
+  {
+   "lane": "rulers",
+   "title": "Thutmose III",
+   "start": -1479,
+   "summary": "Egypt's great warrior pharaoh; some link him with the oppression in Exodus.",
+   "refs": [],
+   "approx": true,
+   "end": -1425
+  },
+  {
+   "lane": "rulers",
+   "title": "Ramesses II",
+   "start": -1279,
+   "summary": "Long-reigning pharaoh; often linked with the Exodus by those who hold a late date.",
+   "refs": [],
+   "approx": true,
+   "end": -1213
+  },
+  {
+   "lane": "rulers",
+   "title": "Shishak (Shoshenq I)",
+   "start": -943,
+   "summary": "Pharaoh who raided Judah after Solomon.",
+   "refs": [
+    "1Kgs.14.25-1Kgs.14.26"
+   ],
+   "approx": true,
+   "end": -922
+  },
+  {
+   "lane": "rulers",
+   "title": "Tiglath-pileser III",
+   "start": -745,
+   "summary": "Assyrian king who made Israel and Judah pay tribute.",
+   "refs": [
+    "2Kgs.15.29",
+    "2Kgs.16.7-2Kgs.16.10"
+   ],
+   "approx": true,
+   "end": -727
+  },
+  {
+   "lane": "rulers",
+   "title": "Sargon II",
+   "start": -722,
+   "summary": "Completed the deportation of Israel.",
+   "refs": [
+    "Isa.20.1"
+   ],
+   "approx": true,
+   "end": -705
+  },
+  {
+   "lane": "rulers",
+   "title": "Sennacherib",
+   "start": -705,
+   "summary": "Besieged Jerusalem under Hezekiah.",
+   "refs": [
+    "2Kgs.18.13"
+   ],
+   "approx": true,
+   "end": -681
+  },
+  {
+   "lane": "rulers",
+   "title": "Nebuchadnezzar II",
+   "start": -605,
+   "summary": "Captured Jerusalem and destroyed the temple.",
+   "refs": [
+    "Dan.1.1",
+    "2Kgs.25.1"
+   ],
+   "approx": true,
+   "end": -562
+  },
+  {
+   "lane": "rulers",
+   "title": "Cyrus the Great",
+   "start": -559,
+   "summary": "Founder of the Persian empire; freed the exiles.",
+   "refs": [
+    "Isa.45.1",
+    "Ezra.1.1-Ezra.1.4"
+   ],
+   "approx": true,
+   "end": -530
+  },
+  {
+   "lane": "rulers",
+   "title": "Darius I",
+   "start": -522,
+   "summary": "Confirmed the temple decree.",
+   "refs": [
+    "Ezra.6.1-Ezra.6.15"
+   ],
+   "approx": true,
+   "end": -486
+  },
+  {
+   "lane": "rulers",
+   "title": "Xerxes I (Ahasuerus)",
+   "start": -486,
+   "summary": "The king of Esther.",
+   "refs": [
+    "Esth.1.1"
+   ],
+   "approx": true,
+   "end": -465
+  },
+  {
+   "lane": "rulers",
+   "title": "Artaxerxes I",
+   "start": -465,
+   "summary": "Sent Ezra and Nehemiah.",
+   "refs": [
+    "Ezra.7.11-Ezra.7.26",
+    "Neh.2.1-Neh.2.8"
+   ],
+   "approx": true,
+   "end": -424
+  },
+  {
+   "lane": "rulers",
+   "title": "Antiochus IV Epiphanes",
+   "start": -175,
+   "summary": "Desecrated the temple in 167 BC.",
+   "refs": [
+    "1Macc.1.20-1Macc.1.64"
+   ],
+   "approx": true,
+   "end": -164
+  },
+  {
+   "lane": "rulers",
+   "title": "Augustus",
+   "start": -27,
+   "summary": "First Roman emperor; ordered the census of Luke 2.",
+   "refs": [
+    "Luke.2.1"
+   ],
+   "approx": true,
+   "end": 14
+  },
+  {
+   "lane": "rulers",
+   "title": "Tiberius",
+   "start": 14,
+   "summary": "Emperor during Jesus' ministry.",
+   "refs": [
+    "Luke.3.1"
+   ],
+   "approx": true,
+   "end": 37
+  },
+  {
+   "lane": "rulers",
+   "title": "Pontius Pilate",
+   "start": 26,
+   "summary": "Prefect of Judea who sentenced Jesus.",
+   "refs": [
+    "Matt.27.1-Matt.27.26"
+   ],
+   "approx": true,
+   "end": 36
+  },
+  {
+   "lane": "rulers",
+   "title": "Claudius",
+   "start": 41,
+   "summary": "Expelled Jews from Rome.",
+   "refs": [
+    "Acts.18.2"
+   ],
+   "approx": true,
+   "end": 54
+  },
+  {
+   "lane": "rulers",
+   "title": "Nero",
+   "start": 54,
+   "summary": "Persecuted Christians after the fire of AD 64; Paul and Peter martyred by tradition.",
+   "refs": [],
+   "approx": true,
+   "end": 68
+  },
+  {
+   "lane": "rulers",
+   "title": "Vespasian and Titus",
+   "start": 69,
+   "summary": "Crushed the Jewish revolt and destroyed Jerusalem.",
+   "refs": [],
+   "approx": true,
+   "end": 81
+  },
+  {
+   "lane": "rulers",
+   "title": "Domitian",
+   "start": 81,
+   "summary": "Emperor at the traditional date of Revelation.",
+   "refs": [],
+   "approx": true,
+   "end": 96
+  },
+  {
+   "lane": "rulers",
+   "title": "Trajan",
+   "start": 98,
+   "summary": "Corresponded with Pliny about Christians.",
+   "refs": [],
+   "approx": true,
+   "end": 117
+  },
+  {
+   "lane": "rulers",
+   "title": "Diocletian",
+   "start": 284,
+   "summary": "Launched the Great Persecution.",
+   "refs": [],
+   "approx": true,
+   "end": 305
+  },
+  {
+   "lane": "rulers",
+   "title": "Constantine",
+   "start": 306,
+   "summary": "First Christian emperor; called the Council of Nicaea.",
+   "refs": [],
+   "approx": true,
+   "end": 337
+  },
+  {
+   "lane": "rulers",
+   "title": "Theodosius I",
+   "start": 379,
+   "summary": "Made Nicene Christianity the state religion.",
+   "refs": [],
+   "approx": true,
+   "end": 395
+  },
+  {
+   "lane": "rulers",
+   "title": "Justinian I",
+   "start": 527,
+   "summary": "Built Hagia Sophia; codified Roman law.",
+   "refs": [],
+   "approx": true,
+   "end": 565
+  },
+  {
+   "lane": "rulers",
+   "title": "Charlemagne",
+   "start": 768,
+   "summary": "Crowned emperor in Rome in AD 800.",
+   "refs": [],
+   "approx": true,
+   "end": 814
+  },
+  {
+   "lane": "rulers",
+   "title": "Henry VIII",
+   "start": 1509,
+   "summary": "Broke with Rome; head of the Church of England.",
+   "refs": [],
+   "approx": true,
+   "end": 1547
+  },
+  {
+   "lane": "rulers",
+   "title": "Charles V",
+   "start": 1519,
+   "summary": "Holy Roman Emperor at the Diet of Worms.",
+   "refs": [],
+   "approx": true,
+   "end": 1556
+  },
+  {
+   "lane": "world",
+   "title": "Code of Hammurabi",
+   "start": -1754,
+   "summary": "One of the oldest written law codes, carved on a basalt stele.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "Late Bronze Age collapse",
+   "start": -1177,
+   "summary": "Empires fall across the eastern Mediterranean; the Sea Peoples appear.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "Phoenician alphabet",
+   "start": -1050,
+   "summary": "Ancestor of the Hebrew, Greek and Latin alphabets.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "First Olympic Games",
+   "start": -776,
+   "summary": "Held at Olympia in Greece.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Founding of Rome",
+   "start": -753,
+   "summary": "The traditional date.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Homer's epics",
+   "start": -750,
+   "summary": "The Iliad and the Odyssey take written form.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "Library of Ashurbanipal",
+   "start": -668,
+   "summary": "Thousands of clay tablets at Nineveh, including the Gilgamesh epic.",
+   "refs": [],
+   "approx": true,
+   "end": -627
+  },
+  {
+   "lane": "world",
+   "title": "Siddhartha Gautama (the Buddha)",
+   "start": -563,
+   "summary": "Traditional dates; many scholars place him about a century later.",
+   "refs": [],
+   "approx": true,
+   "end": -483
+  },
+  {
+   "lane": "world",
+   "title": "Confucius",
+   "start": -551,
+   "summary": "Chinese teacher whose sayings shaped East Asian thought.",
+   "refs": [],
+   "approx": true,
+   "end": -479
+  },
+  {
+   "lane": "world",
+   "title": "Roman Republic founded",
+   "start": -509,
+   "summary": "Rome expels its last king.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "Parthenon built",
+   "start": -447,
+   "summary": "The temple of Athena on the Athenian Acropolis.",
+   "refs": [],
+   "approx": false,
+   "end": -432
+  },
+  {
+   "lane": "world",
+   "title": "Death of Socrates",
+   "start": -399,
+   "summary": "The Athenian philosopher is executed.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Septuagint begun",
+   "start": -250,
+   "summary": "The Hebrew Scriptures translated into Greek at Alexandria.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "Qin unifies China",
+   "start": -221,
+   "summary": "Qin Shi Huang becomes the first emperor of China.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Dead Sea Scrolls copied",
+   "start": -250,
+   "summary": "The Qumran scrolls, the oldest surviving Hebrew Bible manuscripts.",
+   "refs": [],
+   "approx": true,
+   "end": 68
+  },
+  {
+   "lane": "world",
+   "title": "Julius Caesar assassinated",
+   "start": -44,
+   "summary": "The end of the Roman Republic draws near.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Great Fire of Rome",
+   "start": 64,
+   "summary": "Nero blames the Christians.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Destruction of the Second Temple",
+   "start": 70,
+   "summary": "Roman legions under Titus destroy Jerusalem.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Pompeii destroyed",
+   "start": 79,
+   "summary": "Vesuvius buries Pompeii and Herculaneum.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Fall of the Western Roman Empire",
+   "start": 476,
+   "summary": "The last Western emperor is deposed.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Muhammad's Hijra",
+   "start": 622,
+   "summary": "Beginning of the Islamic calendar.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Gutenberg's printed Bible",
+   "start": 1455,
+   "summary": "Movable-type printing transforms the spread of books.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "world",
+   "title": "Fall of Constantinople",
+   "start": 1453,
+   "summary": "The Ottomans take the Byzantine capital.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "world",
+   "title": "Columbus reaches the Americas",
+   "start": 1492,
+   "summary": "The first of four voyages.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Clement of Rome writes to Corinth",
+   "start": 96,
+   "summary": "One of the earliest Christian writings outside the New Testament.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "Ignatius of Antioch martyred",
+   "start": 108,
+   "summary": "Writes seven letters on his way to death in Rome.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "Polycarp martyred",
+   "start": 155,
+   "summary": "Bishop of Smyrna and a disciple of John.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "Justin Martyr's First Apology",
+   "start": 155,
+   "summary": "Describes Christian worship and defends the faith to the emperor.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "Irenaeus, Against Heresies",
+   "start": 180,
+   "summary": "A refutation of Gnosticism that appeals to the apostolic tradition.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "Tertullian",
+   "start": 197,
+   "summary": "First major Latin theologian; coins the term 'Trinity' (trinitas).",
+   "refs": [],
+   "approx": true,
+   "end": 220
+  },
+  {
+   "lane": "church",
+   "title": "Origen",
+   "start": 185,
+   "summary": "Alexandrian scholar; the Hexapla and On First Principles.",
+   "refs": [],
+   "approx": true,
+   "end": 253
+  },
+  {
+   "lane": "church",
+   "title": "Decian persecution",
+   "start": 250,
+   "summary": "The first empire-wide persecution.",
+   "refs": [],
+   "approx": false,
+   "end": 251
+  },
+  {
+   "lane": "church",
+   "title": "Great Persecution",
+   "start": 303,
+   "summary": "Diocletian orders churches and Scriptures destroyed.",
+   "refs": [],
+   "approx": false,
+   "end": 311
+  },
+  {
+   "lane": "church",
+   "title": "Edict of Milan",
+   "start": 313,
+   "summary": "Constantine and Licinius grant religious toleration.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Council of Nicaea",
+   "start": 325,
+   "summary": "Rejects Arianism; the first form of the Nicene Creed.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Athanasius lists the 27 New Testament books",
+   "start": 367,
+   "summary": "His Easter letter is the earliest list matching today's New Testament.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Council of Constantinople",
+   "start": 381,
+   "summary": "Affirms the deity of the Holy Spirit; the Nicene Creed takes its familiar form.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Jerome's Vulgate",
+   "start": 382,
+   "summary": "The Latin Bible used in the West for a thousand years.",
+   "refs": [],
+   "approx": true,
+   "end": 405
+  },
+  {
+   "lane": "church",
+   "title": "Augustine of Hippo",
+   "start": 354,
+   "summary": "Confessions, City of God; deeply shapes Western theology.",
+   "refs": [],
+   "approx": false,
+   "end": 430
+  },
+  {
+   "lane": "church",
+   "title": "Council of Chalcedon",
+   "start": 451,
+   "summary": "Christ confessed as one person in two natures.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Rule of St Benedict",
+   "start": 530,
+   "summary": "Foundation of Western monasticism.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "East–West Schism",
+   "start": 1054,
+   "summary": "Mutual excommunications divide Rome and Constantinople.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "The Crusades",
+   "start": 1095,
+   "summary": "Military campaigns to the Holy Land.",
+   "refs": [],
+   "approx": false,
+   "end": 1291
+  },
+  {
+   "lane": "church",
+   "title": "Thomas Aquinas, Summa Theologiae",
+   "start": 1265,
+   "summary": "Synthesis of Aristotle and Christian theology.",
+   "refs": [],
+   "approx": false,
+   "end": 1274
+  },
+  {
+   "lane": "church",
+   "title": "Wycliffe Bible",
+   "start": 1382,
+   "summary": "First complete English Bible, translated from the Vulgate.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "church",
+   "title": "Jan Hus burned",
+   "start": 1415,
+   "summary": "Czech reformer condemned at the Council of Constance.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Luther's Ninety-five Theses",
+   "start": 1517,
+   "summary": "The start of the Protestant Reformation.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Schleitheim Confession",
+   "start": 1527,
+   "summary": "Early Anabaptist statement of faith.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Augsburg Confession",
+   "start": 1530,
+   "summary": "The chief Lutheran confession.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Act of Supremacy",
+   "start": 1534,
+   "summary": "Henry VIII becomes head of the Church of England.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Calvin's Institutes",
+   "start": 1536,
+   "summary": "First edition of the Reformed classic.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Council of Trent",
+   "start": 1545,
+   "summary": "The Catholic response to the Reformation.",
+   "refs": [],
+   "approx": false,
+   "end": 1563
+  },
+  {
+   "lane": "church",
+   "title": "Heidelberg Catechism",
+   "start": 1563,
+   "summary": "A widely used Reformed catechism.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "First Baptist congregation",
+   "start": 1609,
+   "summary": "John Smyth's English exiles in Amsterdam.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "King James Version",
+   "start": 1611,
+   "summary": "The Authorized Version of the English Bible.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Synod of Dort",
+   "start": 1618,
+   "summary": "Reformed response to the Remonstrants.",
+   "refs": [],
+   "approx": false,
+   "end": 1619
+  },
+  {
+   "lane": "church",
+   "title": "Westminster Confession",
+   "start": 1646,
+   "summary": "Confession of English and Scottish Presbyterianism.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "First Great Awakening",
+   "start": 1730,
+   "summary": "Revivals under Edwards, Whitefield and the Wesleys.",
+   "refs": [],
+   "approx": true,
+   "end": 1745
+  },
+  {
+   "lane": "church",
+   "title": "Wesley's Aldersgate experience",
+   "start": 1738,
+   "summary": "A turning point in the beginnings of Methodism.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Azusa Street revival",
+   "start": 1906,
+   "summary": "Los Angeles revival at the start of modern Pentecostalism.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "church",
+   "title": "Second Vatican Council",
+   "start": 1962,
+   "summary": "Reforms in Catholic worship and relations with other churches.",
+   "refs": [],
+   "approx": false,
+   "end": 1965
+  },
+  {
+   "lane": "islam",
+   "title": "Birth of Muhammad",
+   "start": 570,
+   "summary": "Born in Mecca, by Muslim tradition.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "islam",
+   "title": "First revelation",
+   "start": 610,
+   "summary": "Muslims hold that the Quran began to be revealed to Muhammad in the cave of Hira.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "islam",
+   "title": "The Hijra",
+   "start": 622,
+   "summary": "Muhammad and his followers move from Mecca to Medina; year 1 of the Islamic calendar.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Battle of Badr",
+   "start": 624,
+   "summary": "First major battle between the Muslims of Medina and the Quraysh of Mecca.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Conquest of Mecca",
+   "start": 630,
+   "summary": "Muhammad returns to Mecca; the Kaaba is cleared of idols.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Death of Muhammad",
+   "start": 632,
+   "summary": "Dies in Medina.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Rashidun caliphate",
+   "start": 632,
+   "end": 661,
+   "summary": "Abu Bakr, Umar, Uthman and Ali lead the Muslim community.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Jerusalem surrenders to Umar",
+   "start": 637,
+   "summary": "The city passes from Byzantine to Muslim rule.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "islam",
+   "title": "Uthman’s copy of the Quran",
+   "start": 650,
+   "summary": "Caliph Uthman has a standard text of the Quran copied and sent to the main cities.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "islam",
+   "title": "Umayyad caliphate",
+   "start": 661,
+   "end": 750,
+   "summary": "Ruled from Damascus; the empire reaches from Spain to Central Asia.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Battle of Karbala",
+   "start": 680,
+   "summary": "Husayn, grandson of Muhammad, is killed; a defining moment for Shia Islam.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Dome of the Rock",
+   "start": 691,
+   "summary": "Built in Jerusalem on the Temple Mount.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "islam",
+   "title": "Abbasid caliphate",
+   "start": 750,
+   "end": 1258,
+   "summary": "Ruled from Baghdad; a golden age of learning.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Umayyad emirate of Córdoba",
+   "start": 756,
+   "end": 1031,
+   "summary": "Al-Andalus: Muslim rule in Spain, later a caliphate.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "House of Wisdom, Baghdad",
+   "start": 830,
+   "summary": "Greek, Syriac and Persian works are translated into Arabic.",
+   "refs": [],
+   "approx": true
+  },
+  {
+   "lane": "islam",
+   "title": "Saladin retakes Jerusalem",
+   "start": 1187,
+   "summary": "Ends the crusader kingdom’s rule of the city.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Mongols sack Baghdad",
+   "start": 1258,
+   "summary": "End of the Abbasid caliphate in Baghdad.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Ottoman Empire",
+   "start": 1299,
+   "end": 1922,
+   "summary": "From Anatolia to the Balkans, the Middle East and North Africa.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Fall of Constantinople",
+   "start": 1453,
+   "summary": "Mehmed II takes the city; it becomes the Ottoman capital.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Fall of Granada",
+   "start": 1492,
+   "summary": "End of Muslim rule in Spain.",
+   "refs": [],
+   "approx": false
+  },
+  {
+   "lane": "islam",
+   "title": "Mughal Empire",
+   "start": 1526,
+   "end": 1857,
+   "summary": "Muslim dynasty ruling much of the Indian subcontinent.",
+   "refs": [],
+   "approx": false
+  }
+ ],
+ "books": {
+  "Gen": [
+   [
+    12,
+    -2091,
+    -1805
+   ]
+  ],
+  "Exod": [
+   [
+    1,
+    -1526,
+    -1445
+   ]
+  ],
+  "Lev": [
+   [
+    1,
+    -1445,
+    -1445
+   ]
+  ],
+  "Num": [
+   [
+    1,
+    -1445,
+    -1406
+   ]
+  ],
+  "Deut": [
+   [
+    1,
+    -1406,
+    -1406
+   ]
+  ],
+  "Josh": [
+   [
+    1,
+    -1406,
+    -1375
+   ]
+  ],
+  "Judg": [
+   [
+    1,
+    -1375,
+    -1050
+   ]
+  ],
+  "Ruth": [
+   [
+    1,
+    -1150,
+    -1100
+   ]
+  ],
+  "1Sam": [
+   [
+    1,
+    -1105,
+    -1010
+   ]
+  ],
+  "2Sam": [
+   [
+    1,
+    -1010,
+    -970
+   ]
+  ],
+  "1Kgs": [
+   [
+    1,
+    -970,
+    -931
+   ],
+   [
+    12,
+    -931,
+    -853
+   ]
+  ],
+  "2Kgs": [
+   [
+    1,
+    -853,
+    -722
+   ],
+   [
+    18,
+    -715,
+    -586
+   ],
+   [
+    25,
+    -586,
+    -561
+   ]
+  ],
+  "1Chr": [
+   [
+    10,
+    -1010,
+    -970
+   ]
+  ],
+  "2Chr": [
+   [
+    1,
+    -970,
+    -931
+   ],
+   [
+    10,
+    -931,
+    -586
+   ],
+   [
+    36,
+    -586,
+    -538
+   ]
+  ],
+  "Ezra": [
+   [
+    1,
+    -538,
+    -516
+   ],
+   [
+    7,
+    -458,
+    -458
+   ]
+  ],
+  "Neh": [
+   [
+    1,
+    -445,
+    -432
+   ]
+  ],
+  "Esth": [
+   [
+    1,
+    -483,
+    -473
+   ]
+  ],
+  "Prov": [
+   [
+    1,
+    -950,
+    -700
+   ]
+  ],
+  "Eccl": [
+   [
+    1,
+    -935,
+    -935
+   ]
+  ],
+  "Song": [
+   [
+    1,
+    -960,
+    -960
+   ]
+  ],
+  "Isa": [
+   [
+    1,
+    -740,
+    -681
+   ]
+  ],
+  "Jer": [
+   [
+    1,
+    -627,
+    -586
+   ]
+  ],
+  "Lam": [
+   [
+    1,
+    -586,
+    -586
+   ]
+  ],
+  "Ezek": [
+   [
+    1,
+    -593,
+    -571
+   ]
+  ],
+  "Dan": [
+   [
+    1,
+    -605,
+    -536
+   ]
+  ],
+  "Hos": [
+   [
+    1,
+    -755,
+    -715
+   ]
+  ],
+  "Amos": [
+   [
+    1,
+    -760,
+    -750
+   ]
+  ],
+  "Jonah": [
+   [
+    1,
+    -785,
+    -775
+   ]
+  ],
+  "Mic": [
+   [
+    1,
+    -735,
+    -700
+   ]
+  ],
+  "Nah": [
+   [
+    1,
+    -660,
+    -630
+   ]
+  ],
+  "Hab": [
+   [
+    1,
+    -609,
+    -598
+   ]
+  ],
+  "Zeph": [
+   [
+    1,
+    -640,
+    -621
+   ]
+  ],
+  "Hag": [
+   [
+    1,
+    -520,
+    -520
+   ]
+  ],
+  "Zech": [
+   [
+    1,
+    -520,
+    -518
+   ]
+  ],
+  "Mal": [
+   [
+    1,
+    -440,
+    -420
+   ]
+  ],
+  "1Macc": [
+   [
+    1,
+    -175,
+    -134
+   ]
+  ],
+  "2Macc": [
+   [
+    1,
+    -180,
+    -161
+   ]
+  ],
+  "Matt": [
+   [
+    1,
+    -5,
+    -4
+   ],
+   [
+    3,
+    27,
+    30
+   ]
+  ],
+  "Mark": [
+   [
+    1,
+    27,
+    30
+   ]
+  ],
+  "Luke": [
+   [
+    1,
+    -6,
+    -4
+   ],
+   [
+    3,
+    27,
+    30
+   ]
+  ],
+  "John": [
+   [
+    1,
+    27,
+    30
+   ]
+  ],
+  "Acts": [
+   [
+    1,
+    30,
+    35
+   ],
+   [
+    13,
+    46,
+    57
+   ],
+   [
+    21,
+    57,
+    62
+   ]
+  ],
+  "Rom": [
+   [
+    1,
+    57,
+    57
+   ]
+  ],
+  "1Cor": [
+   [
+    1,
+    55,
+    55
+   ]
+  ],
+  "2Cor": [
+   [
+    1,
+    56,
+    56
+   ]
+  ],
+  "Gal": [
+   [
+    1,
+    49,
+    49
+   ]
+  ],
+  "Eph": [
+   [
+    1,
+    60,
+    62
+   ]
+  ],
+  "Phil": [
+   [
+    1,
+    60,
+    62
+   ]
+  ],
+  "Col": [
+   [
+    1,
+    60,
+    62
+   ]
+  ],
+  "1Thess": [
+   [
+    1,
+    51,
+    51
+   ]
+  ],
+  "2Thess": [
+   [
+    1,
+    51,
+    52
+   ]
+  ],
+  "1Tim": [
+   [
+    1,
+    62,
+    64
+   ]
+  ],
+  "2Tim": [
+   [
+    1,
+    67,
+    67
+   ]
+  ],
+  "Titus": [
+   [
+    1,
+    62,
+    64
+   ]
+  ],
+  "Phlm": [
+   [
+    1,
+    60,
+    62
+   ]
+  ],
+  "Heb": [
+   [
+    1,
+    65,
+    69
+   ]
+  ],
+  "Jas": [
+   [
+    1,
+    45,
+    49
+   ]
+  ],
+  "1Pet": [
+   [
+    1,
+    62,
+    64
+   ]
+  ],
+  "2Pet": [
+   [
+    1,
+    65,
+    67
+   ]
+  ],
+  "1John": [
+   [
+    1,
+    85,
+    95
+   ]
+  ],
+  "2John": [
+   [
+    1,
+    85,
+    95
+   ]
+  ],
+  "3John": [
+   [
+    1,
+    85,
+    95
+   ]
+  ],
+  "Jude": [
+   [
+    1,
+    65,
+    80
+   ]
+  ],
+  "Rev": [
+   [
+    1,
+    95,
+    95
+   ]
+  ]
+ }
 }

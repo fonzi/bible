@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.13
+
+- **Contents as a panel.** In the Reading room, a book's contents (each surah
+  of the Quran, each section of the church fathers) now sit in a panel beside
+  the text, with the part you're reading highlighted. The Contents button
+  shows or hides it.
+- **How the Arabic sounds.** Each verse of the Quran now shows its
+  pronunciation in Latin letters under the Arabic (Tanzil's transliteration),
+  as the Greek and Hebrew do. Download the Quran again to get it.
+- **Islamic history in the timeline**, as its own lane: from the Prophet's
+  life and the Hijra through the caliphates, Córdoba, the House of Wisdom,
+  the Ottomans and the Mughals.
+
 ## 0.9.12
 
 - **Cross-references from your Bible.** When the selected Bible comes with its

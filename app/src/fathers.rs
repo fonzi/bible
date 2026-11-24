@@ -278,7 +278,7 @@ pub struct FathersView {
     root: adw::ToolbarView,
     title: adw::WindowTitle,
     toc: gtk::ListBox,
-    toc_pop: gtk::Popover,
+    toc_pop: adw::OverlaySplitView,
     body: gtk::Box,
     scroll: gtk::ScrolledWindow,
     prev: gtk::Button,
@@ -310,23 +310,29 @@ impl FathersView {
         toc.add_css_class("navigation-sidebar");
         let toc_scroll = gtk::ScrolledWindow::builder()
             .child(&toc)
-            .min_content_width(440)
-            .max_content_height(720)
-            .propagate_natural_height(true)
             .hscrollbar_policy(gtk::PolicyType::Never)
+            .vexpand(true)
             .build();
-        let toc_pop = gtk::Popover::new();
-        toc_pop.set_child(Some(&toc_scroll));
         toc.set_selection_mode(gtk::SelectionMode::Single);
-        let toc_btn = gtk::MenuButton::builder()
+        // the contents as a panel beside the text, open by default
+        let toc_pop = adw::OverlaySplitView::new();
+        toc_pop.set_sidebar(Some(&toc_scroll));
+        toc_pop.set_min_sidebar_width(220.0);
+        toc_pop.set_max_sidebar_width(300.0);
+        toc_pop.set_show_sidebar(true);
+        let toc_btn = gtk::ToggleButton::builder()
             .child(
                 &adw::ButtonContent::builder()
                     .icon_name("view-list-symbolic")
                     .label("Contents")
                     .build(),
             )
-            .popover(&toc_pop)
-            .tooltip_text("Contents of this volume")
+            .active(true)
+            .tooltip_text("Show or hide the contents")
+            .build();
+        toc_btn
+            .bind_property("active", &toc_pop, "show-sidebar")
+            .bidirectional()
             .build();
         hb.pack_end(&next);
         hb.pack_end(&prev);
@@ -354,7 +360,8 @@ impl FathersView {
         let stack = gtk::Stack::new();
         stack.add_named(&scroll, Some("text"));
         stack.add_named(&loading, Some("loading"));
-        root.set_content(Some(&stack));
+        toc_pop.set_content(Some(&stack));
+        root.set_content(Some(&toc_pop));
 
         let v = Rc::new(FathersView {
             ctx: ctx.clone(),
@@ -376,7 +383,10 @@ impl FathersView {
         VIEW.with(|w| *w.borrow_mut() = Rc::downgrade(&v));
         // open the contents at the section being read
         let w = Rc::downgrade(&v);
-        v.toc_pop.connect_show(move |_| {
+        v.toc_pop.connect_show_sidebar_notify(move |sv| {
+            if !sv.shows_sidebar() {
+                return;
+            }
             if let Some(v) = w.upgrade() {
                 if let Some(row) = v.toc.row_at_index(v.at.get() as i32) {
                     v.toc.select_row(Some(&row));
@@ -390,7 +400,9 @@ impl FathersView {
         let w = Rc::downgrade(&v);
         toc.connect_row_activated(move |_, row| {
             if let Some(v) = w.upgrade() {
-                v.toc_pop.popdown();
+                if v.toc_pop.is_collapsed() {
+                    v.toc_pop.set_show_sidebar(false);
+                }
                 v.show(row.index() as usize);
             }
         });
@@ -517,6 +529,14 @@ impl FathersView {
             let l = gtk::Label::new(Some(t));
             l.set_wrap(true);
             l.set_xalign(0.0);
+            if let Some(t) = t.strip_prefix('\u{2063}') {
+                l.set_text(t);
+                l.remove_css_class("scripture");
+                l.add_css_class("dim-label");
+                l.add_css_class("translit");
+                l.set_xalign(1.0);
+                l.set_justify(gtk::Justification::Right);
+            }
             // Arabic reads from the right
             if t.chars().next().is_some_and(|c| ('\u{0600}'..='\u{08FF}').contains(&c) || ('\u{FB50}'..='\u{FEFF}').contains(&c)) {
                 l.set_xalign(1.0);
@@ -527,6 +547,10 @@ impl FathersView {
             l.add_css_class("scripture");
             l.add_css_class("book-text");
             self.body.append(&l);
+        }
+        // keep the panel's highlight on the part being read
+        if let Some(r) = self.toc.row_at_index(i as i32) {
+            self.toc.select_row(Some(&r));
         }
         self.prev.set_sensitive(i > 0);
         self.next.set_sensitive(i + 1 < parts.len());
@@ -635,6 +659,7 @@ mod url_checks {
         urls.push("https://en.wikipedia.org/w/api.php?action=query&format=json&titles=Bible".into());
         urls.push(super::QURAN_ARABIC.into());
         urls.push(super::QURAN_ENGLISH.into());
+        urls.push(super::QURAN_SOUND.into());
         let mut bad = vec![];
         for u in urls {
             match bible_sword::install::url_status(&u) {
@@ -655,6 +680,8 @@ pub const QURAN: &str = "quran";
 /// text be copied unchanged, with credit and a link to tanzil.net.
 pub const QURAN_ARABIC: &str = "https://tanzil.net/pub/download/index.php?marks=true&sajdah=true&rub=true&alif=true&quranType=uthmani&outType=txt-2&agree=true";
 pub const QURAN_ENGLISH: &str = "https://tanzil.net/trans/?transID=en.pickthall&type=txt-2";
+/// How each verse sounds, in Latin letters (Tanzil's transliteration).
+pub const QURAN_SOUND: &str = "https://tanzil.net/trans/?transID=en.transliteration&type=txt-2";
 pub const QURAN_CREDIT: &str = "Arabic text: Tanzil Quran Text (tanzil.net), copied unchanged. English: Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain.";
 
 pub const SURAHS: [&str; 114] = [
@@ -675,7 +702,7 @@ pub const SURAHS: [&str; 114] = [
 ];
 
 fn quran_path() -> PathBuf {
-    dir().join("quran.v1.json")
+    dir().join("quran.v2.json")
 }
 
 /// `sura|aya|text` lines into (sura, aya) → text; comment lines are skipped.
@@ -692,8 +719,9 @@ fn verses(txt: &str) -> std::collections::BTreeMap<(u16, u16), String> {
 }
 
 /// One part per surah: each verse in Arabic, then in English with its number.
-pub fn quran_parts(arabic: &str, english: &str) -> Vec<Part> {
+pub fn quran_parts(arabic: &str, sound: &str, english: &str) -> Vec<Part> {
     let ar = verses(arabic);
+    let tr = verses(sound);
     let en = verses(english);
     let mut parts: Vec<Part> = SURAHS
         .iter()
@@ -703,6 +731,10 @@ pub fn quran_parts(arabic: &str, english: &str) -> Vec<Part> {
     for ((s, a), text) in &ar {
         let Some(p) = parts.get_mut(*s as usize - 1) else { continue };
         p.paras.push(text.clone());
+        if let Some(t) = tr.get(&(*s, *a)) {
+            // pronunciation, like the Greek and Hebrew transliteration
+            p.paras.push(format!("\u{2063}{t}"));
+        }
         if let Some(e) = en.get(&(*s, *a)) {
             p.paras.push(format!("{s}:{a}  {e}"));
         }
@@ -717,7 +749,7 @@ fn download_quran() -> std::io::Result<()> {
             .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "Tanzil didn’t have the file"))?;
         Ok(String::from_utf8_lossy(&b).into_owned())
     };
-    let parts = quran_parts(&get(QURAN_ARABIC)?, &get(QURAN_ENGLISH)?);
+    let parts = quran_parts(&get(QURAN_ARABIC)?, &get(QURAN_SOUND).unwrap_or_default(), &get(QURAN_ENGLISH)?);
     let verses: usize = parts.iter().map(|p| p.paras.len()).sum();
     // 6,236 verses, each in Arabic and English
     if verses < 6000 {
@@ -742,7 +774,7 @@ mod quran_tests {
     fn verses_pair_up() {
         let ar = "1|1|بِسْمِ ٱللَّهِ\n1|2|ٱلْحَمْدُ لِلَّهِ\n# Tanzil\n";
         let en = "1|1|In the name of Allah\n1|2|Praise be to Allah\n";
-        let p = quran_parts(ar, en);
+        let p = quran_parts(ar, "", en);
         assert_eq!(p.len(), 114);
         assert_eq!(p[0].title, "1. Al-Fatihah");
         assert_eq!(p[0].paras, vec!["بِسْمِ ٱللَّهِ", "1:1  In the name of Allah", "ٱلْحَمْدُ لِلَّهِ", "1:2  Praise be to Allah"]);
