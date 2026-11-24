@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.6
+## 0.9.7
 
 - **Mac app (untested):** the macOS download is now a real Bible.app with
   everything inside it, GTK included, so nothing else needs installing
@@ -14,6 +14,13 @@
 - Bible is made for GNOME first: Windows and macOS builds are offered as they
   are, without support. Bug reports now use a short form, and reports from
   Windows or macOS are closed automatically with a note.
+- The original-language button reads **Αω** (Alpha and Omega).
+
+## 0.9.6
+
+- The README says plainly that Windows and macOS builds are untested; Bible is
+  made for GNOME first. (This release has no Windows build: its font check
+  failed, and it was fixed in 0.9.7.)
 
 ## 0.9.5
 
