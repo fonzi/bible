@@ -1,0 +1,39 @@
+name: Linux build dependencies
+description: >-
+  Installs the GTK, libadwaita and GStreamer build packages. Ubuntu's mirror is
+  sometimes very slow (37 MB has taken 12 minutes), so the downloaded packages
+  and package lists are cached for a week. If anything about the cache fails,
+  it falls back to a normal download.
+runs:
+  using: composite
+  steps:
+    - name: Week number
+      id: week
+      shell: bash
+      run: echo "week=$(date +%G-%V)" >> "$GITHUB_OUTPUT"
+    - uses: actions/cache@v4
+      id: cache
+      with:
+        path: ~/apt-cache
+        # bump v1 when the package list below changes
+        key: apt-v1-${{ runner.os }}-${{ steps.week.outputs.week }}
+    - name: Install packages
+      shell: bash
+      env:
+        HIT: ${{ steps.cache.outputs.cache-hit }}
+      run: |
+        pkgs="libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config
+              xvfb mold clang appstream desktop-file-utils"
+        c=$HOME/apt-cache
+        mkdir -p $c/archives/partial $c/lists/partial
+        o="-o Dir::Cache::archives=$c/archives -o Dir::State::lists=$c/lists
+           -o Acquire::Retries=3 -o Acquire::http::Timeout=30"
+        if [ "$HIT" = "true" ] && sudo apt-get $o install -y --no-install-recommends $pkgs; then
+          echo "Installed from the cache"
+        else
+          sudo apt-get $o update
+          sudo apt-get $o install -y --no-install-recommends $pkgs
+        fi
+        # the cache is saved as this user at the end of the job
+        sudo rm -rf $c/archives/partial/* $c/archives/lock $c/lists/lock
+        sudo chown -R "$(id -u):$(id -g)" $c
