@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.18
+
+- **Many more cross-references from older-format Bibles.** Bibles such as
+  the ISV list their cross-references in the text rather than in notes; these
+  are now read as cross-references, including lists like "1 Chr 22:10; 28:6"
+  where the book isn't repeated. The ISV goes from about 400 to over 16,000
+  in the rainbow, and shows them as † notes while reading.
+- **Every CrossWire category in Downloads.** Maps and pictures have their own
+  category, and texts CrossWire files under other traditions (such as the
+  Book of Mormon) are listed last under Other traditions instead of among the
+  Bibles.
+
 ## 0.9.17
 
 - **The rainbow uses your Bible's own cross-references whenever it has any**,

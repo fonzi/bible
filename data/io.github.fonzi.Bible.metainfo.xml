@@ -39,6 +39,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.18" date="2026-11-24">
+      <description>
+        <ul>
+          <li>Many more cross-references from older-format Bibles. Bibles such as the ISV list their cross-references in the text rather than in notes; these are now read as cross-references, including lists like "1 Chr 22:10; 28:6" where the book isn't repeated. The ISV goes from about 400 to over 16,000 in the rainbow, and shows them as † notes while reading.</li>
+          <li>Every CrossWire category in Downloads. Maps and pictures have their own category, and texts CrossWire files under other traditions (such as the Book of Mormon) are listed last under Other traditions instead of among the Bibles.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.17" date="2026-11-24">
       <description>
         <ul>
@@ -193,15 +201,6 @@
       <description>
         <ul>
           <li>The Words panel has a "Show Greek and Hebrew" button, so the interlinear can be turned on from where you look for it.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.8.1" date="2026-11-21">
-      <description>
-        <ul>
-          <li>The globe is round: each Testament spirals over its own half, Genesis by the North Pole and Revelation by the South Pole.</li>
-          <li>The cube fills its space: depth is now how far back in time a reference reaches (late books citing early ones at the back).</li>
-          <li>Splash style has a preview button, and changing it plays the new style straight away.</li>
         </ul>
       </description>
     </release>

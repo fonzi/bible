@@ -140,6 +140,8 @@ struct Builder {
     /// note being collected: (is cross-reference, text, refs)
     note: Option<(bool, String, Vec<Ref>)>,
     note_depth: u32,
+    /// for each open <scripRef>: whether it started a cross-reference note
+    scripref_note: Vec<bool>,
 }
 
 impl Builder {
@@ -150,6 +152,7 @@ impl Builder {
             stack: Vec::new(),
             note: None,
             note_depth: 0,
+            scripref_note: Vec::new(),
         }
     }
     fn begin_note(&mut self, xref: bool) {
@@ -173,6 +176,24 @@ impl Builder {
             for f in find_refs(&text) {
                 if !refs.contains(&f.r) {
                     refs.push(f.r);
+                }
+            }
+            // "1Chr 22:10; 28:6; Ps 2:7; 89:26-27": entries with no book name
+            // belong to the book named before them
+            let mut last: Option<String> = None;
+            for seg in text.split(';') {
+                let seg = seg.trim().trim_matches(|c: char| c == '[' || c == ']' || c == '.');
+                if let Some(f) = find_refs(seg).into_iter().next() {
+                    last = Some(f.r.book.clone());
+                    continue;
+                }
+                let (Some(book), Some((c, v))) = (&last, seg.split_once(':')) else { continue };
+                let v = v.split(|ch: char| !ch.is_ascii_digit()).next().unwrap_or("");
+                if let (Ok(c), Ok(v)) = (c.trim().parse::<u16>(), v.parse::<u16>()) {
+                    let r = Ref::new(book, c, v);
+                    if !refs.contains(&r) {
+                        refs.push(r);
+                    }
                 }
             }
             if text.is_empty() && refs.is_empty() {
@@ -487,15 +508,26 @@ pub fn thml(src: &str) -> Vec<Span> {
             }
             ("note", true) => b.end_note(),
             ("scripref", false) if !selfc => {
-                b.push("scripRef");
                 let r = attr(tok, "passage").and_then(|p| parse(p.split(';').next().unwrap_or(p)));
                 if b.note.is_some() {
+                    b.push("scripRef");
                     b.note_ref(r);
+                    b.scripref_note.push(false);
                 } else {
-                    b.st.link = r;
+                    // a list of references in the text (ThML Bibles such as the
+                    // ISV): a cross-reference note, as OSIS Bibles mark them
+                    b.begin_note(true);
+                    b.note_ref(r);
+                    b.scripref_note.push(true);
                 }
             }
-            ("scripref", true) => b.pop("scripRef"),
+            ("scripref", true) => {
+                if b.scripref_note.pop() == Some(true) {
+                    b.end_note();
+                } else {
+                    b.pop("scripRef");
+                }
+            }
             ("font", false) if !selfc => {
                 b.push("font");
                 if attr(tok, "color")
@@ -690,5 +722,20 @@ mod tests {
             .filter_map(|x| x.link.as_ref().map(|r| r.to_string()))
             .collect();
         assert_eq!(links, vec!["Romans 5:8", "John 1:14"]);
+    }
+}
+
+#[cfg(test)]
+mod thml_scripref_tests {
+    use super::*;
+    #[test]
+    fn a_scripref_list_in_the_text_is_a_cross_reference_note() {
+        let spans = thml("Or again?<scripRef>2Sam 7:14; 1Chr 22:10; 28:6; Ps 2:7; 89:26-27</scripRef>");
+        let n = spans.iter().find_map(|s| s.note.as_ref()).expect("a note");
+        assert!(n.xref);
+        let got: Vec<String> = n.refs.iter().map(|r| format!("{} {}:{}", r.book, r.chapter, r.verse)).collect();
+        for want in ["2Sam 7:14", "1Chr 22:10", "1Chr 28:6", "Ps 2:7", "Ps 89:26"] {
+            assert!(got.contains(&want.to_string()), "{want} missing from {got:?}");
+        }
     }
 }

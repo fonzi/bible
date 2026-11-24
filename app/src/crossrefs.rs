@@ -35,7 +35,7 @@ fn cache_path(module: &str) -> PathBuf {
     dirs::cache_dir()
         .unwrap_or_else(std::env::temp_dir)
         .join("bible-app/crossrefs")
-        .join(format!("{module}-links-v4.tsv"))
+        .join(format!("{module}-links-v5.tsv"))
 }
 
 /// One verse-to-verse cross-reference: [from chapter index, from verse,
@@ -55,7 +55,9 @@ fn compute(m: &Module, progress: &dyn Fn(f64)) -> (Vec<VLink>, String) {
         let mut own = Vec::new();
         for (i, (book, c, _)) in chs.iter().enumerate() {
             for (v, spans) in m.chapter(book, *c) {
-                for n in spans.iter().filter_map(|s| s.note.as_ref()).filter(|n| n.xref) {
+                // references from every note: many Bibles (ISV among them) put
+                // them in footnotes rather than separate cross-reference notes
+                for n in spans.iter().filter_map(|s| s.note.as_ref()) {
                     for r in &n.refs {
                         if let Some(&y) = index.get(&(r.book.clone(), r.chapter)) {
                             own.push([i as u16, v.max(1), y, r.verse.max(1)]);

@@ -104,6 +104,27 @@ where
 
 const RECOMMEND_NOTE: &str = "Turns on the most features: tap a word for its Greek or Hebrew and Strong’s entry, grammar, footnotes and cross-references, red letters and headings. Maps, the timeline, intros from commentaries and the interlinear work with every Bible.";
 
+/// The category a catalogue entry is listed under in Browse: the kinds of
+/// work, then CrossWire's maps and pictures, and other traditions last.
+fn browse_key(conf: &bible_sword::conf::Conf) -> u8 {
+    let cat = conf.get_or("Category", "").to_ascii_lowercase();
+    if cat.contains("cult") || cat.contains("unorthodox") || cat.contains("questionable") {
+        7
+    } else if cat.contains("map") || cat.contains("image") {
+        6
+    } else {
+        kind_order(Kind::from_conf(conf))
+    }
+}
+
+fn browse_label(key: u8, conf: &bible_sword::conf::Conf) -> &'static str {
+    match key {
+        6 => "Maps and pictures",
+        7 => "Other traditions",
+        _ => Kind::from_conf(conf).label(),
+    }
+}
+
 fn kind_order(k: Kind) -> u8 {
     match k {
         Kind::Bible => 0,
@@ -1130,7 +1151,7 @@ impl LibraryView {
                 continue;
             }
             groups
-                .entry(kind_order(Kind::from_conf(&m.conf)))
+                .entry(browse_key(&m.conf))
                 .or_default()
                 .push(m);
         }
@@ -1172,9 +1193,11 @@ impl LibraryView {
                 2 => "bibleapp-books-symbolic",
                 3 => "x-office-calendar-symbolic",
                 4 => "bibleapp-words-symbolic",
+                6 => "image-x-generic-symbolic",
+                7 => "system-users-symbolic",
                 _ => "view-more-horizontal-symbolic",
             };
-            let r = cat_row(&format!("k{k}"), Kind::from_conf(&mods[0].conf).label(), icon, Some(mods.len()));
+            let r = cat_row(&format!("k{k}"), browse_label(*k, &mods[0].conf), icon, Some(mods.len()));
             if self.category.get() == Some(*k) {
                 selected = r;
             }
@@ -1259,7 +1282,7 @@ impl LibraryView {
                 continue;
             }
             let g = adw::PreferencesGroup::new();
-            g.set_title(Kind::from_conf(&mods[0].conf).label());
+            g.set_title(browse_label(k, &mods[0].conf));
             for m in mods.into_iter().take(400) {
                 shown += 1;
                 g.add(&self.module_row(m));
