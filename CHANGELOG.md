@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.12
+
+- **Cross-references from your Bible.** When the selected Bible comes with its
+  own full set of cross-references, the rainbow and the other views now use
+  them. Otherwise the footer says plainly that the links are OpenBible.info's
+  set, which is built into the app (so it works offline too).
+
 ## 0.9.11
 
 - **The Quran, for study and comparison.** Downloads, Start here, has the

@@ -35,7 +35,7 @@ fn cache_path(module: &str) -> PathBuf {
     dirs::cache_dir()
         .unwrap_or_else(std::env::temp_dir)
         .join("bible-app/crossrefs")
-        .join(format!("{module}-openbible-v2.tsv"))
+        .join(format!("{module}-links-v3.tsv"))
 }
 
 /// One verse-to-verse cross-reference: [from chapter index, from verse,
@@ -43,13 +43,35 @@ fn cache_path(module: &str) -> PathBuf {
 type VLink = [u16; 4];
 
 /// Verse-level links, placed on this Bible's chapters, from the built-in data.
-fn compute(m: &Module, progress: &dyn Fn(f64)) -> (Vec<VLink>, &'static str) {
+fn compute(m: &Module, progress: &dyn Fn(f64)) -> (Vec<VLink>, String) {
     let chs = chapters(m);
     let index: HashMap<(String, u16), u16> = chs
         .iter()
         .enumerate()
         .map(|(i, (b, c, _))| ((b.clone(), *c), i as u16))
         .collect();
+    // the Bible's own cross-references, when it has them
+    if m.conf.features().contains(&bible_sword::conf::Feature::CrossRefs) {
+        let mut own = Vec::new();
+        for (i, (book, c, _)) in chs.iter().enumerate() {
+            for (v, spans) in m.chapter(book, *c) {
+                for n in spans.iter().filter_map(|s| s.note.as_ref()).filter(|n| n.xref) {
+                    for r in &n.refs {
+                        if let Some(&y) = index.get(&(r.book.clone(), r.chapter)) {
+                            own.push([i as u16, v.max(1), y, r.verse.max(1)]);
+                        }
+                    }
+                }
+            }
+            if i % 50 == 0 {
+                progress(i as f64 / chs.len().max(1) as f64);
+            }
+        }
+        // a handful means the notes are sparse: better the full built-in set
+        if own.len() >= 1000 {
+            return (own, format!("Cross-references from {} itself", m.abbreviation()));
+        }
+    }
     let all = bible_core::crossrefs::all();
     let n = all.len().max(1);
     let mut out = Vec::with_capacity(n);
@@ -72,7 +94,11 @@ fn compute(m: &Module, progress: &dyn Fn(f64)) -> (Vec<VLink>, &'static str) {
     }
     (
         out,
-        "OpenBible.info (CC BY 4.0), based on the Treasury of Scripture Knowledge",
+        format!(
+            "{} doesn’t come with a full set of cross-references, so these are OpenBible.info’s (CC BY 4.0, from the Treasury of Scripture Knowledge), built into the app and placed on {}’s chapters",
+            m.abbreviation(),
+            m.abbreviation()
+        ),
     )
 }
 
@@ -946,7 +972,7 @@ impl CrossRefs {
                 return;
             }
             if let Ok((links, source)) = res {
-                x.show(links, source);
+                x.show(links, &source);
             }
         });
     }
@@ -1318,7 +1344,15 @@ impl CrossRefs {
             }
         }
         let Some((i, verse)) = self.selected.get() else {
-            let short = source.split(" (").next().unwrap_or(&source).to_string();
+            // "from WEB itself", or plainly that the built-in set stands in
+            let short = if let Some(own) = source.strip_prefix("Cross-references from ") {
+                format!("from {own}")
+            } else if source.contains("OpenBible.info") {
+                let bible = source.split(' ').next().unwrap_or("");
+                format!("from OpenBible.info, built in ({bible} doesn’t come with a full set of its own)")
+            } else {
+                format!("from {}", source.split(" (").next().unwrap_or(&source))
+            };
             let n = total.to_string();
             let mut grouped = String::new();
             for (k, ch) in n.chars().enumerate() {
@@ -1328,7 +1362,7 @@ impl CrossRefs {
                 grouped.push(ch);
             }
             self.info.set_text(&format!(
-                "{grouped} cross-references from {short} · click a chapter to see its links · ⓘ explains the colours and orders"
+                "{grouped} cross-references {short} · click a chapter to see its links"
             ));
             self.info.set_tooltip_text(Some(&source));
             return;
