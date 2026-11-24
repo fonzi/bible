@@ -39,6 +39,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.19" date="2026-11-24">
+      <description>
+        <ul>
+          <li>How literally each Bible translates. In Downloads, Bibles now show whether they translate word for word, balanced, thought for thought, or as a paraphrase, as classified in Wikipedia's article on dynamic and formal equivalence. Bibles that article doesn't list show no such tag.</li>
+          <li>The website now thanks and links CrossWire, the SWORD Project and eBible.org, where most downloads come from.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.18" date="2026-11-24">
       <description>
         <ul>
@@ -194,13 +202,6 @@
         <ul>
           <li>Möbius strip (3D). A cross-reference joins two places in the Bible. With the Bible closed into a loop (Revelation hands back to Genesis), every such pair is exactly one point on a Möbius strip, so nothing is shown twice. Neighbouring passages line the strip's single edge, passages half the Bible apart run along its centre line, and Genesis meets Revelation at the seam.</li>
           <li>The ordering menu (Bible order, chronological, by writer…) now rearranges the cube, globe and Möbius strip too.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.8.2" date="2026-11-21">
-      <description>
-        <ul>
-          <li>The Words panel has a "Show Greek and Hebrew" button, so the interlinear can be turned on from where you look for it.</li>
         </ul>
       </description>
     </release>

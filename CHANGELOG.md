@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.19
+
+- **How literally each Bible translates.** In Downloads, Bibles now show
+  whether they translate word for word, balanced, thought for thought, or as
+  a paraphrase, as classified in Wikipedia's article on dynamic and formal
+  equivalence. Bibles that article doesn't list show no such tag.
+- The website now thanks and links CrossWire, the SWORD Project and
+  eBible.org, where most downloads come from.
+
 ## 0.9.18
 
 - **Many more cross-references from older-format Bibles.** Bibles such as

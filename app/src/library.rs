@@ -104,6 +104,35 @@ where
 
 const RECOMMEND_NOTE: &str = "Turns on the most features: tap a word for its Greek or Hebrew and Strong’s entry, grammar, footnotes and cross-references, red letters and headings. Maps, the timeline, intros from commentaries and the interlinear work with every Bible.";
 
+/// How literally a Bible translates, as Wikipedia's article "Dynamic and
+/// formal equivalence" classifies it (matched on the translation's name).
+/// None for translations that article doesn't list.
+fn approach(description: &str) -> Option<&'static str> {
+    let d = description.to_lowercase();
+    let any = |names: &[&str]| names.iter().any(|n| d.contains(n));
+    // the more specific names first
+    if any(&["living bible", "the message", "the voice", "passion translation", "street bible"]) {
+        return Some("Paraphrase");
+    }
+    if any(&["reader's version", "revised english bible", "new english bible", "new jerusalem", "jerusalem bible",
+             "good news", "contemporary english", "new living", "god's word", "god’s word", "easy-to-read",
+             "new english translation", "knox", "amplified", "complete jewish", "new life version",
+             "christian community bible", "today's new international", "today’s new international"]) {
+        return Some("Thought for thought");
+    }
+    if any(&["new world translation", "new international version", "christian standard", "common english bible",
+             "new american bible", "modern language bible", "evangelical heritage", "new catholic"]) {
+        return Some("Balanced");
+    }
+    if any(&["king james", "young's literal", "young’s literal", "douay", "revised version", "american standard",
+             "revised standard", "world english", "english standard", "lexham", "literal standard", "concordant",
+             "green's literal", "modern english version", "tree of life", "recovery version", "third millennium",
+             "orthodox study"]) {
+        return Some("Word for word");
+    }
+    None
+}
+
 /// The category a catalogue entry is listed under in Browse: the kinds of
 /// work, then CrossWire's maps and pictures, and other traditions last.
 fn browse_key(conf: &bible_sword::conf::Conf) -> u8 {
@@ -832,7 +861,12 @@ impl LibraryView {
         if Kind::from_conf(&m.conf) == Kind::Bible {
             use bible_sword::conf::Feature as F;
             let have = m.conf.features();
-            let tags: Vec<(&str, &str)> = [
+            let mut tags: Vec<(&str, &str)> = approach(&m.description())
+                .map(|a| (a, "How literally it translates, as classified in Wikipedia’s article “Dynamic and formal equivalence”"))
+                .into_iter()
+                .collect();
+            let room = 3 - tags.len();
+            tags.extend::<Vec<(&str, &str)>>([
                 (F::CrossRefs, "Cross-references", "Comes with its own cross-references: the rainbow and the other cross-reference views use them"),
                 (F::Strongs, "Word study", "Tap a word for its Greek or Hebrew and Strong’s entry"),
                 (F::Footnotes, "Footnotes", "Translators’ notes on the text"),
@@ -842,8 +876,8 @@ impl LibraryView {
             .into_iter()
             .filter(|(f, _, _)| have.contains(f))
             .map(|(_, t, tip)| (t, tip))
-            .take(3)
-            .collect();
+            .take(room)
+            .collect());
             let tag_box = gtk::Box::new(gtk::Orientation::Horizontal, 4);
             tag_box.set_valign(gtk::Align::Center);
             for (t, tip) in tags {
@@ -1337,5 +1371,20 @@ impl Section for LibraryView {
         self.render_installed();
         self.legal.set_reveal_child(self.legal_due());
         let _ = &self.browse_box;
+    }
+}
+
+#[cfg(test)]
+mod approach_tests {
+    use super::approach;
+    #[test]
+    fn translations_by_approach() {
+        assert_eq!(approach("King James Version (1769) with Strongs Numbers"), Some("Word for word"));
+        assert_eq!(approach("Young's Literal Translation (1898)"), Some("Word for word"));
+        assert_eq!(approach("World English Bible"), Some("Word for word"));
+        assert_eq!(approach("New International Reader's Version"), Some("Thought for thought"));
+        assert_eq!(approach("NET Bible® (New English Translation)"), Some("Thought for thought"));
+        assert_eq!(approach("The Message"), Some("Paraphrase"));
+        assert_eq!(approach("Bible in Basic English"), None);
     }
 }
