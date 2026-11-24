@@ -39,6 +39,13 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.9.16" date="2026-11-24">
+      <description>
+        <ul>
+          <li>Tags on Bibles in Downloads. Up to three short tags say what a Bible can do: Cross-references (used by the rainbow), Word study (Strong's), Footnotes, Red letters or Headings. They come straight from each module's own description on the download server.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.15" date="2026-11-24">
       <description>
         <ul>
@@ -203,13 +210,6 @@
           <li>A new install opens on a Bible in your language.</li>
           <li>About, the README and the website say why the app exists.</li>
           <li>Every icon-only button has a name for screen readers.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.7.0" date="2026-11-21">
-      <description>
-        <ul>
-          <li>The reader's header is labelled: Original (Greek and Hebrew) and Study. Text size moved into the ⋮ menu.</li>
         </ul>
       </description>
     </release>

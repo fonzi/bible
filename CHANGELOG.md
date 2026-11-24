@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.16
+
+- **Tags on Bibles in Downloads.** Up to three short tags say what a Bible
+  can do: Cross-references (used by the rainbow), Word study (Strong's),
+  Footnotes, Red letters or Headings. They come straight from each module's
+  own description on the download server.
+
 ## 0.9.15
 
 - **Bibles with their own cross-references are marked** in Downloads with an

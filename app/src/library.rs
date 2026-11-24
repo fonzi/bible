@@ -801,33 +801,40 @@ impl LibraryView {
             m.source.name,
             m.conf.get("DistributionLicense").unwrap_or("see details")
         );
-        let feats = if Kind::from_conf(&m.conf) == Kind::Bible {
-            feature_line(&m.conf)
-        } else {
-            String::new()
-        };
-        let sub = if feats.is_empty() {
-            sub
-        } else {
-            format!("{sub}\n{feats}")
-        };
+
         let row = adw::ActionRow::builder()
             .title(glib::markup_escape_text(&m.description()).as_str())
             .subtitle(glib::markup_escape_text(&sub).as_str())
             .subtitle_lines(3)
             .build();
-        // Bibles with their own cross-references, which the rainbow uses
-        if Kind::from_conf(&m.conf) == Kind::Bible
-            && m.conf.features().contains(&bible_sword::conf::Feature::CrossRefs)
-        {
-            let tag = gtk::Label::new(Some("Own cross-references"));
-            tag.add_css_class("xref-tag");
-            tag.add_css_class("caption");
-            tag.set_valign(gtk::Align::Center);
-            tag.set_tooltip_text(Some(
-                "Comes with its own cross-references: the rainbow and the other cross-reference views use them",
-            ));
-            row.add_suffix(&tag);
+        // a few short tags for what a Bible can do (at most three)
+        if Kind::from_conf(&m.conf) == Kind::Bible {
+            use bible_sword::conf::Feature as F;
+            let have = m.conf.features();
+            let tags: Vec<(&str, &str)> = [
+                (F::CrossRefs, "Cross-references", "Comes with its own cross-references: the rainbow and the other cross-reference views use them"),
+                (F::Strongs, "Word study", "Tap a word for its Greek or Hebrew and Strong’s entry"),
+                (F::Footnotes, "Footnotes", "Translators’ notes on the text"),
+                (F::RedLetters, "Red letters", "The words of Jesus in red"),
+                (F::Headings, "Headings", "Section headings in the text"),
+            ]
+            .into_iter()
+            .filter(|(f, _, _)| have.contains(f))
+            .map(|(_, t, tip)| (t, tip))
+            .take(3)
+            .collect();
+            let tag_box = gtk::Box::new(gtk::Orientation::Horizontal, 4);
+            tag_box.set_valign(gtk::Align::Center);
+            for (t, tip) in tags {
+                let tag = gtk::Label::new(Some(t));
+                tag.add_css_class("xref-tag");
+                tag.add_css_class("caption");
+                tag.set_tooltip_text(Some(tip));
+                tag_box.append(&tag);
+            }
+            if tag_box.first_child().is_some() {
+                row.add_suffix(&tag_box);
+            }
         }
         let bar = gtk::ProgressBar::new();
         bar.set_visible(false);
