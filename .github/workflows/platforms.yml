@@ -82,7 +82,7 @@ jobs:
         run: ./dist/Bible/bin/bible-app.exe --check-fonts
       - name: The window opens without missing fonts or files
         run: |
-          BIBLE_APP_SECTION=reader ./dist/Bible/bin/bible-app.exe > run.log 2>&1 &
+          BIBLE_APP_SECTION=bible ./dist/Bible/bin/bible-app.exe > run.log 2>&1 &
           sleep 20
           alive=0; tasklist | grep -qi bible-app.exe && alive=1
           taskkill //F //IM bible-app.exe >/dev/null 2>&1 || true
@@ -125,7 +125,7 @@ jobs:
           a=dist/Bible/Bible.app/Contents/MacOS/bible-app
           $a --help
           $a --check-fonts
-          BIBLE_APP_SECTION=reader $a > run.log 2>&1 &
+          BIBLE_APP_SECTION=bible $a > run.log 2>&1 &
           pid=$!
           sleep 20
           screencapture -x screen.png || true

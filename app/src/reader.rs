@@ -276,9 +276,14 @@ impl Reader {
         par_dd.set_enable_search(true);
         par_dd.set_tooltip_text(Some("Second version"));
         let il_toggle = gtk::ToggleButton::new();
-        let il_lab = gtk::Label::new(None);
-        il_lab.set_markup("<span font_family=\"Literata, Noto Serif, Georgia, serif\" weight=\"bold\">Αα</span>  Original");
-        il_toggle.set_child(Some(&il_lab));
+        // "Αα" in the scripture serif; the font list lives in CSS, since
+        // Pango markup can't fall back through a list on Windows
+        let il_box = gtk::Box::new(gtk::Orientation::Horizontal, 6);
+        let il_aa = gtk::Label::new(Some("Αα"));
+        il_aa.add_css_class("il-label");
+        il_box.append(&il_aa);
+        il_box.append(&gtk::Label::new(Some("Original")));
+        il_toggle.set_child(Some(&il_box));
         il_toggle.set_tooltip_text(Some("Interlinear: Greek and Hebrew word by word"));
         header.pack_end(&panel_toggle);
         header.pack_end(&par_dd);
