@@ -63,24 +63,65 @@ fn ensure_window(app: &adw::Application) -> Rc<ctx::Ctx> {
     c
 }
 
-/// Windows has none of GNOME's fonts, so the Windows zip carries them in
-/// share/fonts with a fontconfig setup in etc/fonts. Pango is pointed at it
-/// before GTK starts.
+/// Hands Pango the fonts bundled next to the app (Windows and macOS have
+/// none of GNOME's), before GTK starts.
+#[cfg(not(target_os = "linux"))]
+fn add_bundled_fonts(dir: &std::path::Path) {
+    use pango::prelude::*;
+    let map = pangocairo::FontMap::default();
+    let Ok(entries) = std::fs::read_dir(dir) else { return };
+    for p in entries.flatten().map(|e| e.path()) {
+        if matches!(p.extension().and_then(|x| x.to_str()), Some("ttf" | "otf")) {
+            if let Err(e) = map.add_font_file(&p) {
+                eprintln!("couldn't add font {}: {e}", p.display());
+            }
+        }
+    }
+}
+
+/// The Windows zip keeps the fonts in share/fonts beside bin/.
 #[cfg(windows)]
 fn use_bundled_fonts() {
-    let Some(root) = std::env::current_exe()
+    if let Some(root) = std::env::current_exe()
         .ok()
         .and_then(|e| Some(e.parent()?.parent()?.to_path_buf()))
-    else {
+    {
+        add_bundled_fonts(&root.join("share").join("fonts"));
+    }
+}
+
+/// Inside Bible.app every library, GTK's data and the fonts are bundled in
+/// Contents/Resources; GTK and GStreamer are told where.
+#[cfg(target_os = "macos")]
+fn use_app_bundle() {
+    use std::env::set_var;
+    let Some(macos) = std::env::current_exe().ok().and_then(|e| Some(e.parent()?.to_path_buf())) else {
         return;
     };
-    let fonts = root.join("etc").join("fonts");
-    if fonts.join("fonts.conf").exists() {
-        if std::env::var_os("PANGOCAIRO_BACKEND").is_none() {
-            std::env::set_var("PANGOCAIRO_BACKEND", "fc");
-        }
-        std::env::set_var("FONTCONFIG_PATH", &fonts);
+    let Some(contents) = macos.parent() else { return };
+    let res = contents.join("Resources");
+    if contents.file_name().and_then(|n| n.to_str()) != Some("Contents") || !res.join("share").exists() {
+        return; // a plain build, using Homebrew's GTK
     }
+    let cache = std::env::var_os("HOME")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(std::env::temp_dir)
+        .join("Library/Caches/io.github.fonzi.Bible");
+    let _ = std::fs::create_dir_all(&cache);
+    set_var("XDG_DATA_DIRS", res.join("share"));
+    set_var("GSETTINGS_SCHEMA_DIR", res.join("share/glib-2.0/schemas"));
+    set_var("GST_PLUGIN_SYSTEM_PATH_1_0", res.join("lib/gstreamer-1.0"));
+    set_var("GST_PLUGIN_SCANNER_1_0", macos.join("gst-plugin-scanner"));
+    set_var("GST_REGISTRY_1_0", cache.join("gst-registry.bin"));
+    // the image loaders' cache needs absolute paths, and the app can live anywhere
+    let pb = res.join("lib/gdk-pixbuf-2.0/2.10.0");
+    if let Ok(t) = std::fs::read_to_string(pb.join("loaders.cache.in")) {
+        let file = cache.join("loaders.cache");
+        if std::fs::write(&file, t.replace("@RES@", &res.to_string_lossy())).is_ok() {
+            set_var("GDK_PIXBUF_MODULE_FILE", file);
+        }
+    }
+    add_bundled_fonts(&res.join("share/fonts"));
 }
 
 /// `--check-fonts`: exits with an error unless the fonts the app is designed
@@ -102,6 +143,8 @@ fn check_fonts() -> gtk::glib::ExitCode {
 fn main() -> gtk::glib::ExitCode {
     #[cfg(windows)]
     use_bundled_fonts();
+    #[cfg(target_os = "macos")]
+    use_app_bundle();
     if std::env::args().any(|a| a == "--check-fonts") {
         return check_fonts();
     }

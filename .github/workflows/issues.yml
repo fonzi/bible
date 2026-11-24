@@ -1,0 +1,30 @@
+name: Issues
+# Windows and macOS builds are offered as they are. Bug reports that say they
+# come from Windows or macOS (the form's "Where are you running Bible?") are
+# closed with a note.
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write
+jobs:
+  unsupported-platform:
+    runs-on: ubuntu-24.04
+    if: contains(github.event.issue.body, '### Where are you running Bible?')
+    steps:
+      - name: Close Windows and macOS reports with a note
+        env:
+          GH_TOKEN: ${{ github.token }}
+          N: ${{ github.event.issue.number }}
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          answer=$(printf '%s\n' "$BODY" | tr -d '\r' | awk '
+            /^### Where are you running Bible\?/ { on = 1; next }
+            on && NF { print; exit }')
+          echo "Platform: $answer"
+          case "$answer" in
+            Windows|macOS) ;;
+            *) exit 0 ;;
+          esac
+          gh issue comment "$N" -R "$GITHUB_REPOSITORY" --body "Thanks for trying Bible. It's made for GNOME first, and the Windows and macOS builds are offered as they are, without support, so this issue is closed automatically. If you can fix it yourself, a pull request is welcome."
+          gh issue close "$N" -R "$GITHUB_REPOSITORY" --reason "not planned"

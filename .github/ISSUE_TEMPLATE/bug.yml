@@ -1,0 +1,30 @@
+name: Something isn't working
+description: Report a bug in Bible
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Where are you running Bible?
+      description: Bible is made for GNOME first. Windows and macOS builds are offered as they are, without support.
+      options:
+        - Linux (.deb)
+        - Linux (Flatpak)
+        - Linux (Arch package)
+        - Linux (built from source)
+        - Windows
+        - macOS
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Bible version
+      description: In the menu, About Bible.
+      placeholder: "0.9.6"
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Screenshots help. The log is at ~/.local/state/bible-app/bible-app.log.
+    validations:
+      required: true

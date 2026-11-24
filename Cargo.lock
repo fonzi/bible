@@ -65,6 +65,7 @@ dependencies = [
  "gstreamer",
  "gtk4",
  "libadwaita",
+ "pango",
  "pangocairo",
  "scraper",
  "serde",

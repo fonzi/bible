@@ -1,0 +1,9 @@
+name: An idea
+description: Suggest something for Bible
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like Bible to do?
+    validations:
+      required: true
