@@ -12,6 +12,7 @@ permissions:
 jobs:
   deb:
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     outputs:
       version: ${{ steps.v.outputs.version }}
       created: ${{ steps.v.outputs.exists != 'true' }}
@@ -28,16 +29,21 @@ jobs:
       - name: Install build dependencies
         if: steps.v.outputs.exists != 'true'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y --no-install-recommends libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config
       - uses: dtolnay/rust-toolchain@stable
         if: steps.v.outputs.exists != 'true'
       - uses: Swatinem/rust-cache@v2
         if: steps.v.outputs.exists != 'true'
+        with:
+          shared-key: release
+      - uses: taiki-e/install-action@v2
+        if: steps.v.outputs.exists != 'true'
+        with:
+          tool: cargo-deb
       - name: Build the Debian package
         if: steps.v.outputs.exists != 'true'
         run: |
-          cargo install cargo-deb --locked
           cargo build --release
           cargo deb -p bible-app --no-build
       - name: Release notes from CHANGELOG.md
@@ -66,6 +72,7 @@ jobs:
     needs: deb
     if: needs.deb.outputs.created == 'true'
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-47
       options: --privileged
@@ -80,7 +87,7 @@ jobs:
         with:
           bundle: bible-app-${{ needs.deb.outputs.version }}.flatpak
           manifest-path: packaging/flatpak/io.github.fonzi.Bible.json
-          cache-key: flatpak-${{ github.sha }}
+          cache-key: flatpak-${{ hashFiles('Cargo.lock', 'packaging/flatpak/*.json') }}
       - name: Attach to the release
         uses: softprops/action-gh-release@v2
         with:

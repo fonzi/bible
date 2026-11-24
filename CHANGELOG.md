@@ -7,6 +7,9 @@
   Ubuntu 22.04 and Debian 12, and on most other distributions.
 - Inside the Flatpak, the update banner opens the release page instead of
   installing a .deb.
+- Groundwork for Windows and macOS: modules and data go in the usual place
+  on each system (%APPDATA%\Sword on Windows), and every push is now built
+  and tested on Windows, macOS and as a Flatpak.
 
 ## 0.9.2
 

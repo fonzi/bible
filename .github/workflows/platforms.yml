@@ -1,0 +1,117 @@
+name: Platforms
+# Builds and tests on Flatpak, Windows and macOS. We have no Windows or Mac
+# to try it on, so these runs are how we know whether it works there.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: platforms-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  CARGO_PROFILE_DEV_DEBUG: 0
+  CARGO_PROFILE_TEST_DEBUG: 0
+jobs:
+  flatpak:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-47
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v5
+      - name: List the crates for an offline build
+        run: |
+          pip install --break-system-packages aiohttp tomlkit 2>/dev/null || pip install aiohttp tomlkit
+          curl -sSLo /tmp/gen.py https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/cargo/flatpak-cargo-generator.py
+          python3 /tmp/gen.py Cargo.lock -o packaging/flatpak/cargo-sources.json
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: bible-app.flatpak
+          manifest-path: packaging/flatpak/io.github.fonzi.Bible.json
+          cache-key: flatpak-${{ hashFiles('Cargo.lock', 'packaging/flatpak/*.json') }}
+          upload-artifact: false
+      - name: The bundle installs and the app starts
+        run: |
+          flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y --noninteractive ./bible-app.flatpak
+          flatpak info --user io.github.fonzi.Bible
+          # the binary runs inside the sandbox (no display needed for --help)
+          flatpak run --user --command=bible-app io.github.fonzi.Bible --help
+
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          cache: true
+          install: >-
+            zip
+          pacboy: >-
+            gtk4:p libadwaita:p gstreamer:p gst-plugins-base:p gst-plugins-good:p
+            rust:p pkgconf:p gcc:p
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            target
+          key: windows-${{ hashFiles('Cargo.lock') }}
+          restore-keys: windows-
+      - name: Build
+        run: cargo build --release -p bible-app
+      - name: Tests
+        run: cargo test --workspace
+      - name: Bundle the app with its libraries
+        run: |
+          set -e
+          d=dist/Bible
+          mkdir -p $d/bin $d/share/glib-2.0/schemas $d/share/icons $d/lib
+          cp target/release/bible-app.exe $d/bin/
+          # every DLL the app loads from MSYS2
+          ldd target/release/bible-app.exe | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} $d/bin/
+          cp /ucrt64/share/glib-2.0/schemas/*.xml $d/share/glib-2.0/schemas/
+          glib-compile-schemas $d/share/glib-2.0/schemas
+          cp -r /ucrt64/share/icons/Adwaita /ucrt64/share/icons/hicolor $d/share/icons/
+          cp -r /ucrt64/lib/gdk-pixbuf-2.0 $d/lib/
+          cp -r /ucrt64/lib/gstreamer-1.0 $d/lib/
+          # libraries the GStreamer plugins load
+          for p in $d/lib/gstreamer-1.0/*.dll; do ldd "$p" | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} $d/bin/; done
+          (cd dist && zip -qr ../bible-app-windows.zip Bible)
+      - name: The bundled app starts on its own
+        run: ./dist/Bible/bin/bible-app.exe --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bible-app-windows
+          path: bible-app-windows.zip
+
+  macos:
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install GTK and libadwaita
+        run: brew install gtk4 libadwaita gstreamer pkgconf adwaita-icon-theme
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: macos
+      - name: Build
+        run: cargo build --release -p bible-app
+      - name: Tests
+        run: cargo test --workspace
+      - name: The app starts
+        run: ./target/release/bible-app --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bible-app-macos
+          path: target/release/bible-app

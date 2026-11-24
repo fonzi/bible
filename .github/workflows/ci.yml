@@ -3,20 +3,42 @@ on:
   push:
     branches: [main]
   pull_request:
+# a newer push makes the older run pointless
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CARGO_TERM_COLOR: always
+  # CI builds once from a cache: no incremental files, no debug info
+  CARGO_INCREMENTAL: 0
+  CARGO_PROFILE_DEV_DEBUG: 0
+  CARGO_PROFILE_TEST_DEBUG: 0
 jobs:
   test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      # mold links several times faster than the default linker
+      RUSTFLAGS: -C link-arg=-fuse-ld=mold
     steps:
       - uses: actions/checkout@v5
       - name: Install build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config xvfb
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y --no-install-recommends \
+            libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config xvfb mold clang \
+            appstream desktop-file-utils
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
       - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: linux
       - name: Clippy
         run: cargo clippy --workspace --all-targets
       - name: Tests
         run: xvfb-run -a cargo test --workspace
+      - name: Check the app's desktop and store metadata
+        run: |
+          desktop-file-validate data/io.github.fonzi.Bible.desktop
+          appstreamcli validate --no-net --explain data/io.github.fonzi.Bible.metainfo.xml

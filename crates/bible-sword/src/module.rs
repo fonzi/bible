@@ -506,21 +506,31 @@ pub(crate) fn block_letter(conf: &Conf) -> char {
 pub fn default_roots() -> Vec<(PathBuf, bool)> {
     let mut v = Vec::new();
     if let Ok(p) = std::env::var("SWORD_PATH") {
-        for part in p.split(':').filter(|s| !s.is_empty()) {
+        // the path separator is ; on Windows, : elsewhere
+        let sep = if cfg!(windows) { ';' } else { ':' };
+        for part in p.split(sep).filter(|s| !s.is_empty()) {
             v.push((PathBuf::from(part), false));
         }
     }
-    if let Some(home) = std::env::var_os("HOME") {
-        v.push((PathBuf::from(home).join(".sword"), true));
+    v.push((user_root(), true));
+    if cfg!(unix) {
+        v.push((PathBuf::from("/usr/share/sword"), false));
+        v.push((PathBuf::from("/usr/local/share/sword"), false));
     }
-    v.push((PathBuf::from("/usr/share/sword"), false));
-    v.push((PathBuf::from("/usr/local/share/sword"), false));
     v
 }
 
-/// The directory new modules are installed into (~/.sword).
+/// The directory new modules are installed into: ~/.sword on Linux and
+/// macOS (shared with other SWORD apps), %APPDATA%\Sword on Windows (where
+/// Xiphos and other Windows SWORD apps keep theirs).
 pub fn user_root() -> PathBuf {
+    if cfg!(windows) {
+        if let Some(a) = std::env::var_os("APPDATA") {
+            return PathBuf::from(a).join("Sword");
+        }
+    }
     std::env::var_os("HOME")
+        .or_else(|| std::env::var_os("USERPROFILE"))
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from("."))
         .join(".sword")
