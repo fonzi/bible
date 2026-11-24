@@ -2,7 +2,7 @@
 # Builds Bible from the tagged release source. To update, set pkgver to the
 # new version and run `updpkgsums`.
 pkgname=bible-app
-pkgver=0.9.3
+pkgver=0.9.4
 pkgrel=1
 pkgdesc="Offline Bible study app for GNOME: SWORD modules, interlinear Greek and Hebrew, cross-references, timeline and maps"
 arch=('x86_64' 'aarch64')

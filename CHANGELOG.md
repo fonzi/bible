@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.4
+
+- **Windows and macOS test builds.** Each release now includes a Windows zip
+  and a macOS zip, named `_untested`: they build and pass every test
+  automatically, but no one has run them on a real PC or Mac yet. The macOS
+  build needs GTK from Homebrew (see the README inside the zip).
+- Releases come out faster: the tests and the Linux package share one build,
+  and Flatpak, Windows and macOS build at the same time.
+
 ## 0.9.3
 
 - **Flatpak.** Each release now also comes as a `.flatpak`, which brings its

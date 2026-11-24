@@ -2,31 +2,34 @@ name: Release
 # Publishes a release whenever the version in Cargo.toml changes on main
 # (or when run by hand from the Actions tab). The tag is created here,
 # on the commit that was built.
+#
+#   check ─┬─ linux   (tests + .deb, one build)   ─┐
+#          ├─ flatpak (build + install + start)    ├─ publish
+#          ├─ windows (tests + zip, untested)      │
+#          └─ macos   (tests + zip, untested)     ─┘
+#
+# Nothing is published unless Linux and Flatpak pass. Windows and macOS are
+# attached when they pass; we have no hardware to try them, so their files
+# are named _untested.
 on:
   push:
     branches: [main]
     paths: ["Cargo.toml", ".github/workflows/release.yml"]
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
 jobs:
-  # nothing is released unless every test passes
-  test:
-    uses: ./.github/workflows/ci.yml
-    permissions:
-      contents: read
-  deb:
-    needs: test
-    permissions:
-      contents: write
+  check:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
     outputs:
       version: ${{ steps.v.outputs.version }}
-      created: ${{ steps.v.outputs.exists != 'true' }}
+      new: ${{ steps.v.outputs.exists != 'true' }}
     steps:
       - uses: actions/checkout@v5
-      - name: Read the version
+      - name: Is this version already released?
         id: v
         run: |
           ver=$(grep -m1 '^version = ' Cargo.toml | cut -d'"' -f2)
@@ -34,53 +37,51 @@ jobs:
           if git ls-remote --exit-code --tags origin "refs/tags/v$ver" >/dev/null; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           fi
+
+  # tests and the .deb share one toolchain, one cache and one release build
+  linux:
+    needs: check
+    if: needs.check.outputs.new == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      RUSTFLAGS: -C link-arg=-fuse-ld=mold
+    steps:
+      - uses: actions/checkout@v5
       - name: Install build dependencies
-        if: steps.v.outputs.exists != 'true'
         run: |
           sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update
-          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y --no-install-recommends libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y --no-install-recommends \
+            libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config xvfb mold clang \
+            appstream desktop-file-utils
       - uses: dtolnay/rust-toolchain@stable
-        if: steps.v.outputs.exists != 'true'
       - uses: Swatinem/rust-cache@v2
-        if: steps.v.outputs.exists != 'true'
         with:
           shared-key: release
       - uses: taiki-e/install-action@v2
-        if: steps.v.outputs.exists != 'true'
         with:
           tool: cargo-deb
+      # release mode, so the package below reuses this build
+      - name: Tests
+        run: xvfb-run -a cargo test --workspace --release
+      - name: Check the app's desktop and store metadata
+        run: |
+          desktop-file-validate data/io.github.fonzi.Bible.desktop
+          appstreamcli validate --no-net --explain data/io.github.fonzi.Bible.metainfo.xml
       - name: Build the Debian package
-        if: steps.v.outputs.exists != 'true'
         run: |
           cargo build --release
           cargo deb -p bible-app --no-build
-      - name: Release notes from CHANGELOG.md
-        if: steps.v.outputs.exists != 'true'
-        run: |
-          awk -v v="## ${{ steps.v.outputs.version }}" '
-            $0 == v { on = 1; next }
-            on && /^## / { exit }
-            on { print }
-          ' CHANGELOG.md > notes.md
-          [ -s notes.md ] || echo "See the commits below." > notes.md
-      - name: Publish the release
-        if: steps.v.outputs.exists != 'true'
-        uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ steps.v.outputs.version }}
-          name: Bible ${{ steps.v.outputs.version }}
-          target_commitish: ${{ github.sha }}
-          files: target/debian/*.deb
-          body_path: notes.md
-          generate_release_notes: true
+          name: deb
+          path: target/debian/*.deb
 
-  # The same release as a Flatpak, which brings its own GNOME libraries and so
-  # runs on older systems too (Ubuntu and Pop!_OS 22.04, Debian 12…).
+  # brings its own GNOME libraries, so it runs on older systems too
+  # (Ubuntu and Pop!_OS 22.04, Debian 12…)
   flatpak:
-    needs: deb
-    permissions:
-      contents: write
-    if: needs.deb.outputs.created == 'true'
+    needs: check
+    if: needs.check.outputs.new == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     container:
@@ -95,11 +96,138 @@ jobs:
           python3 /tmp/gen.py Cargo.lock -o packaging/flatpak/cargo-sources.json
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          bundle: bible-app-${{ needs.deb.outputs.version }}.flatpak
+          bundle: bible-app-${{ needs.check.outputs.version }}.flatpak
           manifest-path: packaging/flatpak/io.github.fonzi.Bible.json
           cache-key: flatpak-${{ hashFiles('Cargo.lock', 'packaging/flatpak/*.json') }}
-      - name: Attach to the release
-        uses: softprops/action-gh-release@v2
+          upload-artifact: false
+      - name: The bundle installs and the app starts
+        run: |
+          flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y --noninteractive ./bible-app-${{ needs.check.outputs.version }}.flatpak
+          flatpak run --user --command=bible-app io.github.fonzi.Bible --help
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ needs.deb.outputs.version }}
-          files: bible-app-${{ needs.deb.outputs.version }}.flatpak
+          name: flatpak
+          path: bible-app-${{ needs.check.outputs.version }}.flatpak
+
+  windows:
+    needs: check
+    if: needs.check.outputs.new == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          cache: true
+          install: >-
+            zip
+          pacboy: >-
+            gtk4:p libadwaita:p gstreamer:p gst-plugins-base:p gst-plugins-good:p
+            rust:p pkgconf:p gcc:p
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            target
+          key: windows-release-${{ hashFiles('Cargo.lock') }}
+          restore-keys: windows-
+      - name: Tests
+        run: cargo test --workspace --release
+      - name: Build
+        run: cargo build --release -p bible-app
+      - name: Bundle the app with its libraries
+        run: |
+          set -e
+          d=dist/Bible
+          mkdir -p $d/bin $d/share/glib-2.0/schemas $d/share/icons $d/lib
+          cp target/release/bible-app.exe $d/bin/
+          ldd target/release/bible-app.exe | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} $d/bin/
+          cp /ucrt64/share/glib-2.0/schemas/*.xml $d/share/glib-2.0/schemas/
+          glib-compile-schemas $d/share/glib-2.0/schemas
+          cp -r /ucrt64/share/icons/Adwaita /ucrt64/share/icons/hicolor $d/share/icons/
+          cp -r /ucrt64/lib/gdk-pixbuf-2.0 $d/lib/
+          cp -r /ucrt64/lib/gstreamer-1.0 $d/lib/
+          for p in $d/lib/gstreamer-1.0/*.dll; do ldd "$p" | grep -i ucrt64 | awk '{print $3}' | xargs -I{} cp -n {} $d/bin/; done
+          printf '%s\r\n' "Untested: built and tested automatically, never run on a real Windows PC." \
+            "Start it with bin\\bible-app.exe. Problems: https://github.com/fonzi/bible/issues" > $d/README.txt
+          (cd dist && zip -qr ../bible-app-${{ needs.check.outputs.version }}-windows_untested.zip Bible)
+      - name: The bundled app starts on its own
+        run: ./dist/Bible/bin/bible-app.exe --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: bible-app-*-windows_untested.zip
+
+  macos:
+    needs: check
+    if: needs.check.outputs.new == 'true'
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install GTK and libadwaita
+        run: brew install gtk4 libadwaita gstreamer pkgconf adwaita-icon-theme
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: macos-release
+      - name: Tests
+        run: cargo test --workspace --release
+      - name: Build
+        run: cargo build --release -p bible-app
+      - name: The app starts
+        run: ./target/release/bible-app --help
+      - name: Zip it
+        run: |
+          mkdir -p dist/Bible
+          cp target/release/bible-app dist/Bible/
+          printf '%s\n' "Untested: built and tested automatically, never run on a real Mac." \
+            "Needs Homebrew: brew install gtk4 libadwaita gstreamer adwaita-icon-theme" \
+            "Then run ./bible-app. Problems: https://github.com/fonzi/bible/issues" > dist/Bible/README.txt
+          (cd dist && zip -qr ../bible-app-${{ needs.check.outputs.version }}-macos_untested.zip Bible)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: bible-app-*-macos_untested.zip
+
+  publish:
+    needs: [check, linux, flatpak, windows, macos]
+    # Linux and Flatpak must pass; untested platforms come along if they built
+    if: >-
+      always() && needs.check.outputs.new == 'true' &&
+      needs.linux.result == 'success' && needs.flatpak.result == 'success'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Release notes from CHANGELOG.md
+        run: |
+          awk -v v="## ${{ needs.check.outputs.version }}" '
+            $0 == v { on = 1; next }
+            on && /^## / { exit }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "See the commits below." > notes.md
+          if ls out/*_untested.zip >/dev/null 2>&1; then
+            printf '\n**Windows and macOS** (`_untested`): built and tested automatically, but no one has run them on a real PC or Mac yet. Reports welcome.\n' >> notes.md
+          fi
+          ls -l out
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.check.outputs.version }}
+          name: Bible ${{ needs.check.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          files: out/*
+          body_path: notes.md
+          generate_release_notes: true
