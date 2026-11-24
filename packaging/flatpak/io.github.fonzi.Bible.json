@@ -11,8 +11,7 @@
     "--socket=wayland",
     "--socket=fallback-x11",
     "--device=dri",
-    "--socket=pulseaudio",
-    "--filesystem=~/.sword:create"
+    "--socket=pulseaudio"
   ],
   "build-options": {
     "append-path": "/usr/lib/sdk/rust-stable/bin",

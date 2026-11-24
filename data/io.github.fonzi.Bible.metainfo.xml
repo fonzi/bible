@@ -28,100 +28,158 @@
   <url type="vcs-browser">https://github.com/fonzi/bible</url>
   <launchable type="desktop-id">io.github.fonzi.Bible.desktop</launchable>
   <content_rating type="oars-1.1"/>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Today: the church year, your reading plan and the passage of the day</caption>
+      <image>https://raw.githubusercontent.com/fonzi/bible/main/data/screenshots/today.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Reading with the Greek word by word, and a word's meaning underneath</caption>
+      <image>https://raw.githubusercontent.com/fonzi/bible/main/data/screenshots/reader.png</image>
+    </screenshot>
+  </screenshots>
   <releases>
-    <release version="0.6.1" date="2026-11-21">
+    <release version="0.9.11" date="2026-11-24">
       <description>
         <ul>
-          <li>Choose your loading animation: a turning cross, a Chi-Rho, an ichthys or a Trinity knot, used wherever the app waits</li>
-          <li>Search suggests searches to try</li>
-          <li>More church-history dates, so Today always has one</li>
-          <li>A larger test suite</li>
+          <li>The Quran, for study and comparison. Downloads, Start here, has the Quran at the very bottom: the Arabic text (Tanzil) with Marmaduke Pickthall's English translation (1930), verse by verse, read in the Reading room. Story links with the Bible and the cross-reference views come later.</li>
+          <li>Ready for Flathub. In the Flatpak, downloads now go into the app's own folder, so it needs no access to your home folder; the update banner is gone there, since GNOME Software updates Flatpaks; and the app's store listing has screenshots and every version's notes.</li>
+          <li>The language list in Downloads no longer jumps around as you scroll.</li>
         </ul>
       </description>
     </release>
-    <release version="0.6.0" date="2026-11-21">
+    <release version="0.9.10" date="2026-11-23">
       <description>
         <ul>
-          <li>Introductions for the 18 deuterocanonical books (Apocrypha), built in, with their full Wikipedia articles to download</li>
-          <li>Gentler Wikipedia downloads that use standard picture sizes, to avoid rate limits</li>
-          <li>A large spinner in the middle of the cross-reference map while it draws</li>
+          <li>Word details live inside Original. Tap a Greek or Hebrew word and its meaning, grammar and lexicon entry open right under the interlinear, instead of in a separate Words tab. The lexicon comes with the Greek and Hebrew download, so nothing else is needed.</li>
+          <li>Church history on Today has a button on each event to read about it on Wikipedia.</li>
+          <li>Every release now checks that the files Bible offers to download (Bible sources, Greek and Hebrew data, church fathers, audio, Wikipedia) are still reachable.</li>
         </ul>
       </description>
     </release>
-    <release version="0.5.3" date="2026-11-18">
+    <release version="0.9.9" date="2026-11-23">
       <description>
         <ul>
-          <li>Wikipedia downloads go gently and retry when rate-limited, and say why any failed</li>
-          <li>Preferences → Book introductions lists every book to download, update or remove one by one</li>
+          <li>Personal copies. Many modern translations are still under copyright, so they can't be offered for download. If you already have one as a SWORD module (.zip), add it from Downloads, Start here, Personal copies. It stays on your computer.</li>
+          <li>Plans for reading the Quran and seeing its story parallels with the Bible (in docs/quran.md); not in the app yet.</li>
         </ul>
       </description>
     </release>
-    <release version="0.5.2" date="2026-11-18">
+    <release version="0.9.8" date="2026-11-23">
       <description>
         <ul>
-          <li>New startup sound: the opening of a Gregorian Kyrie, sung</li>
+          <li>Downloads, a category at a time. Browse now has a list on the left: Start here, Bibles, Commentaries, Books, Devotionals, and Dictionaries and lexicons, each with a count. Search still looks through everything.</li>
+          <li>Languages by name. The language menu shows every language's name instead of codes such as "ckb" or "tpi", in alphabetical order, with how many works each has, and you can type to find one.</li>
+          <li>A little more space under the search bar.</li>
         </ul>
       </description>
     </release>
-    <release version="0.5.1" date="2026-11-18">
+    <release version="0.9.7" date="2026-11-23">
       <description>
         <ul>
-          <li>Cross-references no longer freeze the app: drawing happens in the background with a spinner</li>
-          <li>Reset view (and Esc), a Read button for the selected passage, a colour legend and a slide-in explanations panel</li>
-          <li>Intro in the verse dropdown</li>
-          <li>Full Wikipedia articles with pictures for book introductions, saved for offline reading</li>
-          <li>Classic typography changes only the text, not the page background</li>
+          <li>Mac app (untested): the macOS download is now a real Bible.app with everything inside it, GTK included, so nothing else needs installing (Apple Silicon). Unzip, drag it to Applications, and allow it once in System Settings, Privacy &amp; Security, since it isn't notarized by Apple.</li>
+          <li>Windows build (untested): text uses Windows' own fonts (Georgia or Cambria for scripture, Cascadia Mono or Consolas for code) instead of falling back to a plain sans font, and the app's own icons are included. No more console window beside the app, and no "win32 session" warning. The zip's README explains the SmartScreen warning: the app isn't code-signed.</li>
+          <li>Bible is made for GNOME first: Windows and macOS builds are offered as they are, without support. Bug reports now use a short form, and reports from Windows or macOS are closed automatically with a note.</li>
+          <li>The original-language button reads Αω (Alpha and Omega).</li>
         </ul>
       </description>
     </release>
-    <release version="0.5.0" date="2026-11-18">
+    <release version="0.9.6" date="2026-11-23">
       <description>
         <ul>
-          <li>Fixed a crash when playing downloaded audio; playback now uses its own GStreamer player</li>
-          <li>A log file, with “Open log folder” in Preferences</li>
-          <li>Audio shows in GNOME’s media controls, with cover art</li>
-          <li>Over 340,000 built-in cross-references, so the rainbow works with every Bible</li>
-          <li>Cross-references: zoom down to single verses, see every link meeting at one verse, and experimental circle and matrix views</li>
-          <li>Order the books by events, age written, writers, language, culture, genre, literary form (songs, parables, prayers…), Hebrew Bible order and more, with explanations on hover</li>
-          <li>The Today screen is now tiled</li>
-          <li>Optional two-second startup sound: Old Hundredth, Amazing Grace, Holy Holy Holy or a bell, synthesised from public-domain tunes, with a preview button</li>
+          <li>The README says plainly that Windows and macOS builds are untested; Bible is made for GNOME first. (This release has no Windows build: its font check failed, and it was fixed in 0.9.7.)</li>
         </ul>
       </description>
     </release>
-    <release version="0.4.0" date="2026-11-18">
+    <release version="0.9.5" date="2026-11-23">
       <description>
-        <p>Listen, plan, study and present.</p>
         <ul>
-          <li>Chapter audio: download a chapter or a whole book and listen as you read</li>
-          <li>Reading plans, with today's reading on the Today page</li>
-          <li>A passage of the day, today in church history, and what is happening in the chapter you are reading</li>
-          <li>Introductions to every book, with a map of its places, built in</li>
-          <li>Bookmarks with tags, and Markdown export</li>
-          <li>Word study for any Greek or Hebrew word</li>
-          <li>The cross-reference rainbow</li>
-          <li>Presentation mode, a verse picker and GNOME Shell search</li>
-          <li>Optional fasting calendar, classic typography and splash screen</li>
+          <li>The version menu now shows each version's full name under its short one, and says when a version has only the Old or only the New Testament. LXX2012, for example, is the Septuagint (the Greek Old Testament) in English, so it shows "Old Testament only".</li>
         </ul>
       </description>
     </release>
-    <release version="0.3.1" date="2026-11-16">
-      <description><p>The Library recommends the Bible that turns on the most features, and lists what each Bible supports: Strong's words, grammar, footnotes, cross-references, red letters and headings.</p></description>
-    </release>
-    <release version="0.3.0" date="2026-11-16">
+    <release version="0.9.4" date="2026-11-23">
       <description>
-        <p>A timeline and maps.</p>
         <ul>
-          <li>Timeline of biblical history, the kings of Israel and Judah, prophets, who was in power, world events and church history</li>
-          <li>Every chapter shows when it happened, linked to the timeline</li>
-          <li>Map of the places named in each chapter, on real geography</li>
-          <li>Footnotes and cross-references in the Bible text open in place</li>
-          <li>A "Most popular" group when browsing the library</li>
+          <li>Windows and macOS test builds. Each release now includes a Windows zip and a macOS zip, named _untested: they build and pass every test automatically, but no one has run them on a real PC or Mac yet. The macOS build needs GTK from Homebrew (see the README inside the zip).</li>
+          <li>Releases come out faster: the tests and the Linux package share one build, and Flatpak, Windows and macOS build at the same time.</li>
         </ul>
       </description>
     </release>
-    <release version="0.2.0" date="2026-11-16">
-      <description><p>Interlinear Greek and Hebrew with a lexicon, dictionaries, books and daily devotionals.</p></description>
+    <release version="0.9.3" date="2026-11-23">
+      <description>
+        <ul>
+          <li>Flatpak. Each release now also comes as a .flatpak, which brings its own GNOME libraries and so runs on older systems such as Pop!_OS and Ubuntu 22.04 and Debian 12, and on most other distributions.</li>
+          <li>Inside the Flatpak, the update banner opens the release page instead of installing a .deb.</li>
+          <li>Groundwork for Windows and macOS: modules and data go in the usual place on each system (%APPDATA%\Sword on Windows), and every push is now built and tested on Windows, macOS and as a Flatpak.</li>
+        </ul>
+      </description>
     </release>
-    <release version="0.1.0" date="2026-11-16"/>
+    <release version="0.9.2" date="2026-11-23">
+      <description>
+        <ul>
+          <li>The loading animations follow the accent colour.</li>
+          <li>Dictionaries and glossaries stored like Bibles no longer appear in the version lists.</li>
+          <li>Side by side: a version without the current book says so (the Septuagint has no Acts) instead of showing empty verses.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.9.1" date="2026-11-24">
+      <description>
+        <ul>
+          <li>Church fathers: paragraphs no longer break at footnotes; volumes you already downloaded are read again with the fix.</li>
+          <li>The Contents list is easier to scan (one line per section, full title on hover) and opens at the section you're reading.</li>
+          <li>Downloading or removing a volume no longer closes the list, so you can start several downloads at once.</li>
+          <li>Splash style and loading animation are picked from live previews in Preferences; click a splash to see it full size.</li>
+          <li>An Arch Linux PKGBUILD, and clear system requirements in the README.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.9.0" date="2026-11-21">
+      <description>
+        <ul>
+          <li>Möbius strip (3D). A cross-reference joins two places in the Bible. With the Bible closed into a loop (Revelation hands back to Genesis), every such pair is exactly one point on a Möbius strip, so nothing is shown twice. Neighbouring passages line the strip's single edge, passages half the Bible apart run along its centre line, and Genesis meets Revelation at the seam.</li>
+          <li>The ordering menu (Bible order, chronological, by writer…) now rearranges the cube, globe and Möbius strip too.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.8.2" date="2026-11-21">
+      <description>
+        <ul>
+          <li>The Words panel has a "Show Greek and Hebrew" button, so the interlinear can be turned on from where you look for it.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.8.1" date="2026-11-21">
+      <description>
+        <ul>
+          <li>The globe is round: each Testament spirals over its own half, Genesis by the North Pole and Revelation by the South Pole.</li>
+          <li>The cube fills its space: depth is now how far back in time a reference reaches (late books citing early ones at the back).</li>
+          <li>Splash style has a preview button, and changing it plays the new style straight away.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.8.0" date="2026-11-21">
+      <description>
+        <ul>
+          <li>Church fathers. The Ante-Nicene and Nicene and Post-Nicene Fathers, 37 volumes, download one at a time from the Christian Classics Ethereal Library and read offline in the Reading room, opening where you left off.</li>
+          <li>Cross-references in 3D. A cube and a globe you turn by hand, alongside the rainbow, circle and matrix.</li>
+          <li>Accent colour. Follows the church year by default (violet, gold, green, red), or your desktop's accent, or a colour you pick.</li>
+          <li>Preferences in four pages: General, Reading, Today, Downloads.</li>
+          <li>Clearer names: Reading room (was Books and devotionals) and Downloads (was Library). The sidebar is grouped.</li>
+          <li>Today leads with your reading; the legal notice shows once; the cross-reference view explains itself on your first visit.</li>
+          <li>A new install opens on a Bible in your language.</li>
+          <li>About, the README and the website say why the app exists.</li>
+          <li>Every icon-only button has a name for screen readers.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.7.0" date="2026-11-21">
+      <description>
+        <ul>
+          <li>The reader's header is labelled: Original (Greek and Hebrew) and Study. Text size moved into the ⋮ menu.</li>
+        </ul>
+      </description>
+    </release>
   </releases>
 </component>

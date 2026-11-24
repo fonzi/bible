@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.11
+
+- **The Quran, for study and comparison.** Downloads, Start here, has the
+  Quran at the very bottom: the Arabic text (Tanzil) with Marmaduke
+  Pickthall's English translation (1930), verse by verse, read in the Reading
+  room. Story links with the Bible and the cross-reference views come later.
+- **Ready for Flathub.** In the Flatpak, downloads now go into the app's own
+  folder, so it needs no access to your home folder; the update banner is
+  gone there, since GNOME Software updates Flatpaks; and the app's store
+  listing has screenshots and every version's notes.
+- The language list in Downloads no longer jumps around as you scroll.
+
 ## 0.9.10
 
 - **Word details live inside Original.** Tap a Greek or Hebrew word and its

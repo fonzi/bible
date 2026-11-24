@@ -59,10 +59,11 @@ fn flatpak_installs_what_the_deb_installs() {
         "--socket=wayland",
         "--socket=fallback-x11",
         "--socket=pulseaudio",
-        "--filesystem=~/.sword:create",
     ] {
         assert!(args.contains(&need), "missing {need}");
     }
+    // Flathub asks for as little access as possible: no home folders
+    assert!(!args.iter().any(|a| a.starts_with("--filesystem")), "no filesystem access");
 }
 
 #[test]
@@ -91,4 +92,19 @@ fn package_versions_match_the_workspace() {
         read("CHANGELOG.md").contains(&format!("## {ver}")),
         "CHANGELOG.md has no section for {ver}"
     );
+}
+
+#[test]
+fn store_listing_has_this_version() {
+    // run scripts/metainfo-releases.py after adding the CHANGELOG section
+    let meta = read("data/io.github.fonzi.Bible.metainfo.xml");
+    let cargo = read("Cargo.toml");
+    let ver = cargo
+        .lines()
+        .find_map(|l| l.strip_prefix("version = \""))
+        .and_then(|v| v.split('"').next())
+        .unwrap();
+    let first = meta.split("<release version=\"").nth(1).and_then(|r| r.split('"').next()).unwrap();
+    assert_eq!(first, ver, "the MetaInfo's newest release must be the app's version");
+    assert!(meta.contains("<screenshot"), "the store listing needs screenshots");
 }

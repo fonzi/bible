@@ -114,6 +114,10 @@ pub fn check(ctx: &Rc<Ctx>, banner: &adw::Banner, force: bool, report: Option<Bo
 }
 
 fn offer(_ctx: &Rc<Ctx>, banner: &adw::Banner, r: Release) {
+    // Flatpaks are updated by GNOME Software or `flatpak update`
+    if std::path::Path::new("/.flatpak-info").exists() {
+        return;
+    }
     banner.set_title(&crate::i18n::t("Bible {} is available. You have {}.").replacen("{}", &r.version, 1).replacen("{}", CURRENT, 1));
     // inside a Flatpak the .deb doesn't apply: send people to the release page
     // (or their software centre, when installed from Flathub)

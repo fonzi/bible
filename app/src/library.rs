@@ -199,76 +199,7 @@ impl LibraryView {
                     e
                 }
             };
-            let installed = crate::fathers::is_installed(id);
-            let row = adw::ActionRow::builder()
-                .title(glib::markup_escape_text(title).as_str())
-                .subtitle(if installed { "Downloaded · in the Reading room" } else { "Not downloaded" })
-                .build();
-            row.set_title_lines(2);
-            let spin = crate::loader::new(24);
-            spin.set_visible(false);
-            spin.set_valign(gtk::Align::Center);
-            row.add_suffix(&spin);
-            let btn = gtk::Button::with_label(if installed { "Remove" } else { "Download" });
-            btn.set_valign(gtk::Align::Center);
-            if installed {
-                btn.add_css_class("flat");
-            }
-            let ctx = self.ctx.clone();
-            let sub = row.clone();
-            btn.connect_clicked(move |b| {
-                if crate::fathers::is_installed(id) {
-                    if b.label().as_deref() == Some("Remove") {
-                        b.set_label("Confirm remove");
-                        b.add_css_class("destructive-action");
-                        b.remove_css_class("flat");
-                        return;
-                    }
-                    crate::fathers::remove(id);
-                    ctx.toast("Removed the volume");
-                    // update this row in place, so the list stays open
-                    b.set_label("Download");
-                    b.remove_css_class("destructive-action");
-                    b.remove_css_class("flat");
-                    sub.set_subtitle("Not downloaded");
-                    ctx.refresh_one("books");
-                    return;
-                }
-                b.set_sensitive(false);
-                b.set_label("Downloading");
-                spin.set_visible(true);
-                let ctx = ctx.clone();
-                let b = b.clone();
-                let spin = spin.clone();
-                let sub = sub.clone();
-                glib::spawn_future_local(async move {
-                    let res = gio::spawn_blocking(move || {
-                        crate::fathers::download(id, &mut |_, _| {}).map_err(|e| e.to_string())
-                    })
-                    .await;
-                    spin.set_visible(false);
-                    match res {
-                        Ok(Ok(())) => {
-                            ctx.toast("Downloaded. It’s in the Reading room");
-                            b.set_sensitive(true);
-                            b.set_label("Remove");
-                            b.add_css_class("flat");
-                            sub.set_subtitle("Downloaded · in the Reading room");
-                            ctx.refresh_one("books");
-                        }
-                        Ok(Err(e)) => {
-                            b.set_sensitive(true);
-                            b.set_label("Try again");
-                            ctx.toast(&format!("Download failed: {e}"));
-                        }
-                        Err(_) => {
-                            b.set_sensitive(true);
-                            b.set_label("Try again");
-                        }
-                    }
-                });
-            });
-            row.add_suffix(&btn);
+            let row = self.volume_row(id, title);
             exp.add_row(&row);
         }
         for (ser, e) in &series {
@@ -304,6 +235,23 @@ impl LibraryView {
         search.set_hexpand(true);
         let lang_dd = gtk::DropDown::from_strings(&["All languages"]);
         lang_dd.set_enable_search(true);
+        // every row the same width, so the list doesn't change size (and
+        // shake) as longer names scroll into view
+        let lf = gtk::SignalListItemFactory::new();
+        lf.connect_setup(|_, item| {
+            let l = gtk::Label::new(None);
+            l.set_xalign(0.0);
+            l.set_width_chars(26);
+            l.set_max_width_chars(26);
+            l.set_ellipsize(gtk::pango::EllipsizeMode::End);
+            item.downcast_ref::<gtk::ListItem>().unwrap().set_child(Some(&l));
+        });
+        lf.connect_bind(|_, item| {
+            let item = item.downcast_ref::<gtk::ListItem>().unwrap();
+            let text = item.item().and_downcast::<gtk::StringObject>().map(|o| o.string()).unwrap_or_default();
+            item.child().and_downcast::<gtk::Label>().unwrap().set_text(&text);
+        });
+        lang_dd.set_list_factory(Some(&lf));
         lang_dd.set_expression(Some(gtk::PropertyExpression::new(
             gtk::StringObject::static_type(),
             None::<&gtk::Expression>,
@@ -943,6 +891,94 @@ impl LibraryView {
 
     /// Scriptures of groups outside historic creedal Christianity, kept apart
     /// at the bottom of the list with a plain note.
+    /// A downloadable book (a church fathers volume, the Quran) with its
+    /// Download / Remove button, updated in place.
+    fn volume_row(&self, id: &'static str, title: &str) -> adw::ActionRow {
+            let installed = crate::fathers::is_installed(id);
+            let row = adw::ActionRow::builder()
+                .title(glib::markup_escape_text(title).as_str())
+                .subtitle(if installed { "Downloaded · in the Reading room" } else { "Not downloaded" })
+                .build();
+            row.set_title_lines(2);
+            let spin = crate::loader::new(24);
+            spin.set_visible(false);
+            spin.set_valign(gtk::Align::Center);
+            row.add_suffix(&spin);
+            let btn = gtk::Button::with_label(if installed { "Remove" } else { "Download" });
+            btn.set_valign(gtk::Align::Center);
+            if installed {
+                btn.add_css_class("flat");
+            }
+            let ctx = self.ctx.clone();
+            let sub = row.clone();
+            btn.connect_clicked(move |b| {
+                if crate::fathers::is_installed(id) {
+                    if b.label().as_deref() == Some("Remove") {
+                        b.set_label("Confirm remove");
+                        b.add_css_class("destructive-action");
+                        b.remove_css_class("flat");
+                        return;
+                    }
+                    crate::fathers::remove(id);
+                    ctx.toast("Removed the volume");
+                    // update this row in place, so the list stays open
+                    b.set_label("Download");
+                    b.remove_css_class("destructive-action");
+                    b.remove_css_class("flat");
+                    sub.set_subtitle("Not downloaded");
+                    ctx.refresh_one("books");
+                    return;
+                }
+                b.set_sensitive(false);
+                b.set_label("Downloading");
+                spin.set_visible(true);
+                let ctx = ctx.clone();
+                let b = b.clone();
+                let spin = spin.clone();
+                let sub = sub.clone();
+                glib::spawn_future_local(async move {
+                    let res = gio::spawn_blocking(move || {
+                        crate::fathers::download(id, &mut |_, _| {}).map_err(|e| e.to_string())
+                    })
+                    .await;
+                    spin.set_visible(false);
+                    match res {
+                        Ok(Ok(())) => {
+                            ctx.toast("Downloaded. It’s in the Reading room");
+                            b.set_sensitive(true);
+                            b.set_label("Remove");
+                            b.add_css_class("flat");
+                            sub.set_subtitle("Downloaded · in the Reading room");
+                            ctx.refresh_one("books");
+                        }
+                        Ok(Err(e)) => {
+                            b.set_sensitive(true);
+                            b.set_label("Try again");
+                            ctx.toast(&format!("Download failed: {e}"));
+                        }
+                        Err(_) => {
+                            b.set_sensitive(true);
+                            b.set_label("Try again");
+                        }
+                    }
+                });
+            });
+            row.add_suffix(&btn);
+            row
+    }
+
+    /// The Quran, last on Start here: for study and comparison.
+    fn quran_group(&self) -> adw::PreferencesGroup {
+        let g = adw::PreferencesGroup::new();
+        g.set_title("The Quran");
+        g.set_description(Some(&format!(
+            "For study and comparison: the Arabic text with an English translation, verse by verse, read in the Reading room. {}",
+            crate::fathers::QURAN_CREDIT
+        )));
+        g.add(&self.volume_row(crate::fathers::QURAN, "The Quran, Arabic and English"));
+        g
+    }
+
     /// "Personal copies": texts the person already owns, added from a file.
     /// The app never hosts or shares them.
     fn personal_copies(&self) -> adw::PreferencesGroup {
@@ -1216,6 +1252,9 @@ impl LibraryView {
         }
         if q.is_empty() && category.is_none() && lang.as_deref().is_none_or(|l| l == "en") {
             self.browse_list.append(&self.other_traditions(&cat));
+        }
+        if q.is_empty() && category.is_none() {
+            self.browse_list.append(&self.quran_group());
         }
         if shown == 0 {
             let l = gtk::Label::new(Some(if q.is_empty() {

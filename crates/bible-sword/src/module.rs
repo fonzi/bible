@@ -524,6 +524,13 @@ pub fn default_roots() -> Vec<(PathBuf, bool)> {
 /// macOS (shared with other SWORD apps), %APPDATA%\Sword on Windows (where
 /// Xiphos and other Windows SWORD apps keep theirs).
 pub fn user_root() -> PathBuf {
+    // in a Flatpak, modules go in the app's own sandboxed data folder
+    // (~/.var/app/io.github.fonzi.Bible/data/sword)
+    if std::path::Path::new("/.flatpak-info").exists() {
+        if let Some(d) = std::env::var_os("XDG_DATA_HOME") {
+            return PathBuf::from(d).join("sword");
+        }
+    }
     if cfg!(windows) {
         if let Some(a) = std::env::var_os("APPDATA") {
             return PathBuf::from(a).join("Sword");

@@ -53,6 +53,9 @@ pub const VOLUMES: [(&str, &str, &str); 37] = [
 ];
 
 pub fn title_of(id: &str) -> &'static str {
+    if id == QURAN {
+        return "The Quran";
+    }
     VOLUMES.iter().find(|v| v.0 == id).map(|v| v.2).unwrap_or("")
 }
 
@@ -77,11 +80,14 @@ fn cache_path(id: &str) -> PathBuf {
 }
 
 pub fn is_installed(id: &str) -> bool {
+    if id == QURAN {
+        return quran_path().exists();
+    }
     xml_path(id).exists()
 }
 
 pub fn installed() -> Vec<&'static str> {
-    VOLUMES.iter().map(|v| v.0).filter(|id| is_installed(id)).collect()
+    VOLUMES.iter().map(|v| v.0).chain([QURAN]).filter(|id| is_installed(id)).collect()
 }
 
 pub fn remove(id: &str) {
@@ -99,6 +105,9 @@ pub fn remove(id: &str) {
 
 /// Download one volume. Fails with a reason a person can act on.
 pub fn download(id: &str, progress: &mut dyn FnMut(u64, u64)) -> std::io::Result<()> {
+    if id == QURAN {
+        return download_quran();
+    }
     std::fs::create_dir_all(dir())?;
     let tmp = dir().join(format!("{id}.part"));
     bible_sword::install::download_file(&url(id), &tmp, progress)?;
@@ -235,6 +244,9 @@ pub fn parse(xml: &str) -> Vec<Part> {
 
 /// A volume's parts, parsed once and then kept beside the download.
 pub fn load(id: &str) -> Option<Vec<Part>> {
+    if id == QURAN {
+        return serde_json::from_slice(&std::fs::read(quran_path()).ok()?).ok();
+    }
     if let Some(p) = std::fs::read(cache_path(id))
         .ok()
         .and_then(|b| serde_json::from_slice::<Vec<Part>>(&b).ok())
@@ -505,6 +517,12 @@ impl FathersView {
             let l = gtk::Label::new(Some(t));
             l.set_wrap(true);
             l.set_xalign(0.0);
+            // Arabic reads from the right
+            if t.chars().next().is_some_and(|c| ('\u{0600}'..='\u{08FF}').contains(&c) || ('\u{FB50}'..='\u{FEFF}').contains(&c)) {
+                l.set_xalign(1.0);
+                l.set_justify(gtk::Justification::Right);
+                l.add_css_class("arabic");
+            }
             l.set_selectable(true);
             l.add_css_class("scripture");
             l.add_css_class("book-text");
@@ -615,6 +633,8 @@ mod url_checks {
             urls.extend(src.url("Rev", 22));
         }
         urls.push("https://en.wikipedia.org/w/api.php?action=query&format=json&titles=Bible".into());
+        urls.push(super::QURAN_ARABIC.into());
+        urls.push(super::QURAN_ENGLISH.into());
         let mut bad = vec![];
         for u in urls {
             match bible_sword::install::url_status(&u) {
@@ -623,5 +643,108 @@ mod url_checks {
             }
         }
         assert!(bad.is_empty(), "unreachable downloads:\n{}", bad.join("\n"));
+    }
+}
+
+// ----- the Quran, read in the same reader as the church fathers -----
+
+/// Id of the Quran among the downloadable books.
+pub const QURAN: &str = "quran";
+/// Tanzil's Uthmani Arabic text and Pickthall's English (1930, public domain
+/// in the US), one verse per line as `sura|aya|text`. Tanzil asks that its
+/// text be copied unchanged, with credit and a link to tanzil.net.
+pub const QURAN_ARABIC: &str = "https://tanzil.net/pub/download/index.php?marks=true&sajdah=true&rub=true&alif=true&quranType=uthmani&outType=txt-2&agree=true";
+pub const QURAN_ENGLISH: &str = "https://tanzil.net/trans/?transID=en.pickthall&type=txt-2";
+pub const QURAN_CREDIT: &str = "Arabic text: Tanzil Quran Text (tanzil.net), copied unchanged. English: Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain.";
+
+pub const SURAHS: [&str; 114] = [
+    "Al-Fatihah", "Al-Baqarah", "Al 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal",
+    "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf",
+    "Maryam", "Ta-Ha", "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara'",
+    "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir",
+    "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan",
+    "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur",
+    "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hashr",
+    "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim",
+    "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir",
+    "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar",
+    "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad",
+    "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah",
+    "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takathur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraysh",
+    "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas",
+];
+
+fn quran_path() -> PathBuf {
+    dir().join("quran.v1.json")
+}
+
+/// `sura|aya|text` lines into (sura, aya) → text; comment lines are skipped.
+fn verses(txt: &str) -> std::collections::BTreeMap<(u16, u16), String> {
+    txt.lines()
+        .filter(|l| !l.starts_with('#'))
+        .filter_map(|l| {
+            let mut it = l.splitn(3, '|');
+            let s = it.next()?.trim().parse().ok()?;
+            let a = it.next()?.trim().parse().ok()?;
+            Some(((s, a), it.next()?.trim().to_string()))
+        })
+        .collect()
+}
+
+/// One part per surah: each verse in Arabic, then in English with its number.
+pub fn quran_parts(arabic: &str, english: &str) -> Vec<Part> {
+    let ar = verses(arabic);
+    let en = verses(english);
+    let mut parts: Vec<Part> = SURAHS
+        .iter()
+        .enumerate()
+        .map(|(i, n)| Part { title: format!("{}. {n}", i + 1), depth: 1, paras: vec![] })
+        .collect();
+    for ((s, a), text) in &ar {
+        let Some(p) = parts.get_mut(*s as usize - 1) else { continue };
+        p.paras.push(text.clone());
+        if let Some(e) = en.get(&(*s, *a)) {
+            p.paras.push(format!("{s}:{a}  {e}"));
+        }
+    }
+    parts
+}
+
+fn download_quran() -> std::io::Result<()> {
+    std::fs::create_dir_all(dir())?;
+    let get = |u: &str| -> std::io::Result<String> {
+        let b = bible_sword::install::get_bytes(u)?
+            .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "Tanzil didn’t have the file"))?;
+        Ok(String::from_utf8_lossy(&b).into_owned())
+    };
+    let parts = quran_parts(&get(QURAN_ARABIC)?, &get(QURAN_ENGLISH)?);
+    let verses: usize = parts.iter().map(|p| p.paras.len()).sum();
+    // 6,236 verses, each in Arabic and English
+    if verses < 6000 {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "Tanzil sent something other than the Quran text (the site may be busy); try again later",
+        ));
+    }
+    std::fs::write(quran_path(), serde_json::to_vec(&parts).map_err(std::io::Error::other)?)
+}
+
+#[cfg(test)]
+mod quran_tests {
+    use super::*;
+    #[test]
+    fn every_surah_has_a_name() {
+        assert_eq!(SURAHS.len(), 114);
+        assert_eq!(SURAHS[11], "Yusuf");
+        assert_eq!(SURAHS[113], "An-Nas");
+    }
+    #[test]
+    fn verses_pair_up() {
+        let ar = "1|1|بِسْمِ ٱللَّهِ\n1|2|ٱلْحَمْدُ لِلَّهِ\n# Tanzil\n";
+        let en = "1|1|In the name of Allah\n1|2|Praise be to Allah\n";
+        let p = quran_parts(ar, en);
+        assert_eq!(p.len(), 114);
+        assert_eq!(p[0].title, "1. Al-Fatihah");
+        assert_eq!(p[0].paras, vec!["بِسْمِ ٱللَّهِ", "1:1  In the name of Allah", "ٱلْحَمْدُ لِلَّهِ", "1:2  Praise be to Allah"]);
     }
 }

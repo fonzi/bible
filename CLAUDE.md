@@ -12,6 +12,8 @@ So, before every push that touches the app, data or packaging:
    features), then `cargo build` so `Cargo.lock` follows.
 2. Add a `## <version>` section at the top of `CHANGELOG.md`, in plain words
    for users; the release workflow puts it at the top of the release notes.
+   Then run `python3 scripts/metainfo-releases.py`, so the store listing
+   (GNOME Software, Flathub) has the same notes.
    Commit it with the bump and the change.
 3. After pushing, confirm the release exists:
    `gh api repos/fonzi/bible/releases --jq '.[0].tag_name'`
