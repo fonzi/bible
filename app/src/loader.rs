@@ -24,12 +24,34 @@ pub fn set_style(id: &str) {
     STYLE.with(|s| s.set(STYLES.iter().position(|x| x.0 == id).unwrap_or(0)));
 }
 
+thread_local! {
+    /// The app's accent colour, set whenever the style is loaded, so the
+    /// loading animations match it (gold for the church year's feasts,
+    /// violet in Lent, the desktop's blue…).
+    static ACCENT: std::cell::Cell<(f64, f64, f64)> = const { std::cell::Cell::new((0.73, 0.46, 0.09)) };
+}
+
+/// Set the colour the loading animations are drawn in, from a #rrggbb hex.
+pub fn set_accent(hex: &str) {
+    let h = hex.trim_start_matches('#');
+    if h.len() == 6 {
+        let c = |i: usize| u8::from_str_radix(&h[i..i + 2], 16).unwrap_or(128) as f64 / 255.0;
+        ACCENT.with(|a| a.set((c(0), c(2), c(4))));
+    }
+}
+
 fn gold(k: f64) -> (f64, f64, f64) {
-    // from deep amber to pale gold
+    // from the accent itself to a pale tint of it
     let k = k.clamp(0.0, 1.0);
-    let a = (0.73, 0.46, 0.09);
-    let b = (0.98, 0.78, 0.46);
+    let a = ACCENT.with(|a| a.get());
+    let b = (a.0 + (1.0 - a.0) * 0.6, a.1 + (1.0 - a.1) * 0.6, a.2 + (1.0 - a.2) * 0.6);
     (a.0 + (b.0 - a.0) * k, a.1 + (b.1 - a.1) * k, a.2 + (b.2 - a.2) * k)
+}
+
+/// The accent, darker, for shadows and outlines.
+fn deep(alpha: f64) -> (f64, f64, f64, f64) {
+    let a = ACCENT.with(|a| a.get());
+    (a.0 * 0.7, a.1 * 0.7, a.2 * 0.7, alpha)
 }
 
 type P3 = [f64; 3];
@@ -112,7 +134,8 @@ fn draw_chirho(cr: &gtk::cairo::Context, t: f64, r: f64) {
     cr.curve_to(34.0, -52.0, 34.0, -14.0, 0.0, -16.0);
     let _ = cr.stroke();
     cr.restore().ok();
-    cr.set_source_rgba(0.52, 0.31, 0.04, 0.35);
+    let (r0, g0, b0, a0) = deep(0.35);
+    cr.set_source_rgba(r0, g0, b0, a0);
     cr.set_line_width(2.0);
     cr.arc(0.0, 0.0, r, 0.0, TAU);
     let _ = cr.stroke();
@@ -121,7 +144,8 @@ fn draw_chirho(cr: &gtk::cairo::Context, t: f64, r: f64) {
 fn draw_fish(cr: &gtk::cairo::Context, t: f64, r: f64) {
     let k = r / 66.0;
     let orbit = 48.0 * k;
-    cr.set_source_rgba(0.52, 0.31, 0.04, 0.25);
+    let (r0, g0, b0, a0) = deep(0.25);
+    cr.set_source_rgba(r0, g0, b0, a0);
     cr.set_line_width(2.0);
     cr.set_dash(&[3.0, 6.0], 0.0);
     cr.arc(0.0, 0.0, orbit, 0.0, TAU);

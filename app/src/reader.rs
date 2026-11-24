@@ -1500,8 +1500,20 @@ impl Reader {
             let names = gtk::Box::new(gtk::Orientation::Horizontal, 28);
             names.set_homogeneous(true);
             names.set_margin_end(24);
+            // a version without this book (the Septuagint has no Acts) says so
+            let has_book = |mm: &Arc<Module>| {
+                (1..=3).any(|v| {
+                    mm.verse_spans(&book, chapter, v)
+                        .is_some_and(|s| s.iter().any(|x| !x.text.trim().is_empty()))
+                })
+            };
             for mm in [&m, p] {
-                let l = gtk::Label::new(Some(&mm.description()));
+                let text = if Arc::ptr_eq(mm, p) && !has_book(mm) {
+                    format!("{} doesn’t include {book_name}", mm.abbreviation())
+                } else {
+                    mm.description()
+                };
+                let l = gtk::Label::new(Some(&text));
                 l.add_css_class("dim-label");
                 l.add_css_class("caption-heading");
                 l.set_xalign(0.0);

@@ -109,6 +109,12 @@ pub fn load_css(ctx: &Ctx) {
         }
         other => Some(other.to_string()),
     };
+    // the loading animations follow the accent; the desktop's is
+    // libadwaita's blue
+    crate::loader::set_accent(match &chosen {
+        Some(c) => season_accent(c, adw::StyleManager::default().is_dark()).0,
+        None => "#3584e4",
+    });
     if let Some(colour) = chosen {
         let dark = adw::StyleManager::default().is_dark();
         let (bg, text) = season_accent(&colour, dark);

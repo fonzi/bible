@@ -10,6 +10,11 @@
   start several downloads at once.
 - Splash style and loading animation are picked from live previews in
   Preferences; click a splash to see it full size.
+- The loading animations follow the accent colour.
+- Dictionaries and glossaries stored like Bibles no longer appear in the
+  version lists.
+- Side by side: a version without the current book says so (the Septuagint
+  has no Acts) instead of showing empty verses.
 - An Arch Linux PKGBUILD, and clear system requirements in the README.
 
 ## 0.9.0

@@ -31,6 +31,12 @@ impl Kind {
         if c.all("Feature").contains(&"DailyDevotion") || cat == "Daily Devotional" {
             return Kind::Devotional;
         }
+        // some dictionaries and glossaries are stored like Bibles; their
+        // category says what they are
+        let c_low = cat.to_ascii_lowercase();
+        if c_low.contains("lexicon") || c_low.contains("dictionar") || c_low.contains("glossar") {
+            return Kind::Lexicon;
+        }
         if drv.contains("text") {
             Kind::Bible
         } else if drv.contains("com") {
