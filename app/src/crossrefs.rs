@@ -31,11 +31,34 @@ fn chapters(m: &Module) -> Vec<(String, u16, u16)> {
     out
 }
 
-fn cache_path(module: &str) -> PathBuf {
-    dirs::cache_dir()
-        .unwrap_or_else(std::env::temp_dir)
-        .join("bible-app/crossrefs")
-        .join(format!("{module}-links-v5.tsv"))
+fn cache_dir() -> PathBuf {
+    dirs::cache_dir().unwrap_or_else(std::env::temp_dir).join("bible-app/crossrefs")
+}
+
+/// The saved links for one Bible, keyed by its name and version, so an
+/// updated module is worked out again.
+fn cache_path(m: &Module) -> PathBuf {
+    let ver: String = m
+        .conf
+        .get_or("Version", "0")
+        .chars()
+        .map(|c| if c.is_ascii_alphanumeric() || c == '.' { c } else { '_' })
+        .collect();
+    cache_dir().join(format!("{}-{ver}-links-v6.tsv", m.name))
+}
+
+/// Remove saved links from older formats, and this Bible's other versions.
+fn prune_cache(keep: &std::path::Path, module: &str) {
+    let Ok(rd) = std::fs::read_dir(cache_dir()) else { return };
+    for e in rd.flatten() {
+        let p = e.path();
+        let name = e.file_name().to_string_lossy().into_owned();
+        let old_format = !name.ends_with("-links-v6.tsv");
+        let other_version = name.starts_with(&format!("{module}-")) && p != keep;
+        if old_format || other_version {
+            let _ = std::fs::remove_file(&p);
+        }
+    }
 }
 
 /// One verse-to-verse cross-reference: [from chapter index, from verse,
@@ -963,7 +986,7 @@ impl CrossRefs {
         self.view.set(View::HOME);
         *self.cache.borrow_mut() = None;
         // cached from an earlier run?
-        if let Ok(text) = std::fs::read_to_string(cache_path(&m.name)) {
+        if let Ok(text) = std::fs::read_to_string(cache_path(&m)) {
             let mut lines = text.lines();
             let source = lines.next().unwrap_or("").to_string();
             let links: Vec<VLink> = lines
@@ -1001,7 +1024,7 @@ impl CrossRefs {
                 let (links, source) = compute(&mm, &|f| {
                     let _ = tx.send(f);
                 });
-                let path = cache_path(&mm.name);
+                let path = cache_path(&mm);
                 let mut text = format!("{source}\n");
                 for l in &links {
                     text.push_str(&format!("{}\t{}\t{}\t{}\n", l[0], l[1], l[2], l[3]));
@@ -1010,6 +1033,7 @@ impl CrossRefs {
                     let _ = std::fs::create_dir_all(d);
                 }
                 let _ = std::fs::write(&path, text);
+                prune_cache(&path, &mm.name);
                 (links, source)
             })
             .await;

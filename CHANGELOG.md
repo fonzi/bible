@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cross-references are worked out again when a Bible is updated, and old
+  saved copies are cleared away instead of piling up.
 - **The Reading room has a section list** on the left with counts (Books,
   Devotionals, Dictionaries, Church fathers, the Quran), like Downloads.
 - **Change the Bible in the cross-reference views** with the new version menu
