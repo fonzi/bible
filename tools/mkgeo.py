@@ -17,32 +17,31 @@ def lines(g):
     return []
 def fmt(cs): return ' '.join(f'{x:.3f},{y:.3f}' for x, y in cs)
 rows = []
-land = json.load(open(f'{src}/ne_10m_land.geojson'))
-for f in land['features']:
-    g = shape(f['geometry'])
-    if not g.intersects(BB): continue
-    for p in polys(g.intersection(BB)):
-        p = p.simplify(0.01, preserve_topology=True)
-        if p.area < 0.002: continue
-        rows.append('L ' + fmt(p.exterior.coords))
-        for r in p.interiors:
-            rows.append('H ' + fmt(r.coords))
-lakes = json.load(open(f'{src}/ne_10m_lakes.geojson'))
-for f in lakes['features']:
-    g = shape(f['geometry'])
-    if not g.intersects(BB): continue
-    for p in polys(g.intersection(BB)):
-        p = p.simplify(0.005, preserve_topology=True)
-        if p.area < 0.003: continue
-        rows.append('W ' + fmt(p.exterior.coords))
-riv = json.load(open(f'{src}/ne_10m_rivers_lake_centerlines.geojson'))
-for f in riv['features']:
-    pr = f['properties']
-    if (pr.get('scalerank') or 99) > 7 and pr.get('name') not in ('Jordan',): continue
-    g = shape(f['geometry'])
-    if not g.intersects(BB): continue
-    for l in lines(g.intersection(BB)):
-        l = l.simplify(0.01)
-        rows.append('R ' + fmt(l.coords))
+# Full detail (Natural Earth 10m) inside BB, where most places are; the
+# rest of the world from the 50m set, more simplified, so far-off places
+# (Tarshish, Cush, Sheba, India) sit on real land too.
+WORLD = box(-180, -85, 180, 85)
+LAYERS = [('10m', lambda g: g.intersection(BB), 1.0), ('50m', lambda g: g.intersection(WORLD).difference(BB), 4.0)]
+for res, cut, k in LAYERS:
+    for f in json.load(open(f'{src}/ne_{res}_land.geojson'))['features']:
+        for p in polys(cut(shape(f['geometry']))):
+            p = p.simplify(0.01 * k, preserve_topology=True)
+            if p.area < 0.002 * k: continue
+            rows.append('L ' + fmt(p.exterior.coords))
+            for r in p.interiors:
+                rows.append('H ' + fmt(r.coords))
+    for f in json.load(open(f'{src}/ne_{res}_lakes.geojson'))['features']:
+        for p in polys(cut(shape(f['geometry']))):
+            p = p.simplify(0.005 * k, preserve_topology=True)
+            if p.area < 0.003 * k * k: continue
+            rows.append('W ' + fmt(p.exterior.coords))
+    for f in json.load(open(f'{src}/ne_{res}_rivers_lake_centerlines.geojson'))['features']:
+        pr = f['properties']
+        limit = 7 if res == '10m' else 4
+        if (pr.get('scalerank') or 99) > limit and pr.get('name') not in ('Jordan',): continue
+        for l in lines(cut(shape(f['geometry']))):
+            l = l.simplify(0.01 * k)
+            if len(l.coords) > 1:
+                rows.append('R ' + fmt(l.coords))
 open(out, 'w').write('\n'.join(rows) + '\n')
 print(len(rows), 'shapes')

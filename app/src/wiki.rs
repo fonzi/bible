@@ -469,3 +469,49 @@ mod tests {
         }
     }
 }
+
+/// For showing an article in the app: Bible references become links that
+/// open the passage here, and every other link becomes plain text, so
+/// nothing in an article opens the browser.
+pub fn verse_links(markup: &str) -> String {
+    let mut out = String::with_capacity(markup.len());
+    let mut rest = markup;
+    while !rest.is_empty() {
+        if rest.starts_with('<') {
+            let end = rest.find('>').map(|i| i + 1).unwrap_or(rest.len());
+            let tag = &rest[..end];
+            // drop the article's own links, keep other formatting
+            if !(tag.starts_with("<a ") || tag.starts_with("<a>") || tag == "</a>") {
+                out.push_str(tag);
+            }
+            rest = &rest[end..];
+        } else {
+            let end = rest.find('<').unwrap_or(rest.len());
+            let text = &rest[..end];
+            let mut last = 0;
+            for f in bible_core::refs::find_refs(text) {
+                out.push_str(&text[last..f.start]);
+                out.push_str(&format!("<a href=\"{}\">{}</a>", f.r.uri(), &text[f.start..f.end]));
+                last = f.end;
+            }
+            out.push_str(&text[last..]);
+            rest = &rest[end..];
+        }
+    }
+    out
+}
+
+#[cfg(test)]
+mod verse_link_tests {
+    #[test]
+    fn verses_link_into_the_app_and_other_links_are_plain() {
+        let m = super::verse_links(r#"See <a href="https://en.wikipedia.org/wiki/Gospel">the gospels</a> and John 3:16, <b>bold</b>."#);
+        assert!(!m.contains("wikipedia.org"));
+        assert!(m.contains("the gospels"));
+        assert!(m.contains("<b>bold</b>"));
+        assert!(m.contains(">John 3:16</a>"));
+        // GTK labels add <a> on top of Pango's markup; the rest must be valid Pango
+        let plain = m.replace("</a>", "").replace(r#"<a href="bible://John.3.16">"#, "");
+        assert!(gtk::pango::parse_markup(&plain, '\0').is_ok(), "{m}");
+    }
+}

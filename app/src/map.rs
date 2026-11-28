@@ -51,8 +51,29 @@ impl MapView {
         area.set_content_height(340);
         area.set_vexpand(false);
         area.add_css_class("map-canvas");
+        // zoom buttons over the map, so zooming never depends on a scroll
+        // wheel or touchpad alone
+        let zoom_in = gtk::Button::from_icon_name("zoom-in-symbolic");
+        zoom_in.set_tooltip_text(Some("Zoom in"));
+        let zoom_out = gtk::Button::from_icon_name("zoom-out-symbolic");
+        zoom_out.set_tooltip_text(Some("Zoom out"));
+        let zoom_fit = gtk::Button::from_icon_name("zoom-fit-best-symbolic");
+        zoom_fit.set_tooltip_text(Some("Show all places"));
+        let zoom_box = gtk::Box::new(gtk::Orientation::Vertical, 0);
+        zoom_box.add_css_class("linked");
+        zoom_box.add_css_class("osd");
+        zoom_box.set_halign(gtk::Align::End);
+        zoom_box.set_valign(gtk::Align::Start);
+        zoom_box.set_margin_top(8);
+        zoom_box.set_margin_end(8);
+        for b in [&zoom_in, &zoom_out, &zoom_fit] {
+            zoom_box.append(b);
+        }
+        let over = gtk::Overlay::new();
+        over.set_child(Some(&area));
+        over.add_overlay(&zoom_box);
         let frame = gtk::Frame::new(None);
-        frame.set_child(Some(&area));
+        frame.set_child(Some(&over));
         frame.add_css_class("map-frame");
 
         let caption = gtk::Label::new(None);
@@ -141,12 +162,27 @@ impl MapView {
             let Some(m) = w.upgrade() else {
                 return glib::Propagation::Proceed;
             };
-            m.scale
-                .set((m.scale.get() * if dy > 0.0 { 1.25 } else { 0.8 }).clamp(0.05, 25.0));
-            m.area.queue_draw();
+            // in proportion to how far you scroll: a wheel click is one step,
+            // a touchpad's many small movements add up smoothly
+            m.zoom_by(1.25f64.powf(dy.clamp(-3.0, 3.0)));
             glib::Propagation::Stop
         });
         m.area.add_controller(sc);
+        for (b, f) in [(&zoom_in, 0.8), (&zoom_out, 1.25)] {
+            let w = Rc::downgrade(&m);
+            b.connect_clicked(move |_| {
+                if let Some(m) = w.upgrade() {
+                    m.zoom_by(f);
+                }
+            });
+        }
+        let w = Rc::downgrade(&m);
+        zoom_fit.connect_clicked(move |_| {
+            if let Some(m) = w.upgrade() {
+                m.fit();
+                m.area.queue_draw();
+            }
+        });
 
         // click a pin
         let click = gtk::GestureClick::new();
@@ -226,6 +262,12 @@ impl MapView {
             self.fit();
         }
         self.fill_list(verse);
+        self.area.queue_draw();
+    }
+
+    /// Zoom by a factor (below 1 zooms in), within sensible limits.
+    fn zoom_by(&self, factor: f64) {
+        self.scale.set((self.scale.get() * factor).clamp(0.05, 25.0));
         self.area.queue_draw();
     }
 

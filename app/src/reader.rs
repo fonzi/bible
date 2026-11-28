@@ -1814,11 +1814,19 @@ impl Reader {
                         }
                         crate::wiki::Block::Para { markup } => {
                             let l = gtk::Label::new(None);
-                            l.set_markup(markup);
+                            l.set_markup(&crate::wiki::verse_links(markup));
                             l.set_wrap(true);
                             l.set_xalign(0.0);
                             l.set_selectable(true);
                             l.add_css_class("commentary");
+                            // a verse opens here; nothing opens the browser
+                            let c = self.ctx.clone();
+                            l.connect_activate_link(move |_, uri| {
+                                if let Some(rf) = Ref::from_uri(uri) {
+                                    c.open_ref(&rf);
+                                }
+                                glib::Propagation::Stop
+                            });
                             add(l.upcast_ref());
                         }
                         crate::wiki::Block::Image { file, caption, artist, license, page } => {
@@ -1859,7 +1867,7 @@ impl Reader {
                 }
                 let credit = gtk::Label::new(None);
                 credit.set_markup(&format!(
-                    "Text from <a href=\"{}\">Wikipedia: {}</a>, CC BY-SA 4.0. Pictures from Wikimedia Commons, each under the licence shown. Links need internet.",
+                    "Text from <a href=\"{}\">Wikipedia: {}</a>, CC BY-SA 4.0. Pictures from Wikimedia Commons, each under the licence shown. Bible references open here.",
                     glib::markup_escape_text(&art.url),
                     glib::markup_escape_text(&art.title)
                 ));

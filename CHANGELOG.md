@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.22
+
+- **Bible references in Wikipedia articles open in the app.** Tap a
+  reference such as John 3:16 in a book's introduction to go straight to it;
+  the articles' other links no longer open the browser. This works for
+  articles you've already saved too.
+- **The map covers the whole world**, so far-off places such as Tarshish,
+  Cush, Sheba and India sit on real land (Natural Earth, public domain).
+- **Zoom buttons on the map**, and smoother zooming with a touchpad: you can
+  always zoom back in, or show all places again.
+
 ## 0.9.21
 
 - **Maps and pictures now download with their modules.** Downloads from
