@@ -17,6 +17,8 @@ def inline(t):
     return t
 
 sections = re.split(r"^## ", open("CHANGELOG.md").read(), flags=re.M)[1:]
+# changes not released yet stay out of the store listing
+sections = [x for x in sections if not x.lower().startswith("unreleased")]
 out = ["  <releases>"]
 for sec in sections[:20]:
     head, _, body = sec.partition("\n")

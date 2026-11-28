@@ -1,5 +1,7 @@
 # Changelog
 
+## Unreleased
+
 ## 0.9.22
 
 - **Bible references in Wikipedia articles open in the app.** Tap a

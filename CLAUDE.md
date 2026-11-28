@@ -1,25 +1,30 @@
 # Working on Bible
 
-## Every push that changes the app ships a release
+## Releases are bundled, and only when the owner says so
 
-The release workflow (`.github/workflows/release.yml`) only builds and tags a
-release when `version` in the workspace `Cargo.toml` changes. A push without a
-bump runs CI and nothing else, and users never see the change.
+The release workflow (`.github/workflows/release.yml`) builds and tags a
+release when `version` in the workspace `Cargo.toml` changes. Don't release
+per change: collect changes and release them together when asked.
 
-So, before every push that touches the app, data or packaging:
+While working:
 
-1. Bump `version` in `Cargo.toml` (patch for fixes and polish, minor for new
-   features), then `cargo build` so `Cargo.lock` follows.
-2. Add a `## <version>` section at the top of `CHANGELOG.md`, in plain words
-   for users; the release workflow puts it at the top of the release notes.
-   Then run `python3 scripts/metainfo-releases.py`, so the store listing
-   (GNOME Software, Flathub) has the same notes.
-   Commit it with the bump and the change.
-3. After pushing, confirm the release exists:
+1. Push changes without bumping `version`; CI tests every push, and nothing
+   ships.
+2. Add each user-facing change, in plain words, under `## Unreleased` at the
+   top of `CHANGELOG.md`.
+
+When the owner asks for a release:
+
+1. Summarize what's under `## Unreleased` and agree what goes in.
+2. Bump `version` in `Cargo.toml` (patch for fixes and polish, minor for new
+   features), run `cargo build` so `Cargo.lock` follows, rename
+   `## Unreleased` to `## <version>`, and update `pkgver` in
+   `packaging/arch/PKGBUILD`.
+3. Run `python3 scripts/metainfo-releases.py`, so the store listing (GNOME
+   Software, Flathub) has the same notes. Commit and push.
+4. Confirm the release exists:
    `gh api repos/fonzi/bible/releases --jq '.[0].tag_name'`
-   should show the new `v<version>` with the `.deb` attached.
-
-Docs-only or website-only pushes don't need a bump.
+   should show the new `v<version>` with its files attached.
 
 ## Commits
 
