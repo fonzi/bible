@@ -22,6 +22,9 @@ pub struct Books {
     root: gtk::Stack,
     list: adw::PreferencesPage,
     groups: RefCell<Vec<adw::PreferencesGroup>>,
+    cats: gtk::ListBox,
+    /// None: every section; Some(i): only section i
+    cat: std::cell::Cell<Option<usize>>,
     // reader
     title: adw::WindowTitle,
     toc_split: adw::OverlaySplitView,
@@ -69,6 +72,55 @@ fn date_label(key: &str) -> String {
 }
 
 impl Books {
+    /// The section list: "All", then each section with how many it holds.
+    fn fill_cats(&self) {
+        fn rows(w: &gtk::Widget) -> usize {
+            let mut n = usize::from(w.is::<adw::ActionRow>());
+            let mut c = w.first_child();
+            while let Some(x) = c {
+                n += rows(&x);
+                c = x.next_sibling();
+            }
+            n
+        }
+        while let Some(c) = self.cats.first_child() {
+            self.cats.remove(&c);
+        }
+        let groups = self.groups.borrow();
+        if self.cat.get().is_some_and(|i| i >= groups.len()) {
+            self.cat.set(None);
+        }
+        let add = |title: &str, n: Option<usize>| {
+            let b = gtk::Box::new(gtk::Orientation::Horizontal, 10);
+            let l = gtk::Label::new(Some(title));
+            l.set_xalign(0.0);
+            l.set_hexpand(true);
+            l.set_ellipsize(gtk::pango::EllipsizeMode::End);
+            b.append(&l);
+            if let Some(n) = n {
+                let c = gtk::Label::new(Some(&n.to_string()));
+                c.add_css_class("dim-label");
+                c.add_css_class("numeric");
+                b.append(&c);
+            }
+            let row = gtk::ListBoxRow::new();
+            row.set_child(Some(&b));
+            self.cats.append(&row);
+            row
+        };
+        let all = add("All", None);
+        let mut sel = all;
+        for (i, g) in groups.iter().enumerate() {
+            let title = g.title();
+            let r = add(if title.is_empty() { "Get started" } else { title.as_str() }, Some(rows(g.upcast_ref())));
+            if self.cat.get() == Some(i) {
+                sel = r;
+            }
+            g.set_visible(self.cat.get().is_none_or(|c| c == i));
+        }
+        self.cats.select_row(Some(&sel));
+    }
+
     /// Show the pictures an entry refers to (maps, illustrations), each
     /// fitted to the page width; a missing file is skipped.
     fn show_pictures(&self, m: &Module, spans: &[bible_sword::Span]) {
@@ -106,7 +158,21 @@ impl Books {
         more.connect_clicked(move |_| c.go("library"));
         lh.pack_end(&more);
         list_tv.add_top_bar(&lh);
-        list_tv.set_content(Some(&list));
+        // sections down the left with counts, as in Downloads
+        let cats = gtk::ListBox::new();
+        cats.add_css_class("navigation-sidebar");
+        cats.set_selection_mode(gtk::SelectionMode::Single);
+        let cat_scroll = gtk::ScrolledWindow::builder()
+            .child(&cats)
+            .hscrollbar_policy(gtk::PolicyType::Never)
+            .width_request(250)
+            .build();
+        let list_page = gtk::Box::new(gtk::Orientation::Horizontal, 0);
+        list_page.append(&cat_scroll);
+        list_page.append(&gtk::Separator::new(gtk::Orientation::Vertical));
+        list.set_hexpand(true);
+        list_page.append(&list);
+        list_tv.set_content(Some(&list_page));
 
         // reader page
         let back = gtk::Button::from_icon_name("go-previous-symbolic");
@@ -205,6 +271,8 @@ impl Books {
             root,
             list,
             groups: RefCell::new(vec![]),
+            cats: cats.clone(),
+            cat: std::cell::Cell::new(None),
             title,
             toc_split,
             toc,
@@ -217,6 +285,15 @@ impl Books {
             current: RefCell::new(None),
             pos: RefCell::new(None),
             toc_items: RefCell::new(vec![]),
+        });
+        let w = Rc::downgrade(&b);
+        b.cats.connect_row_activated(move |_, row| {
+            let Some(b) = w.upgrade() else { return };
+            let pick = row.index().checked_sub(1).map(|i| i as usize);
+            b.cat.set(pick);
+            for (i, g) in b.groups.borrow().iter().enumerate() {
+                g.set_visible(pick.is_none_or(|c| c == i));
+            }
         });
         let w = Rc::downgrade(&b);
         back.connect_clicked(move |_| {
@@ -687,6 +764,7 @@ impl Section for Books {
             groups.push(g);
         }
         *self.groups.borrow_mut() = groups;
+        self.fill_cats();
         // the open module may have been removed
         let cur = self.current.borrow().as_ref().map(|m| m.name.clone());
         if let Some(n) = cur {

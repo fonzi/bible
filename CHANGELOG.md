@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **The Reading room has a section list** on the left with counts (Books,
+  Devotionals, Dictionaries, Church fathers, the Quran), like Downloads.
 - **Change the Bible in the cross-reference views** with the new version menu
   in the header, without going back to the reader. It changes your reading
   Bible too, so both stay in step.
