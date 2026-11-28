@@ -16,14 +16,15 @@ runs:
       with:
         path: ~/apt-cache
         # bump v1 when the package list below changes
-        key: apt-v2-${{ runner.os }}-${{ steps.week.outputs.week }}
+        key: apt-v3-${{ runner.os }}-${{ steps.week.outputs.week }}
     - name: Install packages
       shell: bash
       env:
         HIT: ${{ steps.cache.outputs.cache-hit }}
       run: |
         pkgs="libgtk-4-dev libadwaita-1-dev libgstreamer1.0-dev libssl-dev pkg-config
-              xvfb mold clang appstream desktop-file-utils xdotool"
+              xvfb mold clang appstream desktop-file-utils xdotool
+              sword-text-kjv sword-text-web"
         c=$HOME/apt-cache
         mkdir -p $c/archives/partial $c/lists/partial
         o="-o Dir::Cache::archives=$c/archives -o Dir::State::lists=$c/lists

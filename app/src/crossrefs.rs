@@ -451,8 +451,15 @@ impl CrossRefs {
             // the reading Bible changes too, so the reader and this view agree
             x.ctx.config.borrow_mut().bible = name;
             x.ctx.save_config();
-            x.ctx.refresh_one("bible");
-            x.open();
+            // the reader catches up when it's shown again (see its shown()).
+            // Open after this click is handled: changing the menu's own list
+            // inside its selection handler hangs GTK.
+            let w = Rc::downgrade(&x);
+            glib::idle_add_local_once(move || {
+                if let Some(x) = w.upgrade() {
+                    x.open();
+                }
+            });
         });
         let w = Rc::downgrade(&x);
         modes.connect_selected_notify(move |d| {
@@ -640,6 +647,18 @@ impl CrossRefs {
             .filter(|m| m.is_readable())
             .collect();
         bibles.sort_by_key(|m| m.abbreviation().to_lowercase());
+        let names: Vec<String> = bibles.iter().map(|m| m.name.clone()).collect();
+        if *self.ver_names.borrow() == names {
+            // same Bibles: only move the selection
+            if let Some(i) = names.iter().position(|n| n == current) {
+                if self.ver_dd.selected() != i as u32 {
+                    self.ver_filling.set(true);
+                    self.ver_dd.set_selected(i as u32);
+                    self.ver_filling.set(false);
+                }
+            }
+            return;
+        }
         let labels: Vec<String> = bibles.iter().map(|m| m.abbreviation()).collect();
         let lab: Vec<&str> = labels.iter().map(|s| s.as_str()).collect();
         self.ver_filling.set(true);
@@ -1806,6 +1825,26 @@ impl Section for CrossRefs {
         false
     }
     fn shown(&self) {
+        // tests: BIBLE_APP_XREF_SWITCH=<module> picks another Bible in the
+        // version menu, through the same handler a click uses, then logs a
+        // heartbeat; a hang means the heartbeat never comes
+        if let Ok(target) = std::env::var("BIBLE_APP_XREF_SWITCH") {
+            if let Some(x) = self.me.borrow().upgrade() {
+                glib::timeout_add_local_once(std::time::Duration::from_secs(4), move || {
+                    let i = x.ver_names.borrow().iter().position(|n| *n == target);
+                    match i {
+                        Some(i) => x.ver_dd.set_selected(i as u32),
+                        None => crate::log::info(&format!("xref switch: {target} isn't installed")),
+                    }
+                    let w = Rc::downgrade(&x);
+                    glib::timeout_add_local_once(std::time::Duration::from_secs(3), move || {
+                        if let Some(x) = w.upgrade() {
+                            crate::log::info(&format!("xref switch: responsive, showing {}", x.module.borrow()));
+                        }
+                    });
+                });
+            }
+        }
         // the first visit opens the explanations once
         {
             let mut c = self.ctx.config.borrow_mut();

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Fixed: choosing another Bible in the cross-reference views' version menu
+  froze the app. A new automatic test switches Bibles there on every build.
+
 ## 0.11.0
 
 - **Much more of the app in Spanish.** Downloads, the Reading room, the

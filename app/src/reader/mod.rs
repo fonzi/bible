@@ -2566,6 +2566,15 @@ impl Section for Reader {
         self.fill_books();
         self.render();
     }
+    /// The reading Bible may have been changed elsewhere (the cross-reference
+    /// views' version menu): catch up when shown.
+    fn shown(&self) {
+        let want = self.ctx.config.borrow().bible.clone();
+        let showing = self.versions.borrow().get(self.version_dd.selected() as usize).cloned();
+        if showing.as_deref() != Some(want.as_str()) {
+            self.refresh();
+        }
+    }
 }
 
 /// Roman numerals for printed chapter headings.

@@ -46,6 +46,8 @@ jobs:
         run: |
           cargo build
           xvfb-run -a scripts/check-startup.sh target/debug/bible-app
+      - name: Switching Bibles in the cross-reference views doesn't hang
+        run: xvfb-run -a scripts/check-xref-switch.sh target/debug/bible-app
       - name: Check the app's desktop and store metadata
         run: |
           desktop-file-validate data/io.github.fonzi.Bible.desktop
