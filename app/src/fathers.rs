@@ -659,6 +659,22 @@ mod tests {
 
 #[cfg(test)]
 mod url_checks {
+    /// The Quran downloads and parses into all 114 surahs and 6,236 verses.
+    #[test]
+    #[ignore = "needs the internet; run with --ignored download_urls"]
+    fn download_urls_quran_parses() {
+        let get = |u: &str| {
+            String::from_utf8_lossy(&bible_sword::install::get_bytes(u).unwrap().expect("Tanzil sent nothing")).into_owned()
+        };
+        let parts = super::quran_parts(&get(super::QURAN_ARABIC), &get(super::QURAN_SOUND), &get(super::QURAN_ENGLISH));
+        assert_eq!(parts.len(), 114);
+        let arabic = parts.iter().flat_map(|p| &p.paras).filter(|t| t.chars().next().is_some_and(|c| ('\u{0600}'..='\u{08FF}').contains(&c) || ('\u{FB50}'..='\u{FEFF}').contains(&c))).count();
+        let english = parts.iter().flat_map(|p| &p.paras).filter(|t| t.contains(':') && t.chars().next().is_some_and(|c| c.is_ascii_digit())).count();
+        assert_eq!(arabic, 6236, "Arabic verses");
+        assert_eq!(english, 6236, "English verses");
+        assert_eq!(parts[0].paras.len(), 7 * 3, "Al-Fatihah: Arabic, sound and English for 7 verses");
+    }
+
     /// Every church-fathers volume, the audio Bible and Wikipedia still answer.
     #[test]
     #[ignore = "needs the internet; run with --ignored download_urls"]

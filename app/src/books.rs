@@ -127,14 +127,36 @@ impl Books {
         while let Some(c) = self.pictures.first_child() {
             self.pictures.remove(&c);
         }
+        let mut missing = 0;
         for src in spans.iter().filter_map(|s| s.image.as_deref()) {
-            let Some(path) = m.picture(src) else { continue };
+            let Some(path) = m.picture(src) else {
+                missing += 1;
+                continue;
+            };
             let pic = gtk::Picture::for_filename(&path);
             pic.set_can_shrink(true);
             pic.set_content_fit(gtk::ContentFit::Contain);
             pic.set_height_request(360);
             pic.set_tooltip_text(path.file_name().and_then(|n| n.to_str()));
             self.pictures.append(&pic);
+        }
+        // installed before pictures were downloaded with their modules
+        if missing > 0 {
+            let note = adw::ActionRow::builder()
+                .title("This page’s pictures weren’t downloaded")
+                .subtitle("Remove this module in Downloads, then download it again to get its pictures.")
+                .build();
+            note.add_prefix(&gtk::Image::from_icon_name("image-missing-symbolic"));
+            let open = gtk::Button::with_label("Open Downloads");
+            open.set_valign(gtk::Align::Center);
+            let c = self.ctx.clone();
+            open.connect_clicked(move |_| c.go("library"));
+            note.add_suffix(&open);
+            let list = gtk::ListBox::new();
+            list.add_css_class("boxed-list");
+            list.set_selection_mode(gtk::SelectionMode::None);
+            list.append(&note);
+            self.pictures.append(&list);
         }
     }
 

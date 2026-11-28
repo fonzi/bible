@@ -569,6 +569,19 @@ mod import_tests {
 /// a HEAD request, falling back to GET for servers that refuse HEAD. Used by
 /// the download-URL checks (`cargo test -- --ignored download_urls`).
 pub fn url_status(url: &str) -> Result<u16, String> {
+    // a site that's briefly busy gets two more tries
+    let mut last = Err(String::new());
+    for wait in [0, 5, 15] {
+        std::thread::sleep(std::time::Duration::from_secs(wait));
+        last = url_status_once(url);
+        if last == Ok(200) {
+            break;
+        }
+    }
+    last
+}
+
+fn url_status_once(url: &str) -> Result<u16, String> {
     let a = agent(url);
     match a.head(url).call() {
         Ok(r) => Ok(r.status()),

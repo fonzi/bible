@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- A book page whose pictures weren't downloaded (modules installed before
+  0.9.21) now says so, with a button to Downloads.
 - Cross-references are worked out again when a Bible is updated, and old
   saved copies are cleared away instead of piling up.
 - **The Reading room has a section list** on the left with counts (Books,

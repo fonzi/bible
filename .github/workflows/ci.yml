@@ -39,6 +39,8 @@ jobs:
       # every file we offer to download is still there (Bible sources, STEP,
       # church fathers, audio, Wikipedia)
       - name: Download links still work
+        # a site that's down warns instead of blocking; read the log
+        continue-on-error: true
         run: cargo test --workspace -- --ignored download_urls
       - name: The window opens with the splash screen on
         run: |
