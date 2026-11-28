@@ -419,7 +419,7 @@ pub fn remove(p: Pack) -> io::Result<()> {
     let d = data_dir();
     let _ = fs::remove_file(words_file(&d, p));
     let _ = fs::remove_file(lex_file(&d, p));
-    CACHE.lock().unwrap().remove(&p);
+    CACHE.lock().unwrap_or_else(|e| e.into_inner()).remove(&p);
     Ok(())
 }
 
@@ -494,7 +494,7 @@ pub fn build_pack(
     }
     fs::rename(&tmp, words_file(dir, p))?;
     fs::rename(&ltmp, lex_file(dir, p))?;
-    CACHE.lock().unwrap().remove(&p);
+    CACHE.lock().unwrap_or_else(|e| e.into_inner()).remove(&p);
     progress(total, total);
     Ok(())
 }
@@ -579,11 +579,11 @@ impl Interlinear {
 
     /// Cached load from the user's data directory.
     pub fn get(p: Pack) -> Option<Arc<Interlinear>> {
-        if let Some(i) = CACHE.lock().unwrap().get(&p) {
+        if let Some(i) = CACHE.lock().unwrap_or_else(|e| e.into_inner()).get(&p) {
             return Some(i.clone());
         }
         let i = Arc::new(Interlinear::load_from(&data_dir(), p).ok()?);
-        CACHE.lock().unwrap().insert(p, i.clone());
+        CACHE.lock().unwrap_or_else(|e| e.into_inner()).insert(p, i.clone());
         Some(i)
     }
 

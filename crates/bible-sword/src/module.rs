@@ -268,7 +268,7 @@ impl Module {
     }
 
     fn load_testament(&self, t: u8) -> std::io::Result<()> {
-        let mut ts = self.testaments.lock().unwrap();
+        let mut ts = self.testaments.lock().unwrap_or_else(|e| e.into_inner());
         let slot = &mut ts[(t - 1) as usize];
         if slot.loaded {
             return Ok(());
@@ -337,11 +337,11 @@ impl Module {
     }
 
     fn block(&self, t: u8, b: u32) -> Option<Arc<Vec<u8>>> {
-        if let Some(v) = self.cache.lock().unwrap().get(&(t, b)) {
+        if let Some(v) = self.cache.lock().unwrap_or_else(|e| e.into_inner()).get(&(t, b)) {
             return Some(v.clone());
         }
         let (off, csize, _usize) = {
-            let ts = self.testaments.lock().unwrap();
+            let ts = self.testaments.lock().unwrap_or_else(|e| e.into_inner());
             *ts[(t - 1) as usize].blocks.get(b as usize)?
         };
         let pre = if t == 1 { "ot" } else { "nt" };
@@ -353,7 +353,7 @@ impl Module {
         let mut out = Vec::new();
         ZlibDecoder::new(&comp[..]).read_to_end(&mut out).ok()?;
         let arc = Arc::new(out);
-        let mut cache = self.cache.lock().unwrap();
+        let mut cache = self.cache.lock().unwrap_or_else(|e| e.into_inner());
         if cache.len() > 24 {
             cache.clear();
         }
@@ -366,7 +366,7 @@ impl Module {
         let slot = self.v11n.slot_for(book, chapter, verse)?;
         self.load_testament(slot.testament).ok()?;
         let e = {
-            let ts = self.testaments.lock().unwrap();
+            let ts = self.testaments.lock().unwrap_or_else(|e| e.into_inner());
             *ts[(slot.testament - 1) as usize].entries.get(slot.index)?
         };
         if e.size == 0 {

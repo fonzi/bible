@@ -262,7 +262,7 @@ pub fn load(id: &str) -> Option<Vec<Part>> {
 }
 
 thread_local! {
-    static VIEW: RefCell<Weak<FathersView>> = RefCell::new(Weak::new());
+    static VIEW: RefCell<Weak<FathersView>> = const { RefCell::new(Weak::new()) };
 }
 
 /// Open a downloaded volume in the reader.

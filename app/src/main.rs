@@ -9,6 +9,7 @@ mod bookmarks;
 mod books;
 mod config;
 mod crossrefs;
+mod crossrefs_data;
 mod ctx;
 mod export;
 mod fasting;
