@@ -11,7 +11,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::Arc;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 enum Pos {
     Book(usize),
     Key(String),
@@ -24,7 +24,7 @@ pub struct Books {
     groups: RefCell<Vec<adw::PreferencesGroup>>,
     // reader
     title: adw::WindowTitle,
-    section_btn: gtk::MenuButton,
+    toc_split: adw::OverlaySplitView,
     toc: gtk::ListBox,
     toc_search: gtk::SearchEntry,
     text: gtk::Label,
@@ -115,26 +115,37 @@ impl Books {
         prev.set_tooltip_text(Some("Previous section"));
         let next = gtk::Button::from_icon_name("go-down-symbolic");
         next.set_tooltip_text(Some("Next section"));
-        let section_btn = gtk::MenuButton::new();
-        section_btn.set_always_show_arrow(true);
+        // the contents as a panel beside the text, as in the church fathers
+        let section_btn = gtk::ToggleButton::builder()
+            .child(&adw::ButtonContent::builder().icon_name("view-list-symbolic").label("Contents").build())
+            .active(true)
+            .tooltip_text("Show or hide the contents")
+            .build();
         let toc = gtk::ListBox::new();
         toc.add_css_class("navigation-sidebar");
         let toc_search = gtk::SearchEntry::new();
         toc_search.set_placeholder_text(Some("Find a section or word"));
         let toc_scroll = gtk::ScrolledWindow::builder()
             .child(&toc)
-            .min_content_height(360)
-            .max_content_height(480)
-            .propagate_natural_height(true)
             .hscrollbar_policy(gtk::PolicyType::Never)
+            .vexpand(true)
             .build();
-        let pop_box = gtk::Box::new(gtk::Orientation::Vertical, 8);
-        pop_box.append(&toc_search);
-        pop_box.append(&toc_scroll);
-        pop_box.set_size_request(340, -1);
-        let pop = gtk::Popover::new();
-        pop.set_child(Some(&pop_box));
-        section_btn.set_popover(Some(&pop));
+        toc.set_selection_mode(gtk::SelectionMode::Single);
+        let side = gtk::Box::new(gtk::Orientation::Vertical, 8);
+        toc_search.set_margin_top(8);
+        toc_search.set_margin_start(8);
+        toc_search.set_margin_end(8);
+        side.append(&toc_search);
+        side.append(&toc_scroll);
+        let toc_split = adw::OverlaySplitView::new();
+        toc_split.set_sidebar(Some(&side));
+        toc_split.set_min_sidebar_width(220.0);
+        toc_split.set_max_sidebar_width(300.0);
+        toc_split.set_show_sidebar(true);
+        section_btn
+            .bind_property("active", &toc_split, "show-sidebar")
+            .bidirectional()
+            .build();
         let title = adw::WindowTitle::new("", "");
         let rh = adw::HeaderBar::new();
         rh.pack_start(&sidebar_button(ctx));
@@ -181,7 +192,8 @@ impl Books {
             .build();
         let read_tv = adw::ToolbarView::new();
         read_tv.add_top_bar(&rh);
-        read_tv.set_content(Some(&scroller));
+        toc_split.set_content(Some(&scroller));
+        read_tv.set_content(Some(&toc_split));
 
         let root = gtk::Stack::new();
         root.set_transition_type(gtk::StackTransitionType::SlideLeftRight);
@@ -194,7 +206,7 @@ impl Books {
             list,
             groups: RefCell::new(vec![]),
             title,
-            section_btn,
+            toc_split,
             toc,
             toc_search,
             text,
@@ -229,7 +241,9 @@ impl Books {
             if let Some(b) = w.upgrade() {
                 let p = b.toc_items.borrow().get(row.index() as usize).cloned();
                 if let Some(p) = p {
-                    b.section_btn.popdown();
+                    if b.toc_split.is_collapsed() {
+                        b.toc_split.set_show_sidebar(false);
+                    }
                     b.show(p);
                 }
             }
@@ -245,7 +259,9 @@ impl Books {
             if let Some(b) = w.upgrade() {
                 let first = b.toc_items.borrow().first().cloned();
                 if let Some(p) = first {
-                    b.section_btn.popdown();
+                    if b.toc_split.is_collapsed() {
+                        b.toc_split.set_show_sidebar(false);
+                    }
                     b.show(p);
                 }
             }
@@ -398,6 +414,11 @@ impl Books {
     }
 
     fn show(&self, p: Pos) {
+        // keep the panel's highlight on the part being read
+        let at = self.toc_items.borrow().iter().position(|x| *x == p);
+        if let Some(r) = at.and_then(|i| self.toc.row_at_index(i as i32)) {
+            self.toc.select_row(Some(&r));
+        }
         let Some(m) = self.current.borrow().clone() else {
             return;
         };
@@ -418,7 +439,7 @@ impl Books {
                     v.reverse();
                     v
                 };
-                self.section_btn.set_label(&n.name);
+                self.title.set_subtitle(&n.name);
                 self.heading.set_text(&n.name);
                 let body = gb
                     .text(*i)
@@ -455,7 +476,7 @@ impl Books {
                     }
                     _ => k.clone(),
                 };
-                self.section_btn.set_label(&label);
+                self.title.set_subtitle(&label);
                 self.heading.set_text(&label);
                 match ld.get(k) {
                     Some((_, raw)) => {

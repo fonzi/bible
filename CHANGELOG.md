@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **Change the Bible in the cross-reference views** with the new version menu
+  in the header, without going back to the reader. It changes your reading
+  Bible too, so both stay in step.
+- **Books in the Reading room get a Contents panel** beside the text, with a
+  search box and the current section highlighted, like the church fathers and
+  the Quran.
+
 ## 0.9.22
 
 - **Bible references in Wikipedia articles open in the app.** Tap a

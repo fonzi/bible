@@ -514,6 +514,9 @@ pub struct CrossRefs {
     /// where labels were drawn, for hover explanations
     labels: RefCell<Vec<(f64, f64, f64, f64, String)>>,
     module: RefCell<String>,
+    ver_dd: gtk::DropDown,
+    ver_names: RefCell<Vec<String>>,
+    ver_filling: Cell<bool>,
     gen: Cell<u64>,
     me: RefCell<std::rc::Weak<CrossRefs>>,
 }
@@ -602,6 +605,10 @@ impl CrossRefs {
         let c = ctx.clone();
         back.connect_clicked(move |_| c.go("bible"));
         hb.pack_start(&back);
+        // which Bible's links to draw, without going back to the reader
+        let ver_dd = gtk::DropDown::from_strings(&[]);
+        ver_dd.set_tooltip_text(Some("Bible version"));
+        hb.pack_start(&ver_dd);
         // views and zoom
         let modes = gtk::DropDown::from_strings(&[
             "Rainbow",
@@ -716,10 +723,26 @@ impl CrossRefs {
             groups_box: groups_box.clone(),
             labels: RefCell::new(vec![]),
             module: RefCell::new(String::new()),
+            ver_dd: ver_dd.clone(),
+            ver_names: RefCell::new(vec![]),
+            ver_filling: Cell::new(false),
             gen: Cell::new(0),
             me: Default::default(),
         });
         *x.me.borrow_mut() = Rc::downgrade(&x);
+        let w = Rc::downgrade(&x);
+        x.ver_dd.connect_selected_notify(move |dd| {
+            let Some(x) = w.upgrade() else { return };
+            if x.ver_filling.get() {
+                return;
+            }
+            let Some(name) = x.ver_names.borrow().get(dd.selected() as usize).cloned() else { return };
+            // the reading Bible changes too, so the reader and this view agree
+            x.ctx.config.borrow_mut().bible = name;
+            x.ctx.save_config();
+            x.ctx.refresh_one("bible");
+            x.open();
+        });
         let w = Rc::downgrade(&x);
         modes.connect_selected_notify(move |d| {
             let Some(x) = w.upgrade() else { return };
@@ -897,8 +920,30 @@ impl CrossRefs {
         x
     }
 
+    /// The version menu: every readable Bible, the reading one selected.
+    fn fill_versions(&self, current: &str) {
+        let lib = self.ctx.lib();
+        let mut bibles: Vec<_> = lib
+            .of_kind(bible_sword::Kind::Bible)
+            .into_iter()
+            .filter(|m| m.is_readable())
+            .collect();
+        bibles.sort_by_key(|m| m.abbreviation().to_lowercase());
+        let labels: Vec<String> = bibles.iter().map(|m| m.abbreviation()).collect();
+        let lab: Vec<&str> = labels.iter().map(|s| s.as_str()).collect();
+        self.ver_filling.set(true);
+        self.ver_dd.set_model(Some(&gtk::StringList::new(&lab)));
+        if let Some(i) = bibles.iter().position(|m| m.name == current) {
+            self.ver_dd.set_selected(i as u32);
+        }
+        *self.ver_names.borrow_mut() = bibles.iter().map(|m| m.name.clone()).collect();
+        self.ver_filling.set(false);
+    }
+
     /// Start (or reuse) the drawing for the reading Bible.
     pub fn open(&self) {
+        let current = self.ctx.bible().map(|m| m.name.clone()).unwrap_or_default();
+        self.fill_versions(&current);
         let Some(m) = self.ctx.bible() else {
             self.status.set_title("No Bible installed");
             self.status
