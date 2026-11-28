@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- **Church history articles offline.** On Today, Save articles for offline
+  downloads a short Wikipedia article for each church history event (the one
+  Wikipedia's search finds closest), and Read shows it without the internet.
 - **Reinstall from Downloads.** Modules you downloaded show a Reinstall button
   in Browse, which downloads them again over the old copy: handy for a
   module that's damaged, or a map module installed before its pictures came

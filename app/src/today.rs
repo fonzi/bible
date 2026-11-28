@@ -7,6 +7,7 @@ use bible_core::Ref;
 use bible_sword::Kind;
 use chrono::Datelike;
 use std::rc::Rc;
+use gtk::{gio, glib};
 
 pub struct Today {
     ctx: Rc<Ctx>,
@@ -394,19 +395,43 @@ impl Today {
             let t = label(e.text, &[]);
             t.set_hexpand(true);
             row.append(&t);
-            // the article about it on Wikipedia (online)
-            let wiki = gtk::Button::from_icon_name("help-about-symbolic");
+            // the article about it: saved for offline, or on Wikipedia
+            let wiki = gtk::Button::with_label(&crate::i18n::t("Read"));
             wiki.add_css_class("flat");
             wiki.set_valign(gtk::Align::Start);
-            wiki.set_tooltip_text(Some("Read about this on Wikipedia"));
+            wiki.set_tooltip_text(Some(&crate::i18n::t("Read about this, from Wikipedia")));
             let q = e.text.trim_end_matches('.').to_string();
+            let saved = crate::history::load().remove(&crate::history::key(e.month, e.day, e.year));
             wiki.connect_clicked(move |b| {
-                let url = format!(
-                    "https://en.wikipedia.org/w/index.php?search={}",
-                    urlencoding::encode(&q)
-                );
                 let win = b.root().and_downcast::<gtk::Window>();
-                gtk::UriLauncher::new(&url).launch(win.as_ref(), gtk::gio::Cancellable::NONE, |_| {});
+                let online = |title: Option<&str>| match title {
+                    Some(t) => format!("https://en.wikipedia.org/wiki/{}", urlencoding::encode(&t.replace(' ', "_"))),
+                    None => format!("https://en.wikipedia.org/w/index.php?search={}", urlencoding::encode(&q)),
+                };
+                match &saved {
+                    Some(a) => {
+                        let d = adw::AlertDialog::new(Some(&a.title), Some(&a.extract));
+                        d.set_body(&format!(
+                            "{}\n\n{}",
+                            a.extract,
+                            crate::i18n::t("From Wikipedia (CC BY-SA 4.0): the article its search finds closest to this event.")
+                        ));
+                        d.add_response("close", &crate::i18n::t("Close"));
+                        d.add_response("full", &crate::i18n::t("Read the full article"));
+                        d.set_default_response(Some("close"));
+                        let url = online(Some(&a.title));
+                        d.connect_response(None, move |d, r| {
+                            if r == "full" {
+                                let w = d.root().and_downcast::<gtk::Window>();
+                                gtk::UriLauncher::new(&url).launch(w.as_ref(), gtk::gio::Cancellable::NONE, |_| {});
+                            }
+                        });
+                        d.present(win.as_ref());
+                    }
+                    None => {
+                        gtk::UriLauncher::new(&online(None)).launch(win.as_ref(), gtk::gio::Cancellable::NONE, |_| {});
+                    }
+                }
             });
             row.append(&wiki);
             c.append(&row);
@@ -418,7 +443,58 @@ impl Today {
         b.set_margin_top(6);
         let ctx = self.ctx.clone();
         b.connect_clicked(move |_| ctx.go("timeline"));
-        c.append(&b);
+        let buttons = gtk::Box::new(gtk::Orientation::Horizontal, 6);
+        buttons.append(&b);
+        if !crate::history::is_downloaded() {
+            let save = gtk::Button::with_label(&crate::i18n::t("Save articles for offline"));
+            save.add_css_class("pill");
+            save.add_css_class("flat");
+            save.set_margin_top(6);
+            save.set_tooltip_text(Some(&crate::i18n::t("Download a short Wikipedia article for each church history event")));
+            let ctx = self.ctx.clone();
+            save.connect_clicked(move |b| {
+                b.set_sensitive(false);
+                b.set_label(&crate::i18n::t("Saving…"));
+                let (tx, rx) = std::sync::mpsc::channel::<(usize, usize)>();
+                let bp = b.clone();
+                let tick = glib::timeout_add_local(std::time::Duration::from_millis(200), move || {
+                    while let Ok((d, t)) = rx.try_recv() {
+                        bp.set_label(&format!("{} {d}/{t}", crate::i18n::t("Saving…")));
+                    }
+                    glib::ControlFlow::Continue
+                });
+                let ctx = ctx.clone();
+                let b = b.clone();
+                glib::spawn_future_local(async move {
+                    let res = gio::spawn_blocking(move || {
+                        crate::history::download(&mut |d, t| {
+                            let _ = tx.send((d, t));
+                        })
+                        .map_err(|e| e.to_string())
+                    })
+                    .await;
+                    tick.remove();
+                    match res {
+                        Ok(Ok(n)) => {
+                            b.set_visible(false);
+                            ctx.toast(&format!("{} {n}", crate::i18n::t("Articles saved:")));
+                            ctx.refresh_one("today");
+                        }
+                        Ok(Err(e)) => {
+                            b.set_label(&crate::i18n::t("Try again"));
+                            b.set_sensitive(true);
+                            ctx.toast(&e);
+                        }
+                        Err(_) => {
+                            b.set_label(&crate::i18n::t("Try again"));
+                            b.set_sensitive(true);
+                        }
+                    }
+                });
+            });
+            buttons.append(&save);
+        }
+        c.append(&buttons);
         c
     }
 }
