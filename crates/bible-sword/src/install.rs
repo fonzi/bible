@@ -242,6 +242,14 @@ pub fn parse_catalogue(src: &Source, targz: &[u8]) -> io::Result<Vec<RemoteModul
 }
 
 /// Files a module of this driver consists of, relative to the library root.
+/// The complete-package zip for a module, where the source publishes them
+/// (CrossWire's main library: …/sword/raw → …/sword/packages/rawzip/Name.zip).
+fn package_url(m: &RemoteModule) -> Option<String> {
+    let base = m.source.url.trim_end_matches('/');
+    base.strip_suffix("/pub/sword/raw")
+        .map(|root| format!("{root}/pub/sword/packages/rawzip/{}.zip", m.conf.name))
+}
+
 fn module_files(conf: &Conf) -> Vec<String> {
     let dp = conf
         .get_or("DataPath", "")
@@ -284,6 +292,24 @@ pub fn install_into(
     root: &Path,
     progress: &mut dyn FnMut(usize, usize),
 ) -> io::Result<PathBuf> {
+    // CrossWire's main library also has each module as a complete zip:
+    // that brings pictures and any other extra files the file list misses
+    if let Some(url) = package_url(m) {
+        if let Ok(Some(bytes)) = get(&url) {
+            let tmp = std::env::temp_dir().join(format!("bible-pkg-{}.zip", m.conf.name));
+            fs::write(&tmp, &bytes)?;
+            progress(1, 2);
+            let done = import_zip(&tmp, root);
+            let _ = fs::remove_file(&tmp);
+            if done.is_ok() {
+                progress(2, 2);
+                fs::create_dir_all(root.join("mods.d"))?;
+                let conf_path = root.join("mods.d").join(format!("{}.conf", m.conf.name.to_lowercase()));
+                fs::write(&conf_path, m.conf.raw.as_bytes())?;
+                return Ok(conf_path);
+            }
+        }
+    }
     let files = module_files(&m.conf);
     if files.is_empty() {
         return Err(io::Error::new(
@@ -568,6 +594,11 @@ mod url_checks {
                 Ok(200) => println!("ok   {u}"),
                 other => bad.push(format!("{u}: {other:?}")),
             }
+        }
+        let pkg = "https://crosswire.org/ftpmirror/pub/sword/packages/rawzip/KJV.zip";
+        match super::url_status(pkg) {
+            Ok(200) => println!("ok   {pkg}"),
+            other => bad.push(format!("{pkg}: {other:?}")),
         }
         assert!(bad.is_empty(), "unreachable downloads:\n{}", bad.join("\n"));
     }

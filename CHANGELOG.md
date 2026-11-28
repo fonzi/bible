@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.21
+
+- **Maps and pictures now download with their modules.** Downloads from
+  CrossWire's main library now fetch the module's complete package, so the
+  picture files that map and atlas modules need come along. If you already
+  installed one (such as the SonLight maps), remove it and download it again
+  to get its pictures.
+
 ## 0.9.20
 
 - **Maps and pictures in books.** Books and dictionaries that include

@@ -39,14 +39,21 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="0.9.20" date="2026-11-24">
+    <release version="0.9.21" date="2026-11-27">
+      <description>
+        <ul>
+          <li>Maps and pictures now download with their modules. Downloads from CrossWire's main library now fetch the module's complete package, so the picture files that map and atlas modules need come along. If you already installed one (such as the SonLight maps), remove it and download it again to get its pictures.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.9.20" date="2026-11-27">
       <description>
         <ul>
           <li>Maps and pictures in books. Books and dictionaries that include pictures (maps, illustrations) now show them under the text in the Reading room, fitted to the page. The pictures come from the module itself.</li>
         </ul>
       </description>
     </release>
-    <release version="0.9.19" date="2026-11-24">
+    <release version="0.9.19" date="2026-11-27">
       <description>
         <ul>
           <li>How literally each Bible translates. In Downloads, Bibles now show whether they translate word for word, balanced, thought for thought, or as a paraphrase, as classified in Wikipedia's article on dynamic and formal equivalence. Bibles that article doesn't list show no such tag.</li>
@@ -54,7 +61,7 @@
         </ul>
       </description>
     </release>
-    <release version="0.9.18" date="2026-11-24">
+    <release version="0.9.18" date="2026-11-27">
       <description>
         <ul>
           <li>Many more cross-references from older-format Bibles. Bibles such as the ISV list their cross-references in the text rather than in notes; these are now read as cross-references, including lists like "1 Chr 22:10; 28:6" where the book isn't repeated. The ISV goes from about 400 to over 16,000 in the rainbow, and shows them as † notes while reading.</li>
@@ -62,21 +69,21 @@
         </ul>
       </description>
     </release>
-    <release version="0.9.17" date="2026-11-24">
+    <release version="0.9.17" date="2026-11-27">
       <description>
         <ul>
           <li>The rainbow uses your Bible's own cross-references whenever it has any, even an incomplete set (ESV, for example, brings over 85,000). The built-in OpenBible.info set is used only for Bibles with none of their own, and the footer says which you're seeing.</li>
         </ul>
       </description>
     </release>
-    <release version="0.9.16" date="2026-11-24">
+    <release version="0.9.16" date="2026-11-27">
       <description>
         <ul>
           <li>Tags on Bibles in Downloads. Up to three short tags say what a Bible can do: Cross-references (used by the rainbow), Word study (Strong's), Footnotes, Red letters or Headings. They come straight from each module's own description on the download server.</li>
         </ul>
       </description>
     </release>
-    <release version="0.9.15" date="2026-11-24">
+    <release version="0.9.15" date="2026-11-27">
       <description>
         <ul>
           <li>Bibles with their own cross-references are marked in Downloads with an "Own cross-references" tag; the rainbow and the other views use those links.</li>
@@ -84,7 +91,7 @@
         </ul>
       </description>
     </release>
-    <release version="0.9.14" date="2026-11-24">
+    <release version="0.9.14" date="2026-11-27">
       <description>
         <ul>
           <li>In the Reading room, the Quran has its own section at the bottom instead of appearing under the church fathers.</li>
@@ -92,7 +99,7 @@
         </ul>
       </description>
     </release>
-    <release version="0.9.13" date="2026-11-24">
+    <release version="0.9.13" date="2026-11-27">
       <description>
         <ul>
           <li>Contents as a panel. In the Reading room, a book's contents (each surah of the Quran, each section of the church fathers) now sit in a panel beside the text, with the part you're reading highlighted. The Contents button shows or hides it.</li>
@@ -101,14 +108,14 @@
         </ul>
       </description>
     </release>
-    <release version="0.9.12" date="2026-11-24">
+    <release version="0.9.12" date="2026-11-27">
       <description>
         <ul>
           <li>Cross-references from your Bible. When the selected Bible comes with its own full set of cross-references, the rainbow and the other views now use them. Otherwise the footer says plainly that the links are OpenBible.info's set, which is built into the app (so it works offline too).</li>
         </ul>
       </description>
     </release>
-    <release version="0.9.11" date="2026-11-24">
+    <release version="0.9.11" date="2026-11-27">
       <description>
         <ul>
           <li>The Quran, for study and comparison. Downloads, Start here, has the Quran at the very bottom: the Arabic text (Tanzil) with Marmaduke Pickthall's English translation (1930), verse by verse, read in the Reading room. Story links with the Bible and the cross-reference views come later.</li>
@@ -190,17 +197,6 @@
           <li>The loading animations follow the accent colour.</li>
           <li>Dictionaries and glossaries stored like Bibles no longer appear in the version lists.</li>
           <li>Side by side: a version without the current book says so (the Septuagint has no Acts) instead of showing empty verses.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.9.1" date="2026-11-24">
-      <description>
-        <ul>
-          <li>Church fathers: paragraphs no longer break at footnotes; volumes you already downloaded are read again with the fix.</li>
-          <li>The Contents list is easier to scan (one line per section, full title on hover) and opens at the section you're reading.</li>
-          <li>Downloading or removing a volume no longer closes the list, so you can start several downloads at once.</li>
-          <li>Splash style and loading animation are picked from live previews in Preferences; click a splash to see it full size.</li>
-          <li>An Arch Linux PKGBUILD, and clear system requirements in the README.</li>
         </ul>
       </description>
     </release>
