@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- **Reinstall from Downloads.** Modules you downloaded show a Reinstall button
+  in Browse, which downloads them again over the old copy: handy for a
+  module that's damaged, or a map module installed before its pictures came
+  along.
+
 ## 0.10.0
 
 - **The Reading room has a section list** on the left with counts (Books,

@@ -144,7 +144,7 @@ impl Books {
         if missing > 0 {
             let note = adw::ActionRow::builder()
                 .title("This page’s pictures weren’t downloaded")
-                .subtitle("Remove this module in Downloads, then download it again to get its pictures.")
+                .subtitle("Find this module in Downloads, Browse, and choose Reinstall to get its pictures.")
                 .build();
             note.add_prefix(&gtk::Image::from_icon_name("image-missing-symbolic"));
             let open = gtk::Button::with_label("Open Downloads");

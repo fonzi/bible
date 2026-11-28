@@ -902,6 +902,15 @@ impl LibraryView {
                 b.add_css_class("suggested-action");
                 b
             }
+            // yours: download it again over the old copy, to repair it or to
+            // get files an older download missed (such as a map's pictures)
+            Some(h) if h.user_installed => {
+                let b = gtk::Button::with_label("Reinstall");
+                b.add_css_class("flat");
+                b.set_tooltip_text(Some("Download it again, to repair it or get files that are missing"));
+                b
+            }
+            // installed by the system's package manager: not ours to change
             Some(_) => {
                 let b = gtk::Button::with_label("Installed");
                 b.set_sensitive(false);
