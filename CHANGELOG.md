@@ -1,19 +1,22 @@
 # Changelog
 
-## Unreleased
+## 0.10.0
 
-- A book page whose pictures weren't downloaded (modules installed before
-  0.9.21) now says so, with a button to Downloads.
-- Cross-references are worked out again when a Bible is updated, and old
-  saved copies are cleared away instead of piling up.
 - **The Reading room has a section list** on the left with counts (Books,
   Devotionals, Dictionaries, Church fathers, the Quran), like Downloads.
-- **Change the Bible in the cross-reference views** with the new version menu
-  in the header, without going back to the reader. It changes your reading
-  Bible too, so both stay in step.
 - **Books in the Reading room get a Contents panel** beside the text, with a
   search box and the current section highlighted, like the church fathers and
   the Quran.
+- **Change the Bible in the cross-reference views** with the new version menu
+  in the header, without going back to the reader. It changes your reading
+  Bible too, so both stay in step.
+- Cross-references are worked out again when a Bible is updated, and old
+  saved copies are cleared away instead of piling up.
+- A book page whose pictures weren't downloaded (modules installed before
+  0.9.21) now says so, with a button to Downloads.
+- Behind the scenes: the Quran download is now tested against Tanzil on
+  every build, a download site that's briefly down no longer holds up a
+  release, and the code is split into smaller, steadier pieces.
 
 ## 0.9.22
 

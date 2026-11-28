@@ -39,6 +39,18 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.10.0" date="2026-11-27">
+      <description>
+        <ul>
+          <li>The Reading room has a section list on the left with counts (Books, Devotionals, Dictionaries, Church fathers, the Quran), like Downloads.</li>
+          <li>Books in the Reading room get a Contents panel beside the text, with a search box and the current section highlighted, like the church fathers and the Quran.</li>
+          <li>Change the Bible in the cross-reference views with the new version menu in the header, without going back to the reader. It changes your reading Bible too, so both stay in step.</li>
+          <li>Cross-references are worked out again when a Bible is updated, and old saved copies are cleared away instead of piling up.</li>
+          <li>A book page whose pictures weren't downloaded (modules installed before 0.9.21) now says so, with a button to Downloads.</li>
+          <li>Behind the scenes: the Quran download is now tested against Tanzil on every build, a download site that's briefly down no longer holds up a release, and the code is split into smaller, steadier pieces.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.22" date="2026-11-27">
       <description>
         <ul>
@@ -188,15 +200,6 @@
         <ul>
           <li>Windows and macOS test builds. Each release now includes a Windows zip and a macOS zip, named _untested: they build and pass every test automatically, but no one has run them on a real PC or Mac yet. The macOS build needs GTK from Homebrew (see the README inside the zip).</li>
           <li>Releases come out faster: the tests and the Linux package share one build, and Flatpak, Windows and macOS build at the same time.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.9.3" date="2026-11-23">
-      <description>
-        <ul>
-          <li>Flatpak. Each release now also comes as a .flatpak, which brings its own GNOME libraries and so runs on older systems such as Pop!_OS and Ubuntu 22.04 and Debian 12, and on most other distributions.</li>
-          <li>Inside the Flatpak, the update banner opens the release page instead of installing a .deb.</li>
-          <li>Groundwork for Windows and macOS: modules and data go in the usual place on each system (%APPDATA%\Sword on Windows), and every push is now built and tested on Windows, macOS and as a Flatpak.</li>
         </ul>
       </description>
     </release>
