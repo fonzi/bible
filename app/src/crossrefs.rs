@@ -252,7 +252,7 @@ impl CrossRefs {
         // a spinner while the drawing is made in the background
         // a large spinner in the middle while the drawing is made
         let spinner = crate::loader::new(96);
-        let busy_label = gtk::Label::new(Some("Drawing cross-references…"));
+        let busy_label = gtk::Label::new(Some(crate::i18n::t("Drawing cross-references…").as_str()));
         busy_label.add_css_class("title-4");
         let busy = gtk::Box::new(gtk::Orientation::Vertical, 14);
         busy.append(&spinner);
@@ -274,7 +274,7 @@ impl CrossRefs {
         overlay.set_vexpand(true);
         view.append(&overlay);
         // the info line, with a button to read what's selected
-        let read = gtk::Button::with_label("Read");
+        let read = gtk::Button::with_label(crate::i18n::t("Read").as_str());
         read.add_css_class("pill");
         read.add_css_class("suggested-action");
         read.set_valign(gtk::Align::Center);
@@ -295,7 +295,7 @@ impl CrossRefs {
         progress.set_size_request(320, -1);
         let status = adw::StatusPage::builder()
             .icon_name("emblem-shared-symbolic")
-            .title("Drawing every cross-reference")
+            .title(crate::i18n::t("Drawing every cross-reference").as_str())
             .build();
         let pbox = gtk::Box::new(gtk::Orientation::Vertical, 12);
         pbox.set_halign(gtk::Align::Center);
@@ -312,13 +312,13 @@ impl CrossRefs {
         let title = adw::WindowTitle::new("Cross-references", "");
         hb.set_title_widget(Some(&title));
         let back = gtk::Button::from_icon_name("go-previous-symbolic");
-        back.set_tooltip_text(Some("Back to the Bible"));
+        back.set_tooltip_text(Some(crate::i18n::t("Back to the Bible").as_str()));
         let c = ctx.clone();
         back.connect_clicked(move |_| c.go("bible"));
         hb.pack_start(&back);
         // which Bible's links to draw, without going back to the reader
         let ver_dd = gtk::DropDown::from_strings(&[]);
-        ver_dd.set_tooltip_text(Some("Bible version"));
+        ver_dd.set_tooltip_text(Some(crate::i18n::t("Bible version").as_str()));
         hb.pack_start(&ver_dd);
         // views and zoom
         let modes = gtk::DropDown::from_strings(&[
@@ -329,23 +329,23 @@ impl CrossRefs {
             "Globe (3D)",
             "Möbius strip (3D)",
         ]);
-        modes.set_tooltip_text(Some("How to draw the cross-references"));
+        modes.set_tooltip_text(Some(crate::i18n::t("How to draw the cross-references").as_str()));
         let zin = gtk::Button::from_icon_name("zoom-in-symbolic");
-        zin.set_tooltip_text(Some("Zoom in (or scroll over the drawing)"));
+        zin.set_tooltip_text(Some(crate::i18n::t("Zoom in (or scroll over the drawing)").as_str()));
         let zout = gtk::Button::from_icon_name("zoom-out-symbolic");
-        zout.set_tooltip_text(Some("Zoom out"));
+        zout.set_tooltip_text(Some(crate::i18n::t("Zoom out").as_str()));
         let zfit = gtk::Button::from_icon_name("zoom-fit-best-symbolic");
-        zfit.set_tooltip_text(Some("Reset: whole Bible, nothing selected (Esc)"));
+        zfit.set_tooltip_text(Some(crate::i18n::t("Reset: whole Bible, nothing selected (Esc)").as_str()));
         let zoom = gtk::Box::new(gtk::Orientation::Horizontal, 0);
         zoom.add_css_class("linked");
         zoom.append(&zout);
         zoom.append(&zfit);
         zoom.append(&zin);
         let orders = gtk::DropDown::from_strings(&ORDERS);
-        orders.set_tooltip_text(Some("How to order the books"));
+        orders.set_tooltip_text(Some(crate::i18n::t("How to order the books").as_str()));
         let help = gtk::ToggleButton::builder()
             .icon_name("help-about-symbolic")
-            .tooltip_text("What the views, orders and groups mean")
+            .tooltip_text(crate::i18n::t("What the views, orders and groups mean").as_str())
             .build();
         let text = gtk::Box::new(gtk::Orientation::Vertical, 10);
         text.set_margin_top(18);
@@ -656,9 +656,9 @@ impl CrossRefs {
         let current = self.ctx.bible().map(|m| m.name.clone()).unwrap_or_default();
         self.fill_versions(&current);
         let Some(m) = self.ctx.bible() else {
-            self.status.set_title("No Bible installed");
+            self.status.set_title(crate::i18n::t("No Bible installed").as_str());
             self.status
-                .set_description(Some("Download a Bible from Downloads first."));
+                .set_description(Some(crate::i18n::t("Download a Bible from Downloads first.").as_str()));
             self.progress.set_visible(false);
             self.stack.set_visible_child_name("status");
             return;
@@ -686,7 +686,7 @@ impl CrossRefs {
             self.show(links, &source);
             return;
         }
-        self.status.set_title("Drawing every cross-reference");
+        self.status.set_title(crate::i18n::t("Drawing every cross-reference").as_str());
         self.status.set_description(Some(&format!(
             "Placing them on {} once. This takes a moment and is remembered afterwards.",
             m.description()
@@ -738,7 +738,7 @@ impl CrossRefs {
 
     fn show(&self, links: Vec<VLink>, source: &str) {
         if links.is_empty() {
-            self.status.set_title("No cross-references for this Bible");
+            self.status.set_title(crate::i18n::t("No cross-references for this Bible").as_str());
             self.status.set_description(Some(
                 "This Bible’s book and chapter layout doesn’t match the built-in cross-references.",
             ));
@@ -1795,9 +1795,7 @@ impl Section for CrossRefs {
     fn id(&self) -> &'static str {
         "crossrefs"
     }
-    fn title(&self) -> &'static str {
-        "Cross-references"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Cross-references") }
     fn icon(&self) -> &'static str {
         "emblem-shared-symbolic"
     }

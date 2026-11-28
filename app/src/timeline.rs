@@ -99,7 +99,7 @@ impl TimelineView {
         phb.set_show_start_title_buttons(false);
         let close = gtk::Button::from_icon_name("window-close-symbolic");
         close.add_css_class("flat");
-        close.set_tooltip_text(Some("Close"));
+        close.set_tooltip_text(Some(crate::i18n::t("Close").as_str()));
         phb.pack_end(&close);
         panel.add_top_bar(&phb);
         panel.set_content(Some(&detail_scroll));
@@ -119,14 +119,14 @@ impl TimelineView {
         let zoom_box = gtk::Box::new(gtk::Orientation::Horizontal, 0);
         zoom_box.add_css_class("linked");
         let zout = gtk::Button::from_icon_name("zoom-out-symbolic");
-        zout.set_tooltip_text(Some("Zoom out (Ctrl+scroll)"));
+        zout.set_tooltip_text(Some(crate::i18n::t("Zoom out (Ctrl+scroll)").as_str()));
         let zin = gtk::Button::from_icon_name("zoom-in-symbolic");
-        zin.set_tooltip_text(Some("Zoom in (Ctrl+scroll)"));
+        zin.set_tooltip_text(Some(crate::i18n::t("Zoom in (Ctrl+scroll)").as_str()));
         zoom_box.append(&zout);
         zoom_box.append(&zin);
         let jump = gtk::MenuButton::new();
-        jump.set_label("Jump to");
-        jump.set_tooltip_text(Some("Jump to a period"));
+        jump.set_label(crate::i18n::t("Jump to").as_str());
+        jump.set_tooltip_text(Some(crate::i18n::t("Jump to a period").as_str()));
         hb.pack_end(&zoom_box);
         hb.pack_end(&jump);
         root.add_top_bar(&hb);
@@ -677,7 +677,7 @@ impl TimelineView {
             self.detail.append(&s);
         }
         if !e.refs.is_empty() {
-            let h = gtk::Label::new(Some("In the Bible"));
+            let h = gtk::Label::new(Some(crate::i18n::t("In the Bible").as_str()));
             h.set_xalign(0.0);
             h.set_margin_top(10);
             h.add_css_class("heading");
@@ -716,7 +716,7 @@ impl TimelineView {
             .take(8)
             .collect();
         if !around.is_empty() {
-            let h = gtk::Label::new(Some("At the same time"));
+            let h = gtk::Label::new(Some(crate::i18n::t("At the same time").as_str()));
             h.set_xalign(0.0);
             h.set_margin_top(10);
             h.add_css_class("heading");
@@ -799,9 +799,7 @@ impl Section for TimelineView {
     fn id(&self) -> &'static str {
         "timeline"
     }
-    fn title(&self) -> &'static str {
-        "Timeline"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Timeline") }
     fn icon(&self) -> &'static str {
         "document-open-recent-symbolic"
     }

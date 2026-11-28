@@ -175,7 +175,7 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
 
     let window = adw::ApplicationWindow::builder()
         .application(app)
-        .title("Bible")
+        .title(crate::i18n::t("Bible").as_str())
         .default_width(1280)
         .default_height(820)
         .width_request(360)
@@ -284,7 +284,7 @@ pub fn build(app: &adw::Application, present: bool) -> Rc<Ctx> {
     side_header.set_show_end_title_buttons(false);
     side_header.set_title_widget(Some(&adw::WindowTitle::new("Bible", "")));
     let sb = gtk::Button::from_icon_name("system-search-symbolic");
-    sb.set_tooltip_text(Some("Search"));
+    sb.set_tooltip_text(Some(crate::i18n::t("Search").as_str()));
     let c = ctx.clone();
     sb.connect_clicked(move |_| c.go("search"));
     side_header.pack_end(&sb);

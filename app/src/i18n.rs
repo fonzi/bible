@@ -52,6 +52,19 @@ pub fn t(s: &str) -> String {
         .unwrap_or_else(|| s.to_string())
 }
 
+/// Translate a fixed string where a `&'static str` is needed (match arms,
+/// `if … else` labels). Each translation is stored once and kept for the
+/// app's lifetime, so this can't grow without bound.
+pub fn ts(s: &'static str) -> &'static str {
+    let Some(tr) = TABLE.get().and_then(|m| m.get(s)).filter(|x| !x.is_empty()) else {
+        return s;
+    };
+    static KEPT: std::sync::OnceLock<std::sync::Mutex<HashMap<&'static str, &'static str>>> =
+        std::sync::OnceLock::new();
+    let mut kept = KEPT.get_or_init(Default::default).lock().unwrap_or_else(|e| e.into_inner());
+    kept.entry(s).or_insert_with(|| Box::leak(tr.clone().into_boxed_str()))
+}
+
 fn unquote(line: &str) -> String {
     let l = line.trim();
     let l = l.strip_prefix('"').unwrap_or(l);

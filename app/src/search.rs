@@ -24,7 +24,7 @@ pub struct Search {
 impl Search {
     pub fn new(ctx: &Rc<Ctx>) -> Rc<Search> {
         let entry = gtk::SearchEntry::new();
-        entry.set_placeholder_text(Some("Words, a phrase, or a Strong’s number like G25"));
+        entry.set_placeholder_text(Some(crate::i18n::t("Words, a phrase, or a Strong’s number like G25").as_str()));
         entry.set_hexpand(true);
         let dd = gtk::DropDown::from_strings(&[]);
         let top = gtk::Box::new(gtk::Orientation::Horizontal, 8);
@@ -38,7 +38,7 @@ impl Search {
         status.set_wrap(true);
         // ideas to start with, shown until there are results
         let tips = gtk::Box::new(gtk::Orientation::Vertical, 8);
-        let tips_label = gtk::Label::new(Some("Try one of these"));
+        let tips_label = gtk::Label::new(Some(crate::i18n::t("Try one of these").as_str()));
         tips_label.add_css_class("heading");
         tips_label.set_xalign(0.0);
         tips_label.set_margin_top(12);
@@ -237,9 +237,7 @@ impl Section for Search {
     fn id(&self) -> &'static str {
         "search"
     }
-    fn title(&self) -> &'static str {
-        "Search"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Search") }
     fn icon(&self) -> &'static str {
         "system-search-symbolic"
     }

@@ -296,16 +296,16 @@ impl FathersView {
         let hb = adw::HeaderBar::new();
         hb.pack_start(&sidebar_button(ctx));
         let back = gtk::Button::from_icon_name("go-previous-symbolic");
-        back.set_tooltip_text(Some("Back to the Reading room"));
+        back.set_tooltip_text(Some(crate::i18n::t("Back to the Reading room").as_str()));
         let c = ctx.clone();
         back.connect_clicked(move |_| c.go("books"));
         hb.pack_start(&back);
         let title = adw::WindowTitle::new("", "");
         hb.set_title_widget(Some(&title));
         let prev = gtk::Button::from_icon_name("go-up-symbolic");
-        prev.set_tooltip_text(Some("Previous section"));
+        prev.set_tooltip_text(Some(crate::i18n::t("Previous section").as_str()));
         let next = gtk::Button::from_icon_name("go-down-symbolic");
-        next.set_tooltip_text(Some("Next section"));
+        next.set_tooltip_text(Some(crate::i18n::t("Next section").as_str()));
         let toc = gtk::ListBox::new();
         toc.add_css_class("navigation-sidebar");
         let toc_scroll = gtk::ScrolledWindow::builder()
@@ -324,11 +324,11 @@ impl FathersView {
             .child(
                 &adw::ButtonContent::builder()
                     .icon_name("view-list-symbolic")
-                    .label("Contents")
+                    .label(crate::i18n::t("Contents").as_str())
                     .build(),
             )
             .active(true)
-            .tooltip_text("Show or hide the contents")
+            .tooltip_text(crate::i18n::t("Show or hide the contents").as_str())
             .build();
         toc_btn
             .bind_property("active", &toc_pop, "show-sidebar")
@@ -354,7 +354,7 @@ impl FathersView {
         loading.set_valign(gtk::Align::Center);
         loading.set_halign(gtk::Align::Center);
         loading.append(&crate::loader::new(96));
-        let ll = gtk::Label::new(Some("Opening the volume…"));
+        let ll = gtk::Label::new(Some(crate::i18n::t("Opening the volume…").as_str()));
         ll.add_css_class("title-4");
         loading.append(&ll);
         let stack = gtk::Stack::new();
@@ -469,7 +469,7 @@ impl FathersView {
             self.body.remove(&c);
         }
         let Some(p) = parts.get(i) else {
-            let l = gtk::Label::new(Some("This volume couldn’t be read. Remove it in Downloads and download it again."));
+            let l = gtk::Label::new(Some(crate::i18n::t("This volume couldn’t be read. Remove it in Downloads and download it again.").as_str()));
             l.set_wrap(true);
             self.body.append(&l);
             return;
@@ -578,9 +578,7 @@ impl Section for FathersView {
     fn id(&self) -> &'static str {
         "fathers"
     }
-    fn title(&self) -> &'static str {
-        "Church fathers"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Church fathers") }
     fn icon(&self) -> &'static str {
         "accessories-text-editor-symbolic"
     }

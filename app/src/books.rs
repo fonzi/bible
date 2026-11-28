@@ -112,7 +112,7 @@ impl Books {
         let mut sel = all;
         for (i, g) in groups.iter().enumerate() {
             let title = g.title();
-            let r = add(if title.is_empty() { "Get started" } else { title.as_str() }, Some(rows(g.upcast_ref())));
+            let r = add(if title.is_empty() { crate::i18n::ts("Get started") } else { title.as_str() }, Some(rows(g.upcast_ref())));
             if self.cat.get() == Some(i) {
                 sel = r;
             }
@@ -143,11 +143,11 @@ impl Books {
         // installed before pictures were downloaded with their modules
         if missing > 0 {
             let note = adw::ActionRow::builder()
-                .title("This page’s pictures weren’t downloaded")
-                .subtitle("Find this module in Downloads, Browse, and choose Reinstall to get its pictures.")
+                .title(crate::i18n::t("This page’s pictures weren’t downloaded").as_str())
+                .subtitle(crate::i18n::t("Find this module in Downloads, Browse, and choose Reinstall to get its pictures.").as_str())
                 .build();
             note.add_prefix(&gtk::Image::from_icon_name("image-missing-symbolic"));
-            let open = gtk::Button::with_label("Open Downloads");
+            let open = gtk::Button::with_label(crate::i18n::t("Open Downloads").as_str());
             open.set_valign(gtk::Align::Center);
             let c = self.ctx.clone();
             open.connect_clicked(move |_| c.go("library"));
@@ -171,10 +171,10 @@ impl Books {
             .child(
                 &adw::ButtonContent::builder()
                     .icon_name("folder-download-symbolic")
-                    .label("Get more")
+                    .label(crate::i18n::t("Get more").as_str())
                     .build(),
             )
-            .tooltip_text("Get more books in Downloads")
+            .tooltip_text(crate::i18n::t("Get more books in Downloads").as_str())
             .build();
         let c = ctx.clone();
         more.connect_clicked(move |_| c.go("library"));
@@ -198,21 +198,21 @@ impl Books {
 
         // reader page
         let back = gtk::Button::from_icon_name("go-previous-symbolic");
-        back.set_tooltip_text(Some("All books"));
+        back.set_tooltip_text(Some(crate::i18n::t("All books").as_str()));
         let prev = gtk::Button::from_icon_name("go-up-symbolic");
-        prev.set_tooltip_text(Some("Previous section"));
+        prev.set_tooltip_text(Some(crate::i18n::t("Previous section").as_str()));
         let next = gtk::Button::from_icon_name("go-down-symbolic");
-        next.set_tooltip_text(Some("Next section"));
+        next.set_tooltip_text(Some(crate::i18n::t("Next section").as_str()));
         // the contents as a panel beside the text, as in the church fathers
         let section_btn = gtk::ToggleButton::builder()
-            .child(&adw::ButtonContent::builder().icon_name("view-list-symbolic").label("Contents").build())
+            .child(&adw::ButtonContent::builder().icon_name("view-list-symbolic").label(crate::i18n::t("Contents").as_str()).build())
             .active(true)
-            .tooltip_text("Show or hide the contents")
+            .tooltip_text(crate::i18n::t("Show or hide the contents").as_str())
             .build();
         let toc = gtk::ListBox::new();
         toc.add_css_class("navigation-sidebar");
         let toc_search = gtk::SearchEntry::new();
-        toc_search.set_placeholder_text(Some("Find a section or word"));
+        toc_search.set_placeholder_text(Some(crate::i18n::t("Find a section or word").as_str()));
         let toc_scroll = gtk::ScrolledWindow::builder()
             .child(&toc)
             .hscrollbar_policy(gtk::PolicyType::Never)
@@ -623,9 +623,7 @@ impl Section for Books {
     fn id(&self) -> &'static str {
         "books"
     }
-    fn title(&self) -> &'static str {
-        "Reading room"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Reading room") }
     fn icon(&self) -> &'static str {
         "bibleapp-books-symbolic"
     }
@@ -641,8 +639,8 @@ impl Section for Books {
         if mods.is_empty() && crate::fathers::installed().is_empty() {
             let g = adw::PreferencesGroup::new();
             let row = adw::ActionRow::builder()
-                .title("No books yet")
-                .subtitle("Calvin’s Institutes, the Westminster Confession, Spurgeon’s Morning and Evening, Strong’s dictionaries and more are in Downloads.")
+                .title(crate::i18n::t("No books yet").as_str())
+                .subtitle(crate::i18n::t("Calvin’s Institutes, the Westminster Confession, Spurgeon’s Morning and Evening, Strong’s dictionaries and more are in Downloads.").as_str())
                 .activatable(true)
                 .build();
             row.add_suffix(&gtk::Image::from_icon_name("go-next-symbolic"));
@@ -738,8 +736,8 @@ impl Section for Books {
             .collect();
         if !fathers.is_empty() {
             let g = adw::PreferencesGroup::builder()
-                .title("Church fathers")
-                .description("Opens where you left off")
+                .title(crate::i18n::t("Church fathers").as_str())
+                .description(crate::i18n::t("Opens where you left off").as_str())
                 .build();
             for id in fathers {
                 let row = adw::ActionRow::builder()
@@ -767,12 +765,12 @@ impl Section for Books {
         // the Quran has its own place, last, apart from the church fathers
         if crate::fathers::is_installed(crate::fathers::QURAN) {
             let g = adw::PreferencesGroup::builder()
-                .title("The Quran")
-                .description("For study and comparison")
+                .title(crate::i18n::t("The Quran").as_str())
+                .description(crate::i18n::t("For study and comparison").as_str())
                 .build();
             let row = adw::ActionRow::builder()
-                .title("The Quran")
-                .subtitle("Arabic, pronunciation and English")
+                .title(crate::i18n::t("The Quran").as_str())
+                .subtitle(crate::i18n::t("Arabic, pronunciation and English").as_str())
                 .activatable(true)
                 .build();
             let icon = gtk::Image::from_icon_name("accessories-dictionary-symbolic");

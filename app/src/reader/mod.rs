@@ -140,7 +140,7 @@ impl Reader {
         let version_dd = gtk::DropDown::from_strings(&[]);
         // full name and coverage shown under each short name in the menu
         let version_notes: Rc<RefCell<Vec<String>>> = Rc::default();
-        version_dd.set_tooltip_text(Some("Version"));
+        version_dd.set_tooltip_text(Some(crate::i18n::t("Version").as_str()));
         version_dd.set_enable_search(true);
         let title_box = gtk::Box::new(gtk::Orientation::Horizontal, 6);
         title_box.append(&prev);
@@ -148,8 +148,8 @@ impl Reader {
         // jump to a verse in this chapter
         let verse_btn = gtk::MenuButton::new();
         verse_btn.set_always_show_arrow(true);
-        verse_btn.set_label("Verse");
-        verse_btn.set_tooltip_text(Some("Go to a verse"));
+        verse_btn.set_label(crate::i18n::t("Verse").as_str());
+        verse_btn.set_tooltip_text(Some(crate::i18n::t("Go to a verse").as_str()));
         let verse_flow = gtk::FlowBox::new();
         verse_flow.set_max_children_per_line(8);
         verse_flow.set_min_children_per_line(6);
@@ -173,7 +173,7 @@ impl Reader {
         // long abbreviation never widens the window; it drives version_dd
         let version_btn = gtk::MenuButton::new();
         version_btn.set_always_show_arrow(true);
-        version_btn.set_tooltip_text(Some("Version"));
+        version_btn.set_tooltip_text(Some(crate::i18n::t("Version").as_str()));
         let version_lab = gtk::Label::new(None);
         version_lab.set_ellipsize(gtk::pango::EllipsizeMode::End);
         version_lab.set_max_width_chars(10);
@@ -259,25 +259,25 @@ impl Reader {
         panel_toggle.set_child(Some(
             &adw::ButtonContent::builder()
                 .icon_name("sidebar-show-right-symbolic")
-                .label("Study")
+                .label(crate::i18n::t("Study").as_str())
                 .build(),
         ));
-        panel_toggle.set_tooltip_text(Some("Study panel"));
+        panel_toggle.set_tooltip_text(Some(crate::i18n::t("Study panel").as_str()));
         // The word only shows while the panel is closed: open, the panel
         // names itself and the header needs the room.
         panel_toggle.connect_active_notify(|b| {
             if let Some(c) = b.child().and_downcast::<adw::ButtonContent>() {
-                c.set_label(if b.is_active() { "" } else { "Study" });
+                c.set_label(if b.is_active() { "" } else { crate::i18n::ts("Study") });
             }
         });
         panel_toggle.set_active(true);
         let par_toggle = gtk::ToggleButton::new();
         par_toggle.set_icon_name("view-dual-symbolic");
-        par_toggle.set_tooltip_text(Some("Side by side"));
+        par_toggle.set_tooltip_text(Some(crate::i18n::t("Side by side").as_str()));
         let par_dd = gtk::DropDown::from_strings(&[]);
         par_dd.set_visible(false);
         par_dd.set_enable_search(true);
-        par_dd.set_tooltip_text(Some("Second version"));
+        par_dd.set_tooltip_text(Some(crate::i18n::t("Second version").as_str()));
         let il_toggle = gtk::ToggleButton::new();
         // "Αω" (Alpha and Omega) in the scripture serif; the font list lives in CSS, since
         // Pango markup can't fall back through a list on Windows
@@ -285,18 +285,18 @@ impl Reader {
         let il_aa = gtk::Label::new(Some("Αω"));
         il_aa.add_css_class("il-label");
         il_box.append(&il_aa);
-        il_box.append(&gtk::Label::new(Some("Original")));
+        il_box.append(&gtk::Label::new(Some(crate::i18n::t("Original").as_str())));
         il_toggle.set_child(Some(&il_box));
-        il_toggle.set_tooltip_text(Some("Interlinear: Greek and Hebrew word by word"));
+        il_toggle.set_tooltip_text(Some(crate::i18n::t("Interlinear: Greek and Hebrew word by word").as_str()));
         header.pack_end(&panel_toggle);
         header.pack_end(&par_dd);
         header.pack_end(&il_toggle);
         let listen_toggle = gtk::ToggleButton::new();
         listen_toggle.set_icon_name("audio-headphones-symbolic");
-        listen_toggle.set_tooltip_text(Some("Listen to this chapter"));
+        listen_toggle.set_tooltip_text(Some(crate::i18n::t("Listen to this chapter").as_str()));
         let more = gtk::MenuButton::new();
         more.set_icon_name("view-more-symbolic");
-        more.set_tooltip_text(Some("More"));
+        more.set_tooltip_text(Some(crate::i18n::t("More").as_str()));
         let more_box = gtk::Box::new(gtk::Orientation::Vertical, 2);
         more_box.set_margin_top(6);
         more_box.set_margin_bottom(6);
@@ -361,7 +361,7 @@ impl Reader {
         let picker_stack = gtk::Stack::new();
         picker_stack.set_transition_type(gtk::StackTransitionType::SlideLeftRight);
         let go_entry = gtk::SearchEntry::new();
-        go_entry.set_placeholder_text(Some("Go to… John 3:16"));
+        go_entry.set_placeholder_text(Some(crate::i18n::t("Go to… John 3:16").as_str()));
         let book_list = gtk::ListBox::new();
         book_list.add_css_class("navigation-sidebar");
         let books_scroll = gtk::ScrolledWindow::builder()
@@ -382,7 +382,7 @@ impl Reader {
         chapter_box.set_row_spacing(4);
         chapter_box.set_column_spacing(4);
         let back = gtk::Button::from_icon_name("go-previous-symbolic");
-        back.set_tooltip_text(Some("Back to books"));
+        back.set_tooltip_text(Some(crate::i18n::t("Back to books").as_str()));
         back.add_css_class("flat");
         let picker_book_title = gtk::Label::new(None);
         picker_book_title.add_css_class("heading");
@@ -423,12 +423,12 @@ impl Reader {
         tip_label.set_wrap(true);
         tip_label.set_xalign(0.0);
         tip_label.set_hexpand(true);
-        let tip_btn = gtk::Button::with_label("Open Downloads");
+        let tip_btn = gtk::Button::with_label(crate::i18n::t("Open Downloads").as_str());
         tip_btn.add_css_class("suggested-action");
         let tip_close = gtk::Button::from_icon_name("window-close-symbolic");
         tip_close.add_css_class("flat");
         tip_close.add_css_class("circular");
-        tip_close.set_tooltip_text(Some("Dismiss"));
+        tip_close.set_tooltip_text(Some(crate::i18n::t("Dismiss").as_str()));
         let tip_row = gtk::Box::new(gtk::Orientation::Horizontal, 12);
         tip_row.add_css_class("tip-bar");
         tip_row.append(&gtk::Image::from_icon_name("dialog-information-symbolic"));
@@ -451,10 +451,10 @@ impl Reader {
         scroller.add_css_class("reader-page");
         let empty = adw::StatusPage::builder()
             .icon_name("bibleapp-book-symbolic")
-            .title("No Bibles yet")
-            .description("Download a Bible from Downloads to start reading. It suggests the one that turns on the most features, and everything works offline once it’s installed.")
+            .title(crate::i18n::t("No Bibles yet").as_str())
+            .description(crate::i18n::t("Download a Bible from Downloads to start reading. It suggests the one that turns on the most features, and everything works offline once it’s installed.").as_str())
             .build();
-        let empty_btn = gtk::Button::with_label("Open Downloads");
+        let empty_btn = gtk::Button::with_label(crate::i18n::t("Open Downloads").as_str());
         empty_btn.add_css_class("pill");
         empty_btn.add_css_class("suggested-action");
         empty_btn.set_halign(gtk::Align::Center);
@@ -506,10 +506,10 @@ impl Reader {
             .build();
         let il_missing = adw::StatusPage::builder()
             .icon_name("bibleapp-words-symbolic")
-            .title("Interlinear not downloaded")
+            .title(crate::i18n::t("Interlinear not downloaded").as_str())
             .build();
         il_missing.add_css_class("compact");
-        let il_dl_btn = gtk::Button::with_label("Download");
+        let il_dl_btn = gtk::Button::with_label(crate::i18n::t("Download").as_str());
         il_dl_btn.add_css_class("pill");
         il_dl_btn.add_css_class("suggested-action");
         il_dl_btn.set_halign(gtk::Align::Center);
@@ -567,11 +567,11 @@ impl Reader {
         com_body.append(&com_text);
         let com_none = adw::StatusPage::builder()
             .icon_name("bibleapp-book-symbolic")
-            .title("No commentaries")
-            .description("Install Calvin, Matthew Henry, the Geneva notes and more from Downloads. Only download what you want.")
+            .title(crate::i18n::t("No commentaries").as_str())
+            .description(crate::i18n::t("Install Calvin, Matthew Henry, the Geneva notes and more from Downloads. Only download what you want.").as_str())
             .build();
         com_none.add_css_class("compact");
-        let com_get = gtk::Button::with_label("Get commentaries");
+        let com_get = gtk::Button::with_label(crate::i18n::t("Get commentaries").as_str());
         com_get.add_css_class("pill");
         com_get.set_halign(gtk::Align::Center);
         com_none.set_child(Some(&com_get));
@@ -588,11 +588,11 @@ impl Reader {
         panel_stack.add_titled_with_icon(
             &com_stack,
             Some("commentary"),
-            "Commentary",
+            crate::i18n::ts("Commentary"),
             "bibleapp-book-symbolic",
         );
 
-        let note_ref = gtk::Label::new(Some("Select a verse to write a note"));
+        let note_ref = gtk::Label::new(Some(crate::i18n::t("Select a verse to write a note").as_str()));
         note_ref.add_css_class("heading");
         note_ref.set_xalign(0.0);
         let hl_box = gtk::Box::new(gtk::Orientation::Horizontal, 6);
@@ -623,7 +623,7 @@ impl Reader {
         panel_stack.add_titled_with_icon(
             &notes_body,
             Some("notes"),
-            "Notes",
+            crate::i18n::ts("Notes"),
             "document-edit-symbolic",
         );
 
@@ -649,7 +649,7 @@ impl Reader {
         w_def.set_use_markup(true);
         w_def.add_css_class("commentary");
         let w_dicts = gtk::Box::new(gtk::Orientation::Vertical, 14);
-        let w_search = gtk::Button::with_label("Word study");
+        let w_search = gtk::Button::with_label(crate::i18n::t("Word study").as_str());
         w_search.add_css_class("pill");
         w_search.set_tooltip_text(Some(
             "Every use of this word, how it is translated and where it appears",
@@ -679,13 +679,13 @@ impl Reader {
         }
         let w_empty = adw::StatusPage::builder()
             .icon_name("bibleapp-words-symbolic")
-            .title("Pick a word")
-            .description("Tap a Greek or Hebrew word to see its meaning, grammar and lexicon entry. The lexicon comes with the Greek and Hebrew download (STEP Bible), so nothing else is needed.")
+            .title(crate::i18n::t("Pick a word").as_str())
+            .description(crate::i18n::t("Tap a Greek or Hebrew word to see its meaning, grammar and lexicon entry. The lexicon comes with the Greek and Hebrew download (STEP Bible), so nothing else is needed.").as_str())
             .build();
         w_empty.add_css_class("compact");
         // turn it on from here, not only from the header
         {
-            let b = gtk::Button::with_label("Show Greek and Hebrew");
+            let b = gtk::Button::with_label(crate::i18n::t("Show Greek and Hebrew").as_str());
             b.add_css_class("pill");
             b.add_css_class("suggested-action");
             b.set_halign(gtk::Align::Center);
@@ -727,7 +727,7 @@ impl Reader {
             });
         }
         let map = crate::map::MapView::new(ctx);
-        panel_stack.add_titled_with_icon(&map.root, Some("map"), "Map", "mark-location-symbolic");
+        panel_stack.add_titled_with_icon(&map.root, Some("map"), crate::i18n::ts("Map"), "mark-location-symbolic");
 
         let panel_header = adw::HeaderBar::new();
         panel_header.set_show_start_title_buttons(false);
@@ -1137,7 +1137,7 @@ impl Reader {
                             }
                         }
                         b.clipboard().set_text(&text);
-                        r.ctx.toast("Chapter copied");
+                        r.ctx.toast(crate::i18n::t("Chapter copied").as_str());
                     }
                 }
             });
@@ -1338,9 +1338,9 @@ impl Reader {
             self.chapter_box.remove(&c);
         }
         self.picker_book_title.set_text(&b.name);
-        let intro = gtk::Button::with_label("Intro");
+        let intro = gtk::Button::with_label(crate::i18n::t("Intro").as_str());
         intro.add_css_class("flat");
-        intro.set_tooltip_text(Some("Introduction to the book"));
+        intro.set_tooltip_text(Some(crate::i18n::t("Introduction to the book").as_str()));
         {
             let osis = osis.to_string();
             let pop = self.passage_popover.clone();
@@ -1527,7 +1527,7 @@ impl Reader {
             btn.add_css_class("flat");
             btn.add_css_class("when-chip");
             btn.set_halign(gtk::Align::Start);
-            btn.set_tooltip_text(Some("See where this is on the timeline"));
+            btn.set_tooltip_text(Some(crate::i18n::t("See where this is on the timeline").as_str()));
             let ctx = self.ctx.clone();
             let label = format!("{book_name} {chapter}");
             btn.connect_clicked(move |_| ctx.open_time(start, end, &label));
@@ -1704,7 +1704,7 @@ impl Reader {
             verses.push(v);
         }
         if verses.is_empty() {
-            let l = gtk::Label::new(Some("This version doesn’t include this chapter."));
+            let l = gtk::Label::new(Some(crate::i18n::t("This version doesn’t include this chapter.").as_str()));
             l.add_css_class("dim-label");
             let r = gtk::ListBoxRow::new();
             r.set_activatable(false);
@@ -1774,11 +1774,7 @@ impl Reader {
         body.set_size_request(320, -1);
         let title = gtk::Label::new(Some(&format!(
             "{} · {}",
-            if note.xref {
-                "Cross-references"
-            } else {
-                "Footnote"
-            },
+            if note.xref { crate::i18n::ts("Cross-references") } else { crate::i18n::ts("Footnote") },
             Ref::new(&book, chapter, v)
         )));
         title.add_css_class("caption-heading");
@@ -1886,12 +1882,12 @@ impl Reader {
             .map(|b| b.verse_count(chapter))
             .unwrap_or(0);
         // the book's introduction comes first
-        let intro = gtk::Button::with_label("Intro");
+        let intro = gtk::Button::with_label(crate::i18n::t("Intro").as_str());
         intro.add_css_class("flat");
-        intro.set_tooltip_text(Some("Introduction to the book"));
+        intro.set_tooltip_text(Some(crate::i18n::t("Introduction to the book").as_str()));
         if chapter == 0 {
             intro.add_css_class("suggested-action");
-            self.verse_btn.set_label("Intro");
+            self.verse_btn.set_label(crate::i18n::t("Intro").as_str());
         }
         {
             let ctx = self.ctx.clone();
@@ -2160,7 +2156,7 @@ impl Reader {
             let clear = gtk::Button::from_icon_name("edit-clear-symbolic");
             clear.add_css_class("flat");
             clear.add_css_class("circular");
-            clear.set_tooltip_text(Some("Remove highlight"));
+            clear.set_tooltip_text(Some(crate::i18n::t("Remove highlight").as_str()));
             let me = self.clone();
             let p = pop.clone();
             clear.connect_clicked(move |_| {
@@ -2171,8 +2167,8 @@ impl Reader {
             colours.append(&clear);
         }
         let actions = gtk::Box::new(gtk::Orientation::Horizontal, 6);
-        let copy_b = gtk::Button::with_label("Copy");
-        let note_b = gtk::Button::with_label("Add note");
+        let copy_b = gtk::Button::with_label(crate::i18n::t("Copy").as_str());
+        let note_b = gtk::Button::with_label(crate::i18n::t("Add note").as_str());
         let (bk, ch) = {
             let st = self.state.borrow();
             (st.book.clone(), st.chapter)
@@ -2186,7 +2182,7 @@ impl Reader {
         copy_b.connect_clicked(move |b| {
             p.popdown();
             b.clipboard().set_text(&t2);
-            me.ctx.toast("Copied");
+            me.ctx.toast(crate::i18n::t("Copied").as_str());
         });
         let p = pop.clone();
         let me = self.clone();
@@ -2244,11 +2240,7 @@ impl Reader {
         } else {
             "non-starred-symbolic"
         });
-        b.set_tooltip_text(Some(if marked {
-            "Remove bookmark"
-        } else {
-            "Bookmark"
-        }));
+        b.set_tooltip_text(Some(if marked { crate::i18n::ts("Remove bookmark") } else { crate::i18n::ts("Bookmark") }));
         if marked {
             b.add_css_class("accent");
         }
@@ -2261,7 +2253,7 @@ impl Reader {
             if now {
                 ctx.toast_action("Bookmarked", "Bookmarks", move || c2.go("bookmarks"));
             } else {
-                ctx.toast("Bookmark removed");
+                ctx.toast(crate::i18n::t("Bookmark removed").as_str());
             }
             ctx.refresh_except("bible");
         });
@@ -2336,7 +2328,7 @@ impl Reader {
         let clear = gtk::Button::from_icon_name("edit-clear-symbolic");
         clear.add_css_class("flat");
         clear.add_css_class("circular");
-        clear.set_tooltip_text(Some("Remove highlight"));
+        clear.set_tooltip_text(Some(crate::i18n::t("Remove highlight").as_str()));
         let me = self.clone();
         let p = pop.clone();
         clear.connect_clicked(move |_| {
@@ -2346,9 +2338,9 @@ impl Reader {
         });
         colours.append(&clear);
         let actions = gtk::Box::new(gtk::Orientation::Horizontal, 6);
-        let note_b = gtk::Button::with_label("Add note");
-        let com_b = gtk::Button::with_label("Commentary");
-        let copy_b = gtk::Button::with_label("Copy");
+        let note_b = gtk::Button::with_label(crate::i18n::t("Add note").as_str());
+        let com_b = gtk::Button::with_label(crate::i18n::t("Commentary").as_str());
+        let copy_b = gtk::Button::with_label(crate::i18n::t("Copy").as_str());
         actions.append(&self.bookmark_button(&pop, &book, chapter, v));
         for b in [&note_b, &com_b, &copy_b] {
             actions.append(b);
@@ -2378,7 +2370,7 @@ impl Reader {
                     .unwrap_or_default();
                 b.clipboard()
                     .set_text(&format!("“{text}” — {r} ({})", m.abbreviation()));
-                me.ctx.toast("Verse copied");
+                me.ctx.toast(crate::i18n::t("Verse copied").as_str());
             }
         });
         body.append(&title);
@@ -2562,9 +2554,7 @@ impl Section for Reader {
     fn id(&self) -> &'static str {
         "bible"
     }
-    fn title(&self) -> &'static str {
-        "Bible"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Bible") }
     fn icon(&self) -> &'static str {
         "bibleapp-book-symbolic"
     }

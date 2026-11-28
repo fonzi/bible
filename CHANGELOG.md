@@ -1,7 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.11.0
 
+- **Much more of the app in Spanish.** Downloads, the Reading room, the
+  reader and its panels, cross-references, the church fathers, the timeline,
+  search, bookmarks and plans now follow the app's language; 260 strings are
+  translated, up from 116. A few spots are still in English.
 - **Church history articles offline.** On Today, Save articles for offline
   downloads a short Wikipedia article for each church history event (the one
   Wikipedia's search finds closest), and Read shows it without the internet.

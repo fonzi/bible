@@ -100,12 +100,12 @@ impl PlansView {
                 )
             };
             g.set_description(Some(&status));
-            let stop = gtk::Button::with_label("Stop plan");
+            let stop = gtk::Button::with_label(crate::i18n::t("Stop plan").as_str());
             stop.add_css_class("flat");
             let ctx = self.ctx.clone();
             stop.connect_clicked(move |b| {
                 if b.label().as_deref() == Some("Stop plan") {
-                    b.set_label("Stop and clear progress");
+                    b.set_label(crate::i18n::t("Stop and clear progress").as_str());
                     b.add_css_class("destructive-action");
                     return;
                 }
@@ -130,7 +130,7 @@ impl PlansView {
                 let check = gtk::CheckButton::new();
                 check.set_active(st.done.contains(&(i as u16)));
                 check.set_valign(gtk::Align::Center);
-                check.set_tooltip_text(Some("Done"));
+                check.set_tooltip_text(Some(crate::i18n::t("Done").as_str()));
                 let ctx = self.ctx.clone();
                 check.connect_toggled(move |c| {
                     set_done(&ctx, i, c.is_active());
@@ -140,7 +140,7 @@ impl PlansView {
                 });
                 row.add_prefix(&check);
                 row.set_activatable_widget(None::<&gtk::Widget>);
-                let read = gtk::Button::with_label("Read");
+                let read = gtk::Button::with_label(crate::i18n::t("Read").as_str());
                 read.add_css_class("flat");
                 read.set_valign(gtk::Align::Center);
                 let first = day.first().cloned();
@@ -171,11 +171,7 @@ impl PlansView {
             }
         }
         let g = adw::PreferencesGroup::new();
-        g.set_title(if state.is_some() {
-            "Other plans"
-        } else {
-            "Choose a plan"
-        });
+        g.set_title(if state.is_some() { crate::i18n::ts("Other plans") } else { crate::i18n::ts("Choose a plan") });
         g.set_description(Some(
             "Plans start today. Miss a day and simply carry on: your progress is kept, not judged.",
         ));
@@ -187,11 +183,7 @@ impl PlansView {
                 .subtitle(format!("{} · {n} days", p.description))
                 .subtitle_lines(3)
                 .build();
-            let b = gtk::Button::with_label(if current.is_empty() {
-                "Start"
-            } else {
-                "Switch"
-            });
+            let b = gtk::Button::with_label(if current.is_empty() { crate::i18n::ts("Start") } else { crate::i18n::ts("Switch") });
             b.set_valign(gtk::Align::Center);
             if current.is_empty() {
                 b.add_css_class("suggested-action");
@@ -210,9 +202,7 @@ impl Section for PlansView {
     fn id(&self) -> &'static str {
         "plans"
     }
-    fn title(&self) -> &'static str {
-        "Reading plans"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Reading plans") }
     fn icon(&self) -> &'static str {
         "x-office-calendar-symbolic"
     }

@@ -123,14 +123,14 @@ impl BookmarksView {
             .build();
         let empty = adw::StatusPage::builder()
             .icon_name("user-bookmarks-symbolic")
-            .title("No bookmarks yet")
-            .description("Click a verse in the Bible and choose Bookmark. Add tags here to group them, like #promises or #prayer.")
+            .title(crate::i18n::t("No bookmarks yet").as_str())
+            .description(crate::i18n::t("Click a verse in the Bible and choose Bookmark. Add tags here to group them, like #promises or #prayer.").as_str())
             .build();
         let stack = gtk::Stack::new();
         stack.add_named(&scroll, Some("list"));
         stack.add_named(&empty, Some("empty"));
         let (root, hb) = page(ctx, "Bookmarks", "", &stack);
-        let export = gtk::Button::with_label("Export");
+        let export = gtk::Button::with_label(crate::i18n::t("Export").as_str());
         export.set_tooltip_text(Some(
             "Save the bookmarks shown as a Markdown file in your notes folder",
         ));
@@ -255,7 +255,7 @@ impl BookmarksView {
             let rr = r.clone();
             row.connect_activated(move |_| ctx.open_ref(&rr));
             let tags = gtk::Entry::new();
-            tags.set_placeholder_text(Some("Add tags"));
+            tags.set_placeholder_text(Some(crate::i18n::t("Add tags").as_str()));
             tags.set_text(
                 &bm.tags
                     .iter()
@@ -265,7 +265,7 @@ impl BookmarksView {
             );
             tags.set_valign(gtk::Align::Center);
             tags.set_width_chars(16);
-            tags.set_tooltip_text(Some("Tags, separated by spaces, then Enter"));
+            tags.set_tooltip_text(Some(crate::i18n::t("Tags, separated by spaces, then Enter").as_str()));
             let ctx = self.ctx.clone();
             let osis = bm.osis.clone();
             let w = self.me.borrow().clone();
@@ -300,7 +300,7 @@ impl BookmarksView {
             let rm = gtk::Button::from_icon_name("user-trash-symbolic");
             rm.add_css_class("flat");
             rm.set_valign(gtk::Align::Center);
-            rm.set_tooltip_text(Some("Remove bookmark"));
+            rm.set_tooltip_text(Some(crate::i18n::t("Remove bookmark").as_str()));
             let ctx = self.ctx.clone();
             let osis = bm.osis.clone();
             let w = self.me.borrow().clone();
@@ -320,9 +320,7 @@ impl Section for BookmarksView {
     fn id(&self) -> &'static str {
         "bookmarks"
     }
-    fn title(&self) -> &'static str {
-        "Bookmarks"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Bookmarks") }
     fn icon(&self) -> &'static str {
         "user-bookmarks-symbolic"
     }

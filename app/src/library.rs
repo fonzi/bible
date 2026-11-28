@@ -234,7 +234,7 @@ impl LibraryView {
     /// The church fathers, one volume at a time from CCEL.
     fn render_fathers(&self) {
         let g = adw::PreferencesGroup::builder()
-            .title("Church fathers")
+            .title(crate::i18n::t("Church fathers").as_str())
             .description("The Ante-Nicene and Nicene and Post-Nicene Fathers (Roberts, Donaldson and Schaff, public domain), from the Christian Classics Ethereal Library. Each volume is about 3–10 MB and reads offline in the Reading room.")
             .build();
         g.set_widget_name("libgroup");
@@ -275,13 +275,13 @@ impl LibraryView {
         stack.add_titled_with_icon(
             &installed,
             Some("installed"),
-            "Installed",
+            crate::i18n::ts("Installed"),
             "emblem-ok-symbolic",
         );
 
         // browse page
         let search = gtk::SearchEntry::new();
-        search.set_placeholder_text(Some("Search Bibles, commentaries, books…"));
+        search.set_placeholder_text(Some(crate::i18n::t("Search Bibles, commentaries, books…").as_str()));
         search.set_hexpand(true);
         let lang_dd = gtk::DropDown::from_strings(&["All languages"]);
         lang_dd.set_enable_search(true);
@@ -308,7 +308,7 @@ impl LibraryView {
             "string",
         )));
         let refresh = gtk::Button::from_icon_name("view-refresh-symbolic");
-        refresh.set_tooltip_text(Some("Refresh catalogue"));
+        refresh.set_tooltip_text(Some(crate::i18n::t("Refresh catalogue").as_str()));
         let bar = gtk::Box::new(gtk::Orientation::Horizontal, 8);
         bar.append(&search);
         bar.append(&lang_dd);
@@ -316,10 +316,10 @@ impl LibraryView {
         let browse_list = gtk::Box::new(gtk::Orientation::Vertical, 18);
         let browse_status = adw::StatusPage::builder()
             .icon_name("folder-download-symbolic")
-            .title("Browse the library")
-            .description("Fetch the catalogue from your sources to see Bibles, commentaries and books you can download.")
+            .title(crate::i18n::t("Browse the library").as_str())
+            .description(crate::i18n::t("Fetch the catalogue from your sources to see Bibles, commentaries and books you can download.").as_str())
             .build();
-        let fetch = gtk::Button::with_label("Load catalogue");
+        let fetch = gtk::Button::with_label(crate::i18n::t("Load catalogue").as_str());
         fetch.add_css_class("pill");
         fetch.add_css_class("suggested-action");
         fetch.set_halign(gtk::Align::Center);
@@ -327,7 +327,7 @@ impl LibraryView {
         let spinner_page = gtk::Box::new(gtk::Orientation::Vertical, 12);
         spinner_page.set_valign(gtk::Align::Center);
         let spinner = crate::loader::new(72);
-        let sp_label = gtk::Label::new(Some("Loading catalogue…"));
+        let sp_label = gtk::Label::new(Some(crate::i18n::t("Loading catalogue…").as_str()));
         sp_label.add_css_class("dim-label");
         spinner_page.append(&spinner);
         spinner_page.append(&sp_label);
@@ -374,7 +374,7 @@ impl LibraryView {
         stack.add_titled_with_icon(
             &browse_box,
             Some("browse"),
-            "Browse",
+            crate::i18n::ts("Browse"),
             "folder-download-symbolic",
         );
 
@@ -384,7 +384,7 @@ impl LibraryView {
         legal_label.set_wrap(true);
         legal_label.set_xalign(0.0);
         legal_label.set_hexpand(true);
-        let legal_ok = gtk::Button::with_label("Understood");
+        let legal_ok = gtk::Button::with_label(crate::i18n::t("Understood").as_str());
         legal_ok.set_valign(gtk::Align::Center);
         let legal_row = gtk::Box::new(gtk::Orientation::Horizontal, 12);
         legal_row.add_css_class("warning-bar");
@@ -509,17 +509,15 @@ impl LibraryView {
         }
         // interlinear data packs
         let g = adw::PreferencesGroup::builder()
-            .title("Interlinear · STEP Bible")
-            .description("Greek and Hebrew word by word, with glosses, grammar and a brief lexicon. Data from STEP Bible (Tyndale House, Cambridge), CC BY 4.0.")
+            .title(crate::i18n::t("Interlinear · STEP Bible").as_str())
+            .description(crate::i18n::t("Greek and Hebrew word by word, with glosses, grammar and a brief lexicon. Data from STEP Bible (Tyndale House, Cambridge), CC BY 4.0.").as_str())
             .build();
         g.set_widget_name("libgroup");
         for pack in bible_step::Pack::all() {
             let installed = bible_step::is_installed(pack);
             let row = adw::ActionRow::builder()
                 .title(pack.title())
-                .subtitle(if installed {
-                    "Installed · works offline"
-                } else {
+                .subtitle(if installed { crate::i18n::ts("Installed · works offline") } else {
                     pack.description()
                 })
                 .build();
@@ -529,7 +527,7 @@ impl LibraryView {
             bar.set_valign(gtk::Align::Center);
             bar.set_size_request(120, -1);
             row.add_suffix(&bar);
-            let btn = gtk::Button::with_label(if installed { "Remove" } else { "Download" });
+            let btn = gtk::Button::with_label(if installed { crate::i18n::ts("Remove") } else { crate::i18n::ts("Download") });
             btn.set_valign(gtk::Align::Center);
             if installed {
                 btn.add_css_class("flat");
@@ -538,7 +536,7 @@ impl LibraryView {
             btn.connect_clicked(move |b| {
                 if bible_step::is_installed(pack) {
                     if b.label().as_deref() == Some("Remove") {
-                        b.set_label("Confirm remove");
+                        b.set_label(crate::i18n::t("Confirm remove").as_str());
                         b.add_css_class("destructive-action");
                         b.remove_css_class("flat");
                         return;
@@ -549,7 +547,7 @@ impl LibraryView {
                     return;
                 }
                 b.set_sensitive(false);
-                b.set_label("Downloading");
+                b.set_label(crate::i18n::t("Downloading").as_str());
                 bar.set_visible(true);
                 bar.set_fraction(0.02);
                 let (tx, rx) = std::sync::mpsc::channel::<(usize, usize)>();
@@ -579,12 +577,12 @@ impl LibraryView {
                         }
                         Ok(Err(e)) => {
                             b.set_sensitive(true);
-                            b.set_label("Try again");
+                            b.set_label(crate::i18n::t("Try again").as_str());
                             ctx.toast(&format!("Download failed: {e}"));
                         }
                         Err(_) => {
                             b.set_sensitive(true);
-                            b.set_label("Try again");
+                            b.set_label(crate::i18n::t("Try again").as_str());
                         }
                     }
                 });
@@ -600,8 +598,8 @@ impl LibraryView {
             let g = adw::PreferencesGroup::new();
             g.set_widget_name("libgroup");
             let row = adw::ActionRow::builder()
-                .title("Nothing installed yet")
-                .subtitle("Open Browse to download Bibles, commentaries and books.")
+                .title(crate::i18n::t("Nothing installed yet").as_str())
+                .subtitle(crate::i18n::t("Open Browse to download Bibles, commentaries and books.").as_str())
                 .build();
             g.add(&row);
             self.installed.add(&g);
@@ -636,14 +634,14 @@ impl LibraryView {
                     .subtitle_lines(3)
                     .build();
                 if best_installed.as_deref() == Some(m.name.as_str()) {
-                    let badge = gtk::Label::new(Some("Recommended"));
+                    let badge = gtk::Label::new(Some(crate::i18n::t("Recommended").as_str()));
                     badge.add_css_class("recommended-badge");
                     badge.set_valign(gtk::Align::Center);
                     badge.set_tooltip_text(Some(RECOMMEND_NOTE));
                     row.add_suffix(&badge);
                 }
                 if m.user_installed {
-                    let rm = gtk::Button::with_label("Remove");
+                    let rm = gtk::Button::with_label(crate::i18n::t("Remove").as_str());
                     rm.set_valign(gtk::Align::Center);
                     rm.add_css_class("flat");
                     let ctx = self.ctx.clone();
@@ -651,7 +649,7 @@ impl LibraryView {
                     rm.connect_clicked(move |b| {
                         // two-step confirm instead of a dialog
                         if b.label().as_deref() == Some("Remove") {
-                            b.set_label("Confirm remove");
+                            b.set_label(crate::i18n::t("Confirm remove").as_str());
                             b.add_css_class("destructive-action");
                             b.remove_css_class("flat");
                             return;
@@ -695,8 +693,8 @@ impl LibraryView {
             }));
             if items.is_empty() {
                 let row = adw::ActionRow::builder()
-                    .title("No audio downloaded yet")
-                    .subtitle("Press the headphones button while reading to download a chapter or a whole book.")
+                    .title(crate::i18n::t("No audio downloaded yet").as_str())
+                    .subtitle(crate::i18n::t("Press the headphones button while reading to download a chapter or a whole book.").as_str())
                     .build();
                 row.add_prefix(&gtk::Image::from_icon_name("audio-headphones-symbolic"));
                 g.add(&row);
@@ -722,14 +720,14 @@ impl LibraryView {
                         audio::size(bytes)
                     ))
                     .build();
-                let rm_book = gtk::Button::with_label("Remove");
+                let rm_book = gtk::Button::with_label(crate::i18n::t("Remove").as_str());
                 rm_book.add_css_class("flat");
                 rm_book.set_valign(gtk::Align::Center);
                 let ctx = self.ctx.clone();
                 let b2 = book.clone();
                 rm_book.connect_clicked(move |b| {
                     if b.label().as_deref() == Some("Remove") {
-                        b.set_label("Remove all");
+                        b.set_label(crate::i18n::t("Remove all").as_str());
                         b.add_css_class("destructive-action");
                         return;
                     }
@@ -746,7 +744,7 @@ impl LibraryView {
                     play.add_css_class("flat");
                     play.add_css_class("circular");
                     play.set_valign(gtk::Align::Center);
-                    play.set_tooltip_text(Some("Play in the reader"));
+                    play.set_tooltip_text(Some(crate::i18n::t("Play in the reader").as_str()));
                     let ctx = self.ctx.clone();
                     let (b, c) = (d.book.clone(), d.chapter);
                     play.connect_clicked(move |_| ctx.play_audio(&b, c));
@@ -754,7 +752,7 @@ impl LibraryView {
                     let rm = gtk::Button::from_icon_name("user-trash-symbolic");
                     rm.add_css_class("flat");
                     rm.set_valign(gtk::Align::Center);
-                    rm.set_tooltip_text(Some("Remove this chapter's audio"));
+                    rm.set_tooltip_text(Some(crate::i18n::t("Remove this chapter's audio").as_str()));
                     let ctx = self.ctx.clone();
                     let (b, c) = (d.book.clone(), d.chapter);
                     rm.connect_clicked(move |_| {
@@ -809,7 +807,7 @@ impl LibraryView {
             let Some(v) = w.upgrade() else { return };
             let (all, errs) = res.unwrap_or_default();
             if all.is_empty() {
-                v.browse_status.set_title("Couldn’t load the catalogue");
+                v.browse_status.set_title(crate::i18n::t("Couldn’t load the catalogue").as_str());
                 v.browse_status.set_description(Some(&format!(
                     "Check your connection or your sources in Preferences.\n{}",
                     errs.join("\n")
@@ -898,26 +896,26 @@ impl LibraryView {
         row.add_suffix(&bar);
         let btn = match &have {
             Some(h) if h.conf.get("Version") != m.conf.get("Version") && h.user_installed => {
-                let b = gtk::Button::with_label("Update");
+                let b = gtk::Button::with_label(crate::i18n::t("Update").as_str());
                 b.add_css_class("suggested-action");
                 b
             }
             // yours: download it again over the old copy, to repair it or to
             // get files an older download missed (such as a map's pictures)
             Some(h) if h.user_installed => {
-                let b = gtk::Button::with_label("Reinstall");
+                let b = gtk::Button::with_label(crate::i18n::t("Reinstall").as_str());
                 b.add_css_class("flat");
-                b.set_tooltip_text(Some("Download it again, to repair it or get files that are missing"));
+                b.set_tooltip_text(Some(crate::i18n::t("Download it again, to repair it or get files that are missing").as_str()));
                 b
             }
             // installed by the system's package manager: not ours to change
             Some(_) => {
-                let b = gtk::Button::with_label("Installed");
+                let b = gtk::Button::with_label(crate::i18n::t("Installed").as_str());
                 b.set_sensitive(false);
                 b.add_css_class("flat");
                 b
             }
-            None => gtk::Button::with_label("Download"),
+            None => gtk::Button::with_label(crate::i18n::t("Download").as_str()),
         };
         btn.set_valign(gtk::Align::Center);
         let ctx = self.ctx.clone();
@@ -925,7 +923,7 @@ impl LibraryView {
         let barc = bar.clone();
         btn.connect_clicked(move |b| {
             b.set_sensitive(false);
-            b.set_label("Downloading");
+            b.set_label(crate::i18n::t("Downloading").as_str());
             barc.set_visible(true);
             barc.set_fraction(0.0);
             let (tx, rx) = std::sync::mpsc::channel::<(usize, usize)>();
@@ -953,17 +951,17 @@ impl LibraryView {
                 barc.set_visible(false);
                 match res {
                     Ok(Ok(name)) => {
-                        b.set_label("Installed");
+                        b.set_label(crate::i18n::t("Installed").as_str());
                         ctx.toast(&format!("Installed {name}"));
                         ctx.rescan();
                     }
                     Ok(Err(e)) => {
-                        b.set_label("Try again");
+                        b.set_label(crate::i18n::t("Try again").as_str());
                         b.set_sensitive(true);
                         ctx.toast(&format!("Download failed: {e}"));
                     }
                     Err(_) => {
-                        b.set_label("Try again");
+                        b.set_label(crate::i18n::t("Try again").as_str());
                         b.set_sensitive(true);
                     }
                 }
@@ -981,14 +979,14 @@ impl LibraryView {
             let installed = crate::fathers::is_installed(id);
             let row = adw::ActionRow::builder()
                 .title(glib::markup_escape_text(title).as_str())
-                .subtitle(if installed { "Downloaded · in the Reading room" } else { "Not downloaded" })
+                .subtitle(if installed { crate::i18n::ts("Downloaded · in the Reading room") } else { crate::i18n::ts("Not downloaded") })
                 .build();
             row.set_title_lines(2);
             let spin = crate::loader::new(24);
             spin.set_visible(false);
             spin.set_valign(gtk::Align::Center);
             row.add_suffix(&spin);
-            let btn = gtk::Button::with_label(if installed { "Remove" } else { "Download" });
+            let btn = gtk::Button::with_label(if installed { crate::i18n::ts("Remove") } else { crate::i18n::ts("Download") });
             btn.set_valign(gtk::Align::Center);
             if installed {
                 btn.add_css_class("flat");
@@ -998,23 +996,23 @@ impl LibraryView {
             btn.connect_clicked(move |b| {
                 if crate::fathers::is_installed(id) {
                     if b.label().as_deref() == Some("Remove") {
-                        b.set_label("Confirm remove");
+                        b.set_label(crate::i18n::t("Confirm remove").as_str());
                         b.add_css_class("destructive-action");
                         b.remove_css_class("flat");
                         return;
                     }
                     crate::fathers::remove(id);
-                    ctx.toast("Removed the volume");
+                    ctx.toast(crate::i18n::t("Removed the volume").as_str());
                     // update this row in place, so the list stays open
-                    b.set_label("Download");
+                    b.set_label(crate::i18n::t("Download").as_str());
                     b.remove_css_class("destructive-action");
                     b.remove_css_class("flat");
-                    sub.set_subtitle("Not downloaded");
+                    sub.set_subtitle(crate::i18n::t("Not downloaded").as_str());
                     ctx.refresh_one("books");
                     return;
                 }
                 b.set_sensitive(false);
-                b.set_label("Downloading");
+                b.set_label(crate::i18n::t("Downloading").as_str());
                 spin.set_visible(true);
                 let ctx = ctx.clone();
                 let b = b.clone();
@@ -1028,21 +1026,21 @@ impl LibraryView {
                     spin.set_visible(false);
                     match res {
                         Ok(Ok(())) => {
-                            ctx.toast("Downloaded. It’s in the Reading room");
+                            ctx.toast(crate::i18n::t("Downloaded. It’s in the Reading room").as_str());
                             b.set_sensitive(true);
-                            b.set_label("Remove");
+                            b.set_label(crate::i18n::t("Remove").as_str());
                             b.add_css_class("flat");
-                            sub.set_subtitle("Downloaded · in the Reading room");
+                            sub.set_subtitle(crate::i18n::t("Downloaded · in the Reading room").as_str());
                             ctx.refresh_one("books");
                         }
                         Ok(Err(e)) => {
                             b.set_sensitive(true);
-                            b.set_label("Try again");
+                            b.set_label(crate::i18n::t("Try again").as_str());
                             ctx.toast(&format!("Download failed: {e}"));
                         }
                         Err(_) => {
                             b.set_sensitive(true);
-                            b.set_label("Try again");
+                            b.set_label(crate::i18n::t("Try again").as_str());
                         }
                     }
                 });
@@ -1054,7 +1052,7 @@ impl LibraryView {
     /// The Quran, last on Start here: for study and comparison.
     fn quran_group(&self) -> adw::PreferencesGroup {
         let g = adw::PreferencesGroup::new();
-        g.set_title("The Quran");
+        g.set_title(crate::i18n::t("The Quran").as_str());
         g.set_description(Some(&format!(
             "For study and comparison: the Arabic text with an English translation, verse by verse, read in the Reading room. {}",
             crate::fathers::QURAN_CREDIT
@@ -1067,17 +1065,17 @@ impl LibraryView {
     /// The app never hosts or shares them.
     fn personal_copies(&self) -> adw::PreferencesGroup {
         let g = adw::PreferencesGroup::new();
-        g.set_title("Personal copies");
+        g.set_title(crate::i18n::t("Personal copies").as_str());
         g.set_description(Some(
             "Many modern translations are still under copyright, so we can’t offer them for download. We believe Scripture should be free for everyone to read; until it is, you can add a copy you already have, as a SWORD module (.zip). It stays on this computer and is never shared. Please only add texts you have the right to use.",
         ));
         let row = adw::ActionRow::builder()
-            .title("Add a SWORD module from a file")
-            .subtitle("A .zip with mods.d and modules folders")
+            .title(crate::i18n::t("Add a SWORD module from a file").as_str())
+            .subtitle(crate::i18n::t("A .zip with mods.d and modules folders").as_str())
             .activatable(true)
             .build();
         row.add_prefix(&gtk::Image::from_icon_name("document-open-symbolic"));
-        let btn = gtk::Button::with_label("Choose file…");
+        let btn = gtk::Button::with_label(crate::i18n::t("Choose file…").as_str());
         btn.set_valign(gtk::Align::Center);
         row.add_suffix(&btn);
         row.set_activatable_widget(Some(&btn));
@@ -1090,7 +1088,7 @@ impl LibraryView {
             let filters = gio::ListStore::new::<gtk::FileFilter>();
             filters.append(&filter);
             let dialog = gtk::FileDialog::builder()
-                .title("Add a personal copy")
+                .title(crate::i18n::t("Add a personal copy").as_str())
                 .accept_label("Add")
                 .filters(&filters)
                 .build();
@@ -1115,7 +1113,7 @@ impl LibraryView {
 
     fn other_traditions(&self, cat: &[RemoteModule]) -> adw::PreferencesGroup {
         let g = adw::PreferencesGroup::new();
-        g.set_title("Other traditions");
+        g.set_title(crate::i18n::t("Other traditions").as_str());
         g.set_description(Some(
             "Texts used by groups outside historic Christianity as defined by the ecumenical creeds, such as the Nicene Creed. They are listed for study and comparison.",
         ));
@@ -1270,7 +1268,7 @@ impl LibraryView {
                 |m| m.name().to_string(),
             ) {
                 let g = adw::PreferencesGroup::new();
-                g.set_title("Recommended Bible");
+                g.set_title(crate::i18n::t("Recommended Bible").as_str());
                 g.set_description(Some(RECOMMEND_NOTE));
                 g.add(&self.module_row(best));
                 self.browse_list.append(&g);
@@ -1289,8 +1287,8 @@ impl LibraryView {
                 .collect();
             if !popular.is_empty() {
                 let g = adw::PreferencesGroup::new();
-                g.set_title("Most popular");
-                g.set_description(Some("The Bibles and study works most people start with. Many well-known modern translations (NIV, ESV, NKJV, NASB) are copyrighted and aren’t offered for free download."));
+                g.set_title(crate::i18n::t("Most popular").as_str());
+                g.set_description(Some(crate::i18n::t("The Bibles and study works most people start with. Many well-known modern translations (NIV, ESV, NKJV, NASB) are copyrighted and aren’t offered for free download.").as_str()));
                 for m in popular {
                     shown += 1;
                     g.add(&self.module_row(m));
@@ -1299,8 +1297,8 @@ impl LibraryView {
             }
             if lang.as_deref().is_none_or(|l| l == "en") {
                 let g = adw::PreferencesGroup::new();
-                g.set_title("Audio Bibles");
-                g.set_description(Some("Download audio a chapter or a whole book at a time with the headphones button while reading. Downloaded chapters are listed under Installed."));
+                g.set_title(crate::i18n::t("Audio Bibles").as_str());
+                g.set_description(Some(crate::i18n::t("Download audio a chapter or a whole book at a time with the headphones button while reading. Downloaded chapters are listed under Installed.").as_str()));
                 for src in bible_core::audio::SOURCES {
                     let row = adw::ActionRow::builder()
                         .title(
@@ -1343,11 +1341,7 @@ impl LibraryView {
             self.browse_list.append(&self.quran_group());
         }
         if shown == 0 {
-            let l = gtk::Label::new(Some(if q.is_empty() {
-                "Nothing picked out in this language yet. Choose a category on the left."
-            } else {
-                "Nothing matches your search."
-            }));
+            let l = gtk::Label::new(Some(if q.is_empty() { crate::i18n::ts("Nothing picked out in this language yet. Choose a category on the left.") } else { crate::i18n::ts("Nothing matches your search.") }));
             l.set_wrap(true);
             l.add_css_class("dim-label");
             l.set_margin_top(24);
@@ -1360,9 +1354,7 @@ impl Section for LibraryView {
     fn id(&self) -> &'static str {
         "library"
     }
-    fn title(&self) -> &'static str {
-        "Downloads"
-    }
+    fn title(&self) -> &'static str { crate::i18n::ts("Downloads") }
     fn icon(&self) -> &'static str {
         "folder-download-symbolic"
     }

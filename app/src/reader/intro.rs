@@ -10,7 +10,7 @@ impl Reader {
         let Some(b) = sys.book(book) else { return };
         self.passage_btn.set_label(&format!("{} · Intro", b.name));
         self.verse_btn.set_visible(true);
-        self.verse_btn.set_label("Intro");
+        self.verse_btn.set_label(crate::i18n::t("Intro").as_str());
         self.player.tip.set_reveal_child(false);
         let dark = self.dark();
         let add = |w: &gtk::Widget| {
@@ -26,13 +26,7 @@ impl Reader {
         h.set_wrap(true);
         add(h.upcast_ref());
         let idx = sys.book_index(book).unwrap_or(0);
-        let testament = if v11n::is_apocrypha(book) {
-            "Apocrypha"
-        } else if idx < sys.ot_books {
-            "Old Testament"
-        } else {
-            "New Testament"
-        };
+        let testament = if v11n::is_apocrypha(book) { crate::i18n::ts("Apocrypha") } else if idx < sys.ot_books { crate::i18n::ts("Old Testament") } else { crate::i18n::ts("New Testament") };
         let verses: u32 = b.verses.iter().map(|v| *v as u32).sum();
         let facts = gtk::Label::new(Some(&format!(
             "{testament} · {} chapters · {verses} verses",
@@ -169,16 +163,16 @@ impl Reader {
                 // offer the full article with its pictures
                 let row = gtk::Box::new(gtk::Orientation::Vertical, 8);
                 row.set_margin_top(12);
-                let l = gtk::Label::new(Some("Get the full Wikipedia article with its pictures and maps. It downloads once and then reads offline; its links open Wikipedia and need internet."));
+                let l = gtk::Label::new(Some(crate::i18n::t("Get the full Wikipedia article with its pictures and maps. It downloads once and then reads offline; its links open Wikipedia and need internet.").as_str()));
                 l.set_wrap(true);
                 l.set_xalign(0.0);
                 l.add_css_class("dim-label");
                 row.append(&l);
                 let btns = gtk::Box::new(gtk::Orientation::Horizontal, 8);
-                let one = gtk::Button::with_label("Get this article");
+                let one = gtk::Button::with_label(crate::i18n::t("Get this article").as_str());
                 one.add_css_class("pill");
                 one.add_css_class("suggested-action");
-                let all = gtk::Button::with_label("Get all books");
+                let all = gtk::Button::with_label(crate::i18n::t("Get all books").as_str());
                 all.add_css_class("pill");
                 let status = gtk::Label::new(None);
                 status.add_css_class("dim-label");
@@ -353,7 +347,7 @@ impl Reader {
             }
         }
         if found == 0 {
-            let l = gtk::Label::new(Some("None of your installed books has an introduction to this book yet. Many commentaries do (Matthew Henry, for example) — get them from Downloads."));
+            let l = gtk::Label::new(Some(crate::i18n::t("None of your installed books has an introduction to this book yet. Many commentaries do (Matthew Henry, for example) — get them from Downloads.").as_str()));
             l.set_wrap(true);
             l.set_xalign(0.0);
             l.set_margin_top(18);

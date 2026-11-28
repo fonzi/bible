@@ -49,7 +49,7 @@ impl Reader {
             .set_text(&format!("Interlinear · {}", Ref::new(&book, chapter, v)));
         let Some(pack) = Pack::for_book(&book) else {
             self.il_sub.set_text("");
-            self.il_missing.set_title("No interlinear for this book");
+            self.il_missing.set_title(crate::i18n::t("No interlinear for this book").as_str());
             self.il_missing.set_description(Some(
                 "Word-by-word data covers the Hebrew Old Testament and the Greek New Testament.",
             ));
@@ -69,7 +69,7 @@ impl Reader {
             self.il_missing.set_description(Some(pack.description()));
             self.il_dl_btn.set_visible(true);
             self.il_dl_btn.set_sensitive(true);
-            self.il_dl_btn.set_label("Download");
+            self.il_dl_btn.set_label(crate::i18n::t("Download").as_str());
             self.il_stack.set_visible_child_name("missing");
             return;
         }
@@ -82,7 +82,7 @@ impl Reader {
                 .flatten();
             let Some(il) = il else {
                 me.il_missing
-                    .set_title("Couldn’t open the interlinear data");
+                    .set_title(crate::i18n::t("Couldn’t open the interlinear data").as_str());
                 me.il_missing.set_description(Some(
                     "Try removing and downloading it again from Downloads.",
                 ));
@@ -114,7 +114,7 @@ impl Reader {
             gtk::TextDirection::Ltr
         });
         if words.is_empty() {
-            let l = gtk::Label::new(Some("No word-by-word data for this verse."));
+            let l = gtk::Label::new(Some(crate::i18n::t("No word-by-word data for this verse.").as_str()));
             l.add_css_class("dim-label");
             self.il_flow.insert(&l, -1);
             return;
@@ -144,7 +144,7 @@ impl Reader {
             b.set_child(Some(&col));
             if w.variant {
                 b.add_css_class("variant");
-                b.set_tooltip_text(Some("Not in the main critical text (NA28); found in the Textus Receptus or other editions"));
+                b.set_tooltip_text(Some(crate::i18n::t("Not in the main critical text (NA28); found in the Textus Receptus or other editions").as_str()));
             } else {
                 b.set_tooltip_text(Some(&bible_step::morph::describe(&w.morph)));
             }
@@ -249,7 +249,7 @@ impl Reader {
             return;
         };
         self.il_dl_btn.set_sensitive(false);
-        self.il_dl_btn.set_label("Downloading…");
+        self.il_dl_btn.set_label(crate::i18n::t("Downloading…").as_str());
         self.il_progress.set_visible(true);
         self.il_progress.set_fraction(0.02);
         let (tx, rx) = std::sync::mpsc::channel::<(usize, usize)>();
@@ -280,12 +280,12 @@ impl Reader {
                 }
                 Ok(Err(e)) => {
                     me.il_dl_btn.set_sensitive(true);
-                    me.il_dl_btn.set_label("Try again");
+                    me.il_dl_btn.set_label(crate::i18n::t("Try again").as_str());
                     me.ctx.toast(&format!("Download failed: {e}"));
                 }
                 Err(_) => {
                     me.il_dl_btn.set_sensitive(true);
-                    me.il_dl_btn.set_label("Try again");
+                    me.il_dl_btn.set_label(crate::i18n::t("Try again").as_str());
                 }
             }
         });

@@ -39,6 +39,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.11.0" date="2026-11-27">
+      <description>
+        <ul>
+          <li>Much more of the app in Spanish. Downloads, the Reading room, the reader and its panels, cross-references, the church fathers, the timeline, search, bookmarks and plans now follow the app's language; 260 strings are translated, up from 116. A few spots are still in English.</li>
+          <li>Church history articles offline. On Today, Save articles for offline downloads a short Wikipedia article for each church history event (the one Wikipedia's search finds closest), and Read shows it without the internet.</li>
+          <li>Reinstall from Downloads. Modules you downloaded show a Reinstall button in Browse, which downloads them again over the old copy: handy for a module that's damaged, or a map module installed before its pictures came along.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.10.0" date="2026-11-27">
       <description>
         <ul>
@@ -192,14 +201,6 @@
       <description>
         <ul>
           <li>The version menu now shows each version's full name under its short one, and says when a version has only the Old or only the New Testament. LXX2012, for example, is the Septuagint (the Greek Old Testament) in English, so it shows "Old Testament only".</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.9.4" date="2026-11-23">
-      <description>
-        <ul>
-          <li>Windows and macOS test builds. Each release now includes a Windows zip and a macOS zip, named _untested: they build and pass every test automatically, but no one has run them on a real PC or Mac yet. The macOS build needs GTK from Homebrew (see the README inside the zip).</li>
-          <li>Releases come out faster: the tests and the Linux package share one build, and Flatpak, Windows and macOS build at the same time.</li>
         </ul>
       </description>
     </release>

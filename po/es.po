@@ -354,3 +354,471 @@ msgstr "Color de acento"
 
 msgid "The church year follows the liturgical colour of the day: violet in Advent and Lent, gold at feasts, green in Ordinary Time, red at Pentecost"
 msgstr "El año litúrgico sigue el color del día: morado en Adviento y Cuaresma, dorado en las fiestas, verde en el Tiempo Ordinario, rojo en Pentecostés"
+
+msgid "A .zip with mods.d and modules folders"
+msgstr "Un .zip con las carpetas mods.d y modules"
+
+msgid "Add a SWORD module from a file"
+msgstr "Añadir un módulo SWORD desde un archivo"
+
+msgid "Add a daily devotional: Spurgeon’s Morning and Evening, Daily Light and others are free."
+msgstr "Añade un devocional diario: Morning and Evening de Spurgeon, Daily Light y otros son gratuitos."
+
+msgid "Add a personal copy"
+msgstr "Añadir una copia personal"
+
+msgid "Add note"
+msgstr "Añadir nota"
+
+msgid "Add tags"
+msgstr "Añadir etiquetas"
+
+msgid "All books"
+msgstr "Todos los libros"
+
+msgid "Arabic, pronunciation and English"
+msgstr "Árabe, pronunciación e inglés"
+
+msgid "Articles saved:"
+msgstr "Artículos guardados:"
+
+msgid "At the same time"
+msgstr "Al mismo tiempo"
+
+msgid "Audio Bibles"
+msgstr "Biblias en audio"
+
+msgid "Back to books"
+msgstr "Volver a los libros"
+
+msgid "Back to the Bible"
+msgstr "Volver a la Biblia"
+
+msgid "Back to the Reading room"
+msgstr "Volver a la Sala de lectura"
+
+msgid "Bible version"
+msgstr "Versión de la Biblia"
+
+msgid "Bookmark removed"
+msgstr "Marcador eliminado"
+
+msgid "Browse"
+msgstr "Explorar"
+
+msgid "Browse the library"
+msgstr "Explorar la biblioteca"
+
+msgid "Calvin’s Institutes, the Westminster Confession, Spurgeon’s Morning and Evening, Strong’s dictionaries and more are in Downloads."
+msgstr "La Institución de Calvino, la Confesión de Westminster, Morning and Evening de Spurgeon, los diccionarios de Strong y más están en Descargas."
+
+msgid "Chapter copied"
+msgstr "Capítulo copiado"
+
+msgid "Choose file…"
+msgstr "Elegir archivo…"
+
+msgid "Church fathers"
+msgstr "Padres de la Iglesia"
+
+msgid "Click a verse in the Bible and choose Bookmark. Add tags here to group them, like #promises or #prayer."
+msgstr "Haz clic en un versículo de la Biblia y elige Marcador. Añade etiquetas aquí para agruparlos, como #promesas o #oración."
+
+msgid "Click one to see it full size"
+msgstr "Haz clic en una para verla a tamaño completo"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Commentary"
+msgstr "Comentario"
+
+msgid "Confirm remove"
+msgstr "Confirmar eliminación"
+
+msgid "Contents"
+msgstr "Contenido"
+
+msgid "Copied"
+msgstr "Copiado"
+
+msgid "Couldn’t load the catalogue"
+msgstr "No se pudo cargar el catálogo"
+
+msgid "Couldn’t open the interlinear data"
+msgstr "No se pudieron abrir los datos interlineales"
+
+msgid "Dismiss"
+msgstr "Descartar"
+
+msgid "Done"
+msgstr "Hecho"
+
+msgid "Download a Bible from Downloads first."
+msgstr "Primero descarga una Biblia en Descargas."
+
+msgid "Download a Bible from Downloads to start reading. It suggests the one that turns on the most features, and everything works offline once it’s installed."
+msgstr "Descarga una Biblia en Descargas para empezar a leer. Se sugiere la que activa más funciones, y todo funciona sin conexión una vez instalada."
+
+msgid "Download a short Wikipedia article for each church history event"
+msgstr "Descargar un breve artículo de Wikipedia para cada acontecimiento de la historia de la Iglesia"
+
+msgid "Download audio a chapter or a whole book at a time with the headphones button while reading. Downloaded chapters are listed under Installed."
+msgstr "Descarga el audio de un capítulo o de un libro entero con el botón de auriculares mientras lees. Los capítulos descargados aparecen en Instalado."
+
+msgid "Download it again, to repair it or get files that are missing"
+msgstr "Descargarlo de nuevo, para repararlo u obtener los archivos que faltan"
+
+msgid "Downloaded · in the Reading room"
+msgstr "Descargado · en la Sala de lectura"
+
+msgid "Downloaded. It’s in the Reading room"
+msgstr "Descargado. Está en la Sala de lectura"
+
+msgid "Downloading"
+msgstr "Descargando"
+
+msgid "Downloading…"
+msgstr "Descargando…"
+
+msgid "Drawing cross-references…"
+msgstr "Dibujando las referencias cruzadas…"
+
+msgid "Drawing every cross-reference"
+msgstr "Dibujando todas las referencias cruzadas"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "Fetch the catalogue from your sources to see Bibles, commentaries and books you can download."
+msgstr "Obtén el catálogo de tus fuentes para ver las Biblias, comentarios y libros que puedes descargar."
+
+msgid "Find a section or word"
+msgstr "Buscar una sección o palabra"
+
+msgid "Find this module in Downloads, Browse, and choose Reinstall to get its pictures."
+msgstr "Busca este módulo en Descargas, Explorar, y elige Reinstalar para obtener sus imágenes."
+
+msgid "For study and comparison"
+msgstr "Para estudio y comparación"
+
+msgid "From Wikipedia (CC BY-SA 4.0): the article its search finds closest to this event."
+msgstr "De Wikipedia (CC BY-SA 4.0): el artículo que su búsqueda encuentra más cercano a este acontecimiento."
+
+msgid "Get all books"
+msgstr "Obtener todos los libros"
+
+msgid "Get commentaries"
+msgstr "Obtener comentarios"
+
+msgid "Get more"
+msgstr "Obtener más"
+
+msgid "Get more books in Downloads"
+msgstr "Obtén más libros en Descargas"
+
+msgid "Get the full Wikipedia article with its pictures and maps. It downloads once and then reads offline; its links open Wikipedia and need internet."
+msgstr "Obtén el artículo completo de Wikipedia con sus imágenes y mapas. Se descarga una vez y luego se lee sin conexión."
+
+msgid "Get this article"
+msgstr "Obtener este artículo"
+
+msgid "Go to a verse"
+msgstr "Ir a un versículo"
+
+msgid "Go to… John 3:16"
+msgstr "Ir a… Juan 3:16"
+
+msgid "Greek and Hebrew word by word, with glosses, grammar and a brief lexicon. Data from STEP Bible (Tyndale House, Cambridge), CC BY 4.0."
+msgstr "Griego y hebreo palabra por palabra, con glosas, gramática y un breve léxico. Datos de STEP Bible (Tyndale House, Cambridge), CC BY 4.0."
+
+msgid "How to draw the cross-references"
+msgstr "Cómo dibujar las referencias cruzadas"
+
+msgid "How to order the books"
+msgstr "Cómo ordenar los libros"
+
+msgid "In the Bible"
+msgstr "En la Biblia"
+
+msgid "Install Calvin, Matthew Henry, the Geneva notes and more from Downloads. Only download what you want."
+msgstr "Instala a Calvino, Matthew Henry, las notas de Ginebra y más desde Descargas. Descarga solo lo que quieras."
+
+msgid "Installed"
+msgstr "Instalado"
+
+msgid "Interlinear not downloaded"
+msgstr "Interlineal no descargado"
+
+msgid "Interlinear · STEP Bible"
+msgstr "Interlineal · STEP Bible"
+
+msgid "Interlinear: Greek and Hebrew word by word"
+msgstr "Interlineal: griego y hebreo palabra por palabra"
+
+msgid "Intro"
+msgstr "Introducción"
+
+msgid "Introduction to the book"
+msgstr "Introducción al libro"
+
+msgid "Jump to"
+msgstr "Ir a"
+
+msgid "Jump to a period"
+msgstr "Ir a un período"
+
+msgid "Listen to this chapter"
+msgstr "Escuchar este capítulo"
+
+msgid "Load catalogue"
+msgstr "Cargar catálogo"
+
+msgid "Loading catalogue…"
+msgstr "Cargando catálogo…"
+
+msgid "More"
+msgstr "Más"
+
+msgid "Most popular"
+msgstr "Más populares"
+
+msgid "Next section"
+msgstr "Sección siguiente"
+
+msgid "No Bible installed"
+msgstr "No hay ninguna Biblia instalada"
+
+msgid "No Bibles yet"
+msgstr "Aún no hay Biblias"
+
+msgid "No audio downloaded yet"
+msgstr "Aún no hay audio descargado"
+
+msgid "No bookmarks yet"
+msgstr "Aún no hay marcadores"
+
+msgid "No books yet"
+msgstr "Aún no hay libros"
+
+msgid "No commentaries"
+msgstr "No hay comentarios"
+
+msgid "No cross-references for this Bible"
+msgstr "No hay referencias cruzadas para esta Biblia"
+
+msgid "No interlinear for this book"
+msgstr "No hay interlineal para este libro"
+
+msgid "No word-by-word data for this verse."
+msgstr "No hay datos palabra por palabra para este versículo."
+
+msgid "None of your installed books has an introduction to this book yet. Many commentaries do (Matthew Henry, for example) — get them from Downloads."
+msgstr "Ninguno de tus libros instalados tiene aún una introducción a este libro. Muchos comentarios la tienen (Matthew Henry, por ejemplo): obténlos en Descargas."
+
+msgid "Not downloaded"
+msgstr "No descargado"
+
+msgid "Not in the main critical text (NA28); found in the Textus Receptus or other editions"
+msgstr "No está en el texto crítico principal (NA28); aparece en el Textus Receptus u otras ediciones"
+
+msgid "Nothing installed yet"
+msgstr "Aún no hay nada instalado"
+
+msgid "Open Browse to download Bibles, commentaries and books."
+msgstr "Abre Explorar para descargar Biblias, comentarios y libros."
+
+msgid "Opening the volume…"
+msgstr "Abriendo el volumen…"
+
+msgid "Opens where you left off"
+msgstr "Se abre donde lo dejaste"
+
+msgid "Original"
+msgstr "Original"
+
+msgid "Other traditions"
+msgstr "Otras tradiciones"
+
+msgid "Personal copies"
+msgstr "Copias personales"
+
+msgid "Pick a word"
+msgstr "Elige una palabra"
+
+msgid "Play in the reader"
+msgstr "Reproducir en el lector"
+
+msgid "Press the headphones button while reading to download a chapter or a whole book."
+msgstr "Pulsa el botón de auriculares mientras lees para descargar un capítulo o un libro entero."
+
+msgid "Previous section"
+msgstr "Sección anterior"
+
+msgid "Read about this, from Wikipedia"
+msgstr "Leer sobre esto, de Wikipedia"
+
+msgid "Read the full article"
+msgstr "Leer el artículo completo"
+
+msgid "Recommended"
+msgstr "Recomendado"
+
+msgid "Recommended Bible"
+msgstr "Biblia recomendada"
+
+msgid "Refresh catalogue"
+msgstr "Actualizar catálogo"
+
+msgid "Reinstall"
+msgstr "Reinstalar"
+
+msgid "Remove"
+msgstr "Quitar"
+
+msgid "Remove all"
+msgstr "Quitar todo"
+
+msgid "Remove bookmark"
+msgstr "Quitar marcador"
+
+msgid "Remove highlight"
+msgstr "Quitar resaltado"
+
+msgid "Remove this chapter's audio"
+msgstr "Quitar el audio de este capítulo"
+
+msgid "Removed the volume"
+msgstr "Volumen quitado"
+
+msgid "Reset: whole Bible, nothing selected (Esc)"
+msgstr "Restablecer: toda la Biblia, nada seleccionado (Esc)"
+
+msgid "Save articles for offline"
+msgstr "Guardar artículos sin conexión"
+
+msgid "Saving…"
+msgstr "Guardando…"
+
+msgid "Search Bibles, commentaries, books…"
+msgstr "Buscar Biblias, comentarios, libros…"
+
+msgid "Second version"
+msgstr "Segunda versión"
+
+msgid "See where this is on the timeline"
+msgstr "Ver dónde está en la línea de tiempo"
+
+msgid "Select a verse to write a note"
+msgstr "Selecciona un versículo para escribir una nota"
+
+msgid "Show Greek and Hebrew"
+msgstr "Mostrar griego y hebreo"
+
+msgid "Show or hide the contents"
+msgstr "Mostrar u ocultar el contenido"
+
+msgid "Side by side"
+msgstr "Lado a lado"
+
+msgid "Stop and clear progress"
+msgstr "Detener y borrar el progreso"
+
+msgid "Stop plan"
+msgstr "Detener el plan"
+
+msgid "Study"
+msgstr "Estudio"
+
+msgid "Study panel"
+msgstr "Panel de estudio"
+
+msgid "Tags, separated by spaces, then Enter"
+msgstr "Etiquetas, separadas por espacios, y luego Intro"
+
+msgid "Tap a Greek or Hebrew word to see its meaning, grammar and lexicon entry. The lexicon comes with the Greek and Hebrew download (STEP Bible), so nothing else is needed."
+msgstr "Toca una palabra griega o hebrea para ver su significado, gramática y entrada de léxico. El léxico viene con la descarga de griego y hebreo (STEP Bible), así que no hace falta nada más."
+
+msgid "The Bibles and study works most people start with. Many well-known modern translations (NIV, ESV, NKJV, NASB) are copyrighted and aren’t offered for free download."
+msgstr "Las Biblias y obras de estudio con las que empieza la mayoría. Muchas traducciones modernas conocidas (NVI, ESV, NKJV, NASB) tienen derechos de autor y no se ofrecen para descarga gratuita."
+
+msgid "The Quran"
+msgstr "El Corán"
+
+msgid "This page’s pictures weren’t downloaded"
+msgstr "Las imágenes de esta página no se descargaron"
+
+msgid "This version doesn’t include this chapter."
+msgstr "Esta versión no incluye este capítulo."
+
+msgid "This volume couldn’t be read. Remove it in Downloads and download it again."
+msgstr "No se pudo leer este volumen. Quítalo en Descargas y descárgalo de nuevo."
+
+msgid "Try one of these"
+msgstr "Prueba una de estas"
+
+msgid "Understood"
+msgstr "Entendido"
+
+msgid "Verse"
+msgstr "Versículo"
+
+msgid "Verse copied"
+msgstr "Versículo copiado"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "What the views, orders and groups mean"
+msgstr "Qué significan las vistas, los órdenes y los grupos"
+
+msgid "Words, a phrase, or a Strong’s number like G25"
+msgstr "Palabras, una frase o un número de Strong como G25"
+
+msgid "Zoom in (Ctrl+scroll)"
+msgstr "Acercar (Ctrl+rueda)"
+
+msgid "Zoom in (or scroll over the drawing)"
+msgstr "Acercar (o usa la rueda sobre el dibujo)"
+
+msgid "Zoom out"
+msgstr "Alejar"
+
+msgid "Zoom out (Ctrl+scroll)"
+msgstr "Alejar (Ctrl+rueda)"
+
+msgid "Apocrypha"
+msgstr "Apócrifos"
+
+msgid "Bookmark"
+msgstr "Marcador"
+
+msgid "Footnote"
+msgstr "Nota al pie"
+
+msgid "Installed · works offline"
+msgstr "Instalado · funciona sin conexión"
+
+msgid "Map"
+msgstr "Mapa"
+
+msgid "New Testament"
+msgstr "Nuevo Testamento"
+
+msgid "Nothing matches your search."
+msgstr "Nada coincide con tu búsqueda."
+
+msgid "Nothing picked out in this language yet. Choose a category on the left."
+msgstr "Aún no hay nada destacado en este idioma. Elige una categoría a la izquierda."
+
+msgid "Old Testament"
+msgstr "Antiguo Testamento"
+
+msgid "Other plans"
+msgstr "Otros planes"
+
+msgid "Start"
+msgstr "Empezar"
+
+msgid "Switch"
+msgstr "Cambiar"
