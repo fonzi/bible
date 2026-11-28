@@ -39,6 +39,13 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.11.1" date="2026-11-27">
+      <description>
+        <ul>
+          <li>Fixed: choosing another Bible in the cross-reference views' version menu froze the app. A new automatic test switches Bibles there on every build.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.11.0" date="2026-11-27">
       <description>
         <ul>
@@ -194,13 +201,6 @@
       <description>
         <ul>
           <li>The README says plainly that Windows and macOS builds are untested; Bible is made for GNOME first. (This release has no Windows build: its font check failed, and it was fixed in 0.9.7.)</li>
-        </ul>
-      </description>
-    </release>
-    <release version="0.9.5" date="2026-11-23">
-      <description>
-        <ul>
-          <li>The version menu now shows each version's full name under its short one, and says when a version has only the Old or only the New Testament. LXX2012, for example, is the Septuagint (the Greek Old Testament) in English, so it shows "Old Testament only".</li>
         </ul>
       </description>
     </release>

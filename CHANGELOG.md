@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.11.1
 
 - Fixed: choosing another Bible in the cross-reference views' version menu
   froze the app. A new automatic test switches Bibles there on every build.
